@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     public Transform Target;
     private Vector3 velocity;
 
-    private void Update()
+    private void LateUpdate()
     {
         Vector3 targetPos = Target.transform.position + Target.localRotation * Offset;
         transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, Smoothing * Time.deltaTime);
