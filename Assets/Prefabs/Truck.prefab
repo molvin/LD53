@@ -44,7 +44,7 @@ Rigidbody:
   m_GameObject: {fileID: 8098728701403824975}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 1
+  m_Drag: 0
   m_AngularDrag: 4
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -78,17 +78,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LinearForce: 1750
   AngularForce: 750
-  MinHeight: 0
+  RollForce: 1000
+  MinHeight: 0.2
   MaxHeight: 1.5
   VisionHeight: 20
   MaxCompression: 0.8
-  SpringForce: 4
+  SpringForce: 6
   Damping: 0.6
   AlignedFrictionCoef: 0.3
-  PerpendicularFrictionCoef: 0.8
-  AlignmentRotationSpeed: 3.5
-  GravitationalPull: 0.2
-  OverrideGravity: 12
+  ForwardFictionCoef: 0.025
+  PerpendicularFrictionCoef: 0.65
+  SlideFrictionCoef: 0
+  SlideSmoothing: 0.15
+  AlignmentRotationSpeed: 11.15
+  GravitationalPull: 6
+  OverrideGravity: 18
   Mask:
     serializedVersion: 2
     m_Bits: 128

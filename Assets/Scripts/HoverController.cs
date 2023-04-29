@@ -5,16 +5,24 @@ using UnityEngine;
 
 public class HoverController : MonoBehaviour
 {
+    [Header("Acceleration")]
     public float LinearForce = 1750.0f;
     public float AngularForce = 750.0f;
+    public float RollForce = 750.0f;
+    [Header("Dampning")]
     public float MinHeight = 0.0f;
     public float MaxHeight = 1.5f;
     public float VisionHeight = 20.0f;
     public float MaxCompression = 0.8f;
     public float SpringForce = 4.0f;
     public float Damping = 0.6f;
+    [Header("Friction")]
     public float AlignedFrictionCoef = 0.3f;
+    public float ForwardFictionCoef = 0.2f;
     public float PerpendicularFrictionCoef = 0.8f;
+    public float SlideFrictionCoef = 0.2f;
+    public float SlideSmoothing = 0.01f;
+    [Header("Physics")]
     public float AlignmentRotationSpeed = 3.5f;
     public float GravitationalPull = 0.2f;
     public float OverrideGravity = 12.0f;
@@ -27,6 +35,8 @@ public class HoverController : MonoBehaviour
 
     private Vector3 InputVector;
     private Vector3 UpNormal;
+    private float rightCoef;
+    private float slideDelta;
 
     private List<Vector3> IcoNormals = new List<Vector3>()
     {
@@ -89,9 +99,13 @@ public class HoverController : MonoBehaviour
     {
         // TODO: Heurisitic ground normal
         Vector3 LocalInput = Input.GetAxisRaw("Horizontal") * Vector3.right;
-        LocalInput += Input.GetAxisRaw("Vertical") * Vector3.forward;
+        LocalInput += Input.GetAxisRaw("Forward") * Vector3.forward;
         InputVector += Vector3.ClampMagnitude(LocalInput, 1.0f) * Time.deltaTime;
         //InputVector += Vector3.ProjectOnPlane(transform.rotation * LocalInput, UpNormal).normalized * Time.deltaTime;
+    
+        if (Input.GetButton("Slide"))
+            rightCoef = SlideFrictionCoef;
+        rightCoef = Mathf.SmoothDamp(rightCoef, PerpendicularFrictionCoef, ref slideDelta, SlideSmoothing);
     }
 
     private void OnDrawGizmos()
@@ -121,15 +135,6 @@ public class HoverController : MonoBehaviour
         }
         UpNormal.Normalize();
 
-        // Friction
-        Vector3 Right = Vector3.ProjectOnPlane(transform.right, UpNormal).normalized;
-        float Dot = Vector3.Dot(Right, rigidbody.velocity);
-        rigidbody.velocity -= Right * Dot * PerpendicularFrictionCoef;
-
-        Quaternion delta = Quaternion.FromToRotation(transform.up, UpNormal);//.ToAngleAxis(out float Angle, out Vector2 Axis);
-        delta.ToAngleAxis(out float Angle, out Vector3 axis);
-        rigidbody.AddTorque(axis.normalized * Angle * AlignmentRotationSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
-
         // Consume input vector
         float Forward = InputVector.z;
         float Rotation = InputVector.x;
@@ -137,6 +142,7 @@ public class HoverController : MonoBehaviour
 
         Vector3 ForwardInput = Vector3.ProjectOnPlane(transform.TransformDirection(Vector3.forward), UpNormal) * Forward;
         Vector3 TurningInput = Vector3.up * Rotation;
+        Vector3 RollInput = Vector3.forward * Rotation;
 
         float Range = MaxHeight - MinHeight;
         float Hits = 0.0f;
@@ -177,15 +183,31 @@ public class HoverController : MonoBehaviour
             PreviousHeights[i] = suspensionDistance;
         }
 
+        // Friction
+        Vector3 Right = Vector3.ProjectOnPlane(transform.right, UpNormal).normalized;
+        float Dot = Vector3.Dot(Right, rigidbody.velocity);
+
+        rigidbody.velocity -= Right * Dot * rightCoef;
+
+        Vector3 forward = Vector3.ProjectOnPlane(transform.forward, UpNormal).normalized;
+        rigidbody.velocity -= forward * Vector3.Dot(forward, rigidbody.velocity) * ForwardFictionCoef * (Hits / Normals.Count);
+
+        Quaternion delta = Quaternion.FromToRotation(transform.up, UpNormal);//.ToAngleAxis(out float Angle, out Vector2 Axis);
+        delta.ToAngleAxis(out float Angle, out Vector3 axis);
+        rigidbody.AddTorque(axis.normalized * Angle * AlignmentRotationSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
+
+
+
         Debug.DrawLine(transform.position, transform.position + UpNormal * 3.0f);
 
         Vector3 Gravity = -UpNormal * OverrideGravity * GravitationalPull * Time.fixedDeltaTime;
-        Gravity += Vector3.down * (OverrideGravity - 9.81f) * Time.fixedDeltaTime;
+        Gravity += Vector3.down * (OverrideGravity - 9.81f);
         // Gravitational pull
-        rigidbody.AddForce(Gravity);
+        rigidbody.AddForce(Gravity, ForceMode.Acceleration);
         // Input
         rigidbody.AddForce(ForwardInput * LinearForce * Hits / Normals.Count);
         rigidbody.AddRelativeTorque(TurningInput * AngularForce * Hits / Normals.Count);
+        rigidbody.AddRelativeTorque(RollInput * RollForce * (1.0f - Hits / Normals.Count));
 
 
         //float yVel = rigidbody.velocity.y;

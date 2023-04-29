@@ -970,6 +970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LinearForce: 300
   AngularForce: 50
+  RollForce: 750
   MinHeight: 0.5
   MaxHeight: 1.5
   VisionHeight: 20
@@ -977,8 +978,13 @@ MonoBehaviour:
   SpringForce: 20
   Damping: 3
   AlignedFrictionCoef: 0.3
+  ForwardFictionCoef: 0.2
   PerpendicularFrictionCoef: 0.8
+  SlideFrictionCoef: 0.2
+  SlideSmoothing: 0.01
   AlignmentRotationSpeed: 0.5
+  GravitationalPull: 0.2
+  OverrideGravity: 12
   Mask:
     serializedVersion: 2
     m_Bits: 0
@@ -1345,9 +1351,6 @@ MonoBehaviour:
   TargetOffset: {x: 0, y: 3, z: -5}
   LookOffset: {x: 0, y: 0, z: 5}
   Smoothing: 8
-  MaxInputOffset: {x: 5, y: 5, z: 2}
-  InputModifer: {x: 55, y: 55, z: 1}
-  InputSmoothing: 0.07
 --- !u!114 &2104746263
 MonoBehaviour:
   m_ObjectHideFlags: 0
