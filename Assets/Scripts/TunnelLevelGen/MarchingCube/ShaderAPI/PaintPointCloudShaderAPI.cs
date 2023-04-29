@@ -9,6 +9,7 @@ public class PaintPointCloudShaderAPI
 {
     private ComputeShader paintShader;
     private ComputeBuffer pointCloud_buf;
+    private int size = 8;
     public PaintPointCloudShaderAPI(Vector3 canvasWorldPosition)
     {
         //Set up shader
@@ -17,7 +18,7 @@ public class PaintPointCloudShaderAPI
         paintShader.SetFloat("BrushRadius", 1);
         paintShader.SetVector("BrushPosition", Vector3.zero);
         paintShader.SetVector("WorldPos", canvasWorldPosition);
-        pointCloud_buf = new ComputeBuffer(8 * 8 * 8 * sizeof(float), sizeof(float), ComputeBufferType.Default);
+        pointCloud_buf = new ComputeBuffer(size * size * size * sizeof(float), sizeof(float), ComputeBufferType.Default);
         paintShader.SetBuffer(paintShader.FindKernel("CSMain"), "PointCloud", pointCloud_buf);
     }
     public void MoveCanvas(Vector3 canvasWorldPosition)

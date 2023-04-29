@@ -13,14 +13,17 @@ public class MarchingCubeMesh : MonoBehaviour
     public MeshFilter meshFilter;
     public MeshCollider meshCollider;
     public Mesh mesh;
+    [NonSerialized]
     public Vector3[] optimizedVerts;
+    [NonSerialized]
     public int[] optimizedTris;
+    private int size = 8;
 
     //Unity callbacks
     void OnDrawGizmos()
     {
         Gizmos.color = new Color(0, 0, 1, 0.05f);
-        Gizmos.DrawCube(transform.position + Vector3.one * 4, new Vector3(8, 8, 8));
+        Gizmos.DrawCube(transform.position + Vector3.one * (size / 2f), new Vector3(size, size, size));
     }
     void Awake()
     {

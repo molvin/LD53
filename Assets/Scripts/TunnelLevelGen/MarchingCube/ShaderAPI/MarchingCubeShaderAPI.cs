@@ -13,13 +13,14 @@ public class MarchingCubeShaderAPI
     private ComputeBuffer pointCloud_buf;
     private ComputeBuffer vert_buf;
     private ComputeBuffer tris_buf;
+    private int grid_size = 8;
     public MarchingCubeShaderAPI(out float[] pointCloud, out Vector3[] verts, out int[] tris)
     {
         //Set up shader
         marchShader = ComputeShader.Instantiate(Resources.Load<ComputeShader>("Shaders/MarchingCubeShader"));
-        pointCloud = new float[9 * 9 * 9];
-        verts = new Vector3[8 * 8 * 8 * 15];
-        tris = new int[8 * 8 * 8 * 15];
+        pointCloud = new float[(grid_size + 1) * ( grid_size + 1) * (grid_size + 1)];
+        verts = new Vector3[grid_size * grid_size * grid_size * 15];
+        tris = new int[grid_size * grid_size * grid_size * 15];
         pointCloud_buf = new ComputeBuffer(pointCloud.Length * sizeof(float), sizeof(float), ComputeBufferType.Default);
         vert_buf = new ComputeBuffer(verts.Length * sizeof(float) * 3, sizeof(float) * 3, ComputeBufferType.Default);
         tris_buf = new ComputeBuffer(tris.Length * sizeof(int), sizeof(int), ComputeBufferType.Default);

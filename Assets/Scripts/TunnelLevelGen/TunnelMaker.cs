@@ -9,7 +9,7 @@ public class TunnelMaker : MonoBehaviour
     private float _CaveWallAmount = 4f;
     private float _InternalCaveAmount = 10f;
     private float _InternalCaveNoise = 0.02f;
-    private float _HoleSize = 3f;
+    private float _HoleSize = 7f;
     public List<Color> colors = new List<Color>();
     public System.Action<int> Progress;
     private void OnDrawGizmos()
@@ -28,6 +28,11 @@ public class TunnelMaker : MonoBehaviour
         }
 
     }
+
+    public void Start()
+    {
+        StartCoroutine(createLevelSLowLike(5, .5f, .5f));
+    }
     public void makeSpline(int segmentCount, float sporadicFactor,float noiseScale)
     {
         Perlin3D.scale = noiseScale;
@@ -45,7 +50,7 @@ public class TunnelMaker : MonoBehaviour
     }
     public void addOne(Vector3 paintPoint)
     {
-        PCM.InitializeIsoSurfaceSphere(paintPoint, 0.1f, SuperNoise);
+        PCM.InitializeIsoSurfaceSphere(paintPoint, 0.1f, SuperNoiseHole);
     }
     public IEnumerator createLevelSLowLike(int segmentCount, float sporadicFactor, float noiseScale, float CaveWallAmount = 4f, float InternalCaveAmount = 10f, float InternalCaveNoise = 0.2f, float HoleSize = 3f)
     {
@@ -78,6 +83,14 @@ public class TunnelMaker : MonoBehaviour
         float caveWalls = SplineNoise3D.SplineNoise(point) + Perlin3D.PerlinNoise3D(point) * _CaveWallAmount;
         if (caveWalls < 6f) caveWalls = 0f;
         return (caveWalls + Perlin3D.PerlinNoise3D(point) * _InternalCaveAmount) * dist;
+    }
+    public float SuperNoiseHole(Vector3 point)
+    {
+        //distance along spline X
+        float dist = SplineNoise3D.HoleNoise(point) / _HoleSize;
+        if (dist > 1f) dist = 1f;
+        Perlin3D.scale = _InternalCaveNoise;
+        return dist;
     }
 
 }

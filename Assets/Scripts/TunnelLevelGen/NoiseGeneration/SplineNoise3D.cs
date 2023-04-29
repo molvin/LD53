@@ -8,7 +8,7 @@ public class SplineNoise3D
     public static List<Spline> SplineHole = new List<Spline>();
     public static float SplineNoise(Vector3 point)
     {
-        return SplineDistance(point);
+        return (getPointOnSpline(point) - point).magnitude;
     }
     public static float SplineDistance(Vector3 point)
     {
@@ -35,11 +35,12 @@ public class SplineNoise3D
         }
         return 100;
     }
-    public static float HoleNoise(Vector3 point)
+    public static float HoleNoise(Vector3 point, int splineWindow = 10)
     {
         float smaletsFound = float.MaxValue;
+        int min = Mathf.Max(0, SplineHole.Count - splineWindow);
         //OnLine
-        for (int i = 0; i < SplineHole.Count - 1; i++)
+        for (int i = min; i < SplineHole.Count - 1; i++)
         {
             if (IsOnLine(SplineHole[i].pos, SplineHole[i + 1].pos, point))
             {
@@ -54,11 +55,15 @@ public class SplineNoise3D
         for (int i = 1; i < SplineHole.Count - 1; i++)
         {
             float hypo = Vector3.Distance(point, SplineHole[i].pos);
-            if (hypo < SplineHole[i].radius)
-                return (LineDistance(SplineHole[i - 1].pos, SplineHole[i].pos, point) + LineDistance(SplineHole[i].pos, SplineHole[i + 1].pos, point)) / 2f;
+            if (smaletsFound > hypo)
+                smaletsFound = hypo;
+            
+            //if (hypo < SplineHole[i].radius)
+              //  return (LineDistance(SplineHole[i - 1].pos, SplineHole[i].pos, point) + LineDistance(SplineHole[i].pos, SplineHole[i + 1].pos, point)) / 2f;
         }
-        return 100;
+        return smaletsFound;
     }
+
     public static float LineDistance(Vector3 lineA, Vector3 lineB, Vector3 pointC)
     {
         Vector3 AC = pointC - lineB;
@@ -97,20 +102,23 @@ public class SplineNoise3D
             if (IsOnLine(SplineLine[i].pos, SplineLine[i + 1].pos, pointC))
             {
                 float dis = LineDistance(SplineLine[i].pos, SplineLine[i + 1].pos, pointC);
-                return SplineLine[i].pos + (SplineLine[i + 1].pos - SplineLine[i].pos).normalized * dis;
+                Vector3 lineDir = (SplineLine[i + 1].pos - SplineLine[i].pos).normalized;
+                return SplineLine[i].pos + lineDir * dis;
             }
         }
         //InJoint
-        for (int i = 0; i < SplineLine.Count - 1; i++)
+        float shortest = float.MaxValue;
+        Vector3 joint = SplineLine[SplineLine.Count - 1].pos;
+        for (int i = 0; i < SplineHole.Count; i++)
         {
-            float maxDist = (SplineLine[i+1].pos - SplineLine[i].pos).magnitude;
-            float dis = distanceOnLine(SplineLine[i].pos, SplineLine[i + 1].pos, pointC);
-            if (dis <= maxDist)
+            float hypo = Vector3.Distance(pointC, SplineHole[i].pos);
+            if (shortest > hypo)
             {
-                return SplineLine[i].pos;
+                joint = SplineHole[i].pos;
+                shortest = hypo;
             }
         }
-        return SplineLine[SplineLine.Count-1].pos;
+        return joint;
     }
     public static bool IsOnLine(Vector3 lineA, Vector3 lineB, Vector3 pointC)
     {
@@ -119,19 +127,36 @@ public class SplineNoise3D
         return alongLine > 0f && alongLine <= BA.magnitude;
     }
     //Spline stuff
-    public static void AddSplineSegment(Vector3 pos, float holeOffsetRadius)
+    public static void AddSplineSegment(Transform trans, float radius)
     {
-        SplineLine.Add(new Spline { pos = pos, radius = 10 });
-        //Hole!
-        float x = (Perlin3D.PerlinNoise3D(pos + Vector3.up) -0.5f) * 2 * holeOffsetRadius;
-        float y = (Perlin3D.PerlinNoise3D(pos + Vector3.right) - 0.5f) *2 * holeOffsetRadius;
-        float z = (Perlin3D.PerlinNoise3D(pos + Vector3.forward) - 0.5f) *2 * holeOffsetRadius;
-        Vector3 off = new Vector3(x, y, z);
-        SplineHole.Add(new Spline { pos = pos + off, radius = 5f });
+        SplineLine.Add(new Spline { pos = trans.position, radius = radius, up = trans.up });
+        SplineHole.Add(new Spline { pos = trans.position, radius = radius, up = trans.up });
+    }
+    public static void AddSplineSegment(Vector3 pos, float radius)
+    {
+        SplineLine.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
+        SplineHole.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
+    }
+    public static Spline LearpSpline(Spline a, Spline b, float t)
+    {
+        return new Spline
+        {
+            radius = Mathf.Lerp(a.radius, b.radius, t),
+            up = Vector3.Slerp(a.up, b.up, t),
+            downFactor = Mathf.Lerp(a.downFactor, b.downFactor, t),
+            rightFactor = Mathf.Lerp(a.rightFactor, b.rightFactor, t),
+            upFactor = Mathf.Lerp(a.upFactor, b.upFactor, t),
+            leftFactor = Mathf.Lerp(a.leftFactor, b.leftFactor, t)
+        };
     }
     public struct Spline
     {
         public Vector3 pos;
         public float radius;
+        public Vector3 up;
+        public float downFactor;
+        public float rightFactor;
+        public float upFactor;
+        public float leftFactor;
     }
 }

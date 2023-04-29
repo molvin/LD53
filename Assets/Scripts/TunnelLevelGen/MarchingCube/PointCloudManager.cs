@@ -16,6 +16,7 @@ public class PointCloudManager : MonoBehaviour
     private float[] pointCloud;
     private Vector3[] verts;
     private int[] tris;
+    private int size = 8;
 
     public void Awake()
     {
@@ -24,24 +25,26 @@ public class PointCloudManager : MonoBehaviour
     }
     public void InitializeIsoSurfaceSphere(Vector3 brushPoint, float brushRadius, Func<Vector3, float> initDef)
     {
-        int halfExtend = Mathf.FloorToInt(brushRadius / 8f) + 2;
-        Vector3Int Chunk = new Vector3Int((int)(brushPoint.x / 8f), (int)(brushPoint.y / 8f), (int)(brushPoint.z / 8f));
+        int halfExtend = Mathf.FloorToInt(brushRadius / (size * 1f)) + 2;
+        Vector3Int Chunk = new Vector3Int((int)(brushPoint.x / (size * 1f)), (int)(brushPoint.y / (size * 1f)), (int)(brushPoint.z / (size * 1f)));
 
         for (int x = -halfExtend; x <= halfExtend; x++)
             for (int y = -halfExtend; y <= halfExtend; y++)
                 for (int z = -halfExtend; z <= halfExtend; z++)
-                {
-                    Vector3Int chuckID = Chunk + new Vector3Int(x, y, z);
-                    if (!meshGrid.ContainsKey(chuckID))
-                    {
-                        MarchingCubeMesh mesh = Instantiate(Prefab8X8, chuckID * 8, Quaternion.identity, transform);
-                        meshGrid.Add(chuckID, mesh);
-                        SetPointCloud(initDef, new Vector3(chuckID.x, chuckID.y, chuckID.z) * 8f);
-                        marchShader.MarchCloud(ref pointCloud, ref verts, ref tris);
-                        mesh.gameObject.layer = LayerMask.NameToLayer(GeoLayer);
-                        CleanVerts(mesh);
-                    }
-                }
+                    UpdateIsoSurfaceChunk(Chunk + new Vector3Int(x, y, z), initDef);
+    }
+    public void UpdateIsoSurfaceChunk(Vector3Int chunkId, Func<Vector3, float> initDef)
+    {
+        if (!meshGrid.ContainsKey(chunkId))
+        {
+            MarchingCubeMesh mesh = Instantiate(Prefab8X8, chunkId * size, Quaternion.identity, transform);
+            meshGrid.Add(chunkId, mesh);
+        }
+        MarchingCubeMesh temp = meshGrid[chunkId];
+        SetPointCloud(initDef, new Vector3(chunkId.x, chunkId.y, chunkId.z) * (size * 1f));
+        marchShader.MarchCloud(ref pointCloud, ref verts, ref tris);
+        temp.gameObject.layer = LayerMask.NameToLayer(GeoLayer);
+        CleanVerts(temp);
     }
     private void CleanVerts(MarchingCubeMesh current)
     {
@@ -70,11 +73,11 @@ public class PointCloudManager : MonoBehaviour
     }
     public void SetPointCloud(Func<Vector3, float> initDef, Vector3 pos)
     {
-        for (int z = 0; z < 9; z++)
-            for (int y = 0; y < 9; y++)
-                for (int x = 0; x < 9; x++)
+        for (int z = 0; z < (size + 1); z++)
+            for (int y = 0; y < (size + 1); y++)
+                for (int x = 0; x < (size + 1); x++)
                 {
-                    int id = x + ((8 + 1) * y) + ((8 + 1) * (8 + 1) * z);
+                    int id = x + ((size + 1) * y) + ((size + 1) * (size + 1) * z);
                     pointCloud[id] = initDef.Invoke(pos + new Vector3(x, y, z));
                 }
     }
