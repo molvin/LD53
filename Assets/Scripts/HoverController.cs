@@ -28,6 +28,8 @@ public class HoverController : MonoBehaviour
     private Vector3 InputVector;
     private Vector3 UpNormal;
 
+    public Vector3 GroundNormal => UpNormal;
+
     private List<Vector3> IcoNormals = new List<Vector3>()
     {
         new Vector3( 0.1876f, -0.7947f, 0.5774f),
