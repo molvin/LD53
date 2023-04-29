@@ -15,7 +15,9 @@ public class HoverController : MonoBehaviour
     public float Damping = 0.6f;
     public float AlignedFrictionCoef = 0.3f;
     public float PerpendicularFrictionCoef = 0.8f;
-    public float AlignmentRotationSpeed = 0.5f;
+    public float AlignmentRotationSpeed = 3.5f;
+    public float GravitationalPull = 0.2f;
+    public float OverrideGravity = 12.0f;
     public LayerMask Mask;
 
     private new Rigidbody rigidbody;
@@ -126,7 +128,7 @@ public class HoverController : MonoBehaviour
 
         Quaternion delta = Quaternion.FromToRotation(transform.up, UpNormal);//.ToAngleAxis(out float Angle, out Vector2 Axis);
         delta.ToAngleAxis(out float Angle, out Vector3 axis);
-        rigidbody.AddTorque(axis.normalized * Angle * AlignmentRotationSpeed, ForceMode.Acceleration);
+        rigidbody.AddTorque(axis.normalized * Angle * AlignmentRotationSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
 
         // Consume input vector
         float Forward = InputVector.z;
@@ -177,8 +179,10 @@ public class HoverController : MonoBehaviour
 
         Debug.DrawLine(transform.position, transform.position + UpNormal * 3.0f);
 
+        Vector3 Gravity = -UpNormal * OverrideGravity * GravitationalPull * Time.fixedDeltaTime;
+        Gravity += Vector3.down * (OverrideGravity - 9.81f) * Time.fixedDeltaTime;
         // Gravitational pull
-        rigidbody.AddForce(-UpNormal * 9.81f * 0.3f * Time.fixedDeltaTime);
+        rigidbody.AddForce(Gravity);
         // Input
         rigidbody.AddForce(ForwardInput * LinearForce * Hits / Normals.Count);
         rigidbody.AddRelativeTorque(TurningInput * AngularForce * Hits / Normals.Count);

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1184032}
   - component: {fileID: 1184031}
   - component: {fileID: 1184033}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Truck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,12 +80,15 @@ MonoBehaviour:
   AngularForce: 750
   MinHeight: 0
   MaxHeight: 1.5
+  VisionHeight: 20
   MaxCompression: 0.8
   SpringForce: 4
   Damping: 0.6
   AlignedFrictionCoef: 0.3
   PerpendicularFrictionCoef: 0.8
-  AlignmentRotationSpeed: 0.5
+  AlignmentRotationSpeed: 3.5
+  GravitationalPull: 0.2
+  OverrideGravity: 12
   Mask:
     serializedVersion: 2
     m_Bits: 128
@@ -156,6 +159,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HoverParticle
       objectReference: {fileID: 0}
+    - target: {fileID: 4123283204892393050, guid: 42d44a5fd92405f49a4723ea64e84104,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d44a5fd92405f49a4723ea64e84104, type: 3}
 --- !u!1001 &1705385396596860537
@@ -224,6 +232,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HoverParticle (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4123283204892393050, guid: 42d44a5fd92405f49a4723ea64e84104,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d44a5fd92405f49a4723ea64e84104, type: 3}
@@ -309,6 +322,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HoverParticle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4123283204892393050, guid: 42d44a5fd92405f49a4723ea64e84104,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d44a5fd92405f49a4723ea64e84104, type: 3}
 --- !u!1001 &4461791083051251709
@@ -393,6 +411,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HoverParticle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4123283204892393050, guid: 42d44a5fd92405f49a4723ea64e84104,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d44a5fd92405f49a4723ea64e84104, type: 3}
 --- !u!1001 &7301775390741206282
@@ -467,25 +490,55 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3b6758fe94b2aac4a9948cd9a083cf30, type: 2}
+    - target: {fileID: -4993905172991875063, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -4462337843298199271, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3b6758fe94b2aac4a9948cd9a083cf30, type: 2}
+    - target: {fileID: -4423802031303801356, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -3497835523497657164, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -2002868518202131178, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3b6758fe94b2aac4a9948cd9a083cf30, type: 2}
+    - target: {fileID: -1022296208462119032, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -692781193793962523, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3b6758fe94b2aac4a9948cd9a083cf30, type: 2}
+    - target: {fileID: 901897122485332503, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
         type: 3}
       propertyPath: m_Name
       value: truck
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1063117530245640706, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
         type: 3}
@@ -502,6 +555,26 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3b6758fe94b2aac4a9948cd9a083cf30, type: 2}
+    - target: {fileID: 6254527795633167285, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7140949294638884588, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7769950677249043255, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773242223585921908, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8198999868943737385, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -512,6 +585,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: e2e3ee5645bb38840836a86cf3d71e78, type: 2}
+    - target: {fileID: 8989615606581495769, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ee9d9fad00be5a4f8dbbd4cebcfe1d2, type: 3}
 --- !u!4 &90485830734715585 stripped
@@ -635,6 +713,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HoverParticle
       objectReference: {fileID: 0}
+    - target: {fileID: 4123283204892393050, guid: 42d44a5fd92405f49a4723ea64e84104,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d44a5fd92405f49a4723ea64e84104, type: 3}
 --- !u!1001 &8356738306742365241
@@ -718,6 +801,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HoverParticle (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4123283204892393050, guid: 42d44a5fd92405f49a4723ea64e84104,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d44a5fd92405f49a4723ea64e84104, type: 3}
@@ -803,6 +891,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HoverParticle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4123283204892393050, guid: 42d44a5fd92405f49a4723ea64e84104,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d44a5fd92405f49a4723ea64e84104, type: 3}
 --- !u!1001 &8991384360356378465
@@ -886,6 +979,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HoverParticle (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4123283204892393050, guid: 42d44a5fd92405f49a4723ea64e84104,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d44a5fd92405f49a4723ea64e84104, type: 3}
