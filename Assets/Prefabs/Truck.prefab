@@ -80,6 +80,7 @@ MonoBehaviour:
   AngularForce: 750
   MinHeight: 0
   MaxHeight: 1.5
+  VisionHeight: 20
   MaxCompression: 0.8
   SpringForce: 4
   Damping: 0.6
@@ -816,21 +817,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886501590245355761, guid: 42d44a5fd92405f49a4723ea64e84104,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886501590245355761, guid: 42d44a5fd92405f49a4723ea64e84104,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886501590245355761, guid: 42d44a5fd92405f49a4723ea64e84104,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886501590245355761, guid: 42d44a5fd92405f49a4723ea64e84104,
         type: 3}
