@@ -5,15 +5,17 @@ using UnityEngine;
 
 public class HoverController : MonoBehaviour
 {
-    public float LinearForce = 1000.0f;
-    public float AngularForce = 50.0f;
+    public float LinearForce = 1750.0f;
+    public float AngularForce = 750.0f;
     public float MinHeight = 0.0f;
     public float MaxHeight = 1.5f;
+    public float VisionHeight = 20.0f;
     public float MaxCompression = 0.8f;
     public float SpringForce = 4.0f;
     public float Damping = 0.6f;
     public float AlignedFrictionCoef = 0.3f;
     public float PerpendicularFrictionCoef = 0.8f;
+    public float AlignmentRotationSpeed = 0.5f;
     public LayerMask Mask;
 
     private new Rigidbody rigidbody;
@@ -23,6 +25,30 @@ public class HoverController : MonoBehaviour
 
     private Vector3 InputVector;
     private Vector3 UpNormal;
+
+    private List<Vector3> IcoNormals = new List<Vector3>()
+    {
+        new Vector3( 0.1876f, -0.7947f, 0.5774f),
+        new Vector3( 0.6071f, -0.7947f, 0.0000f),
+        new Vector3( -0.4911f, -0.7947f, 0.3568f),
+        new Vector3( -0.4911f, -0.7947f, -0.3568f),
+        new Vector3( 0.1876f, -0.7947f, -0.5774f),
+        new Vector3( 0.9822f, -0.1876f, 0.0000f),
+        new Vector3( 0.3035f, -0.1876f, 0.9342f),
+        new Vector3( -0.7946f, -0.1876f, 0.5774f),
+        new Vector3( -0.7946f, -0.1876f, -0.5774f),
+        new Vector3( 0.3035f, -0.1876f, -0.9342f),
+        new Vector3( 0.7946f, 0.1876f, 0.5774f),
+        new Vector3( -0.3035f, 0.1876f, 0.9342f),
+        new Vector3( -0.9822f, 0.1876f, 0.0000f),
+        new Vector3( -0.3035f, 0.1876f, -0.9342f),
+        new Vector3( 0.7946f, 0.1876f, -0.5774f),
+        new Vector3( 0.4911f, 0.7947f, 0.3568f),
+        new Vector3( -0.1876f, 0.7947f, 0.5774f),
+        new Vector3( -0.6071f, 0.7947f, 0.0000f),
+        new Vector3( -0.1876f, 0.7947f, -0.5774f),
+        new Vector3( 0.4911f, 0.7947f, -0.3f) 
+    };
 
     private void Awake()
     {
@@ -66,28 +92,52 @@ public class HoverController : MonoBehaviour
         //InputVector += Vector3.ProjectOnPlane(transform.rotation * LocalInput, UpNormal).normalized * Time.deltaTime;
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + UpNormal * 3.0f);
+        Gizmos.color = Color.blue;
+        foreach (var IcoNormal in IcoNormals)
+        {
+            Gizmos.DrawLine(transform.position, transform.position + IcoNormal * VisionHeight);
+        }
+    }
+
     private void FixedUpdate()
     {
-        // Quaternion desired = Quaternion.LookRotation(transform.forward, Vector3.Lerp(transform.up, Vector3.up, Time.fixedDeltaTime));
-        // Quaternion delta = transform.rotation * Quaternion.Inverse(desired);
+        UpNormal = Vector3.up;
+        foreach (var IcoNormal in IcoNormals)
+        {
+            if (Physics.Raycast(
+                transform.position,
+                IcoNormal,
+                out RaycastHit hit,
+                VisionHeight,
+                Mask))
+            {
+                UpNormal -= IcoNormal * (1.0f - (hit.distance / VisionHeight));
+            }
+        }
+        UpNormal.Normalize();
+
+        // Friction
+        Vector3 Right = Vector3.ProjectOnPlane(transform.right, UpNormal).normalized;
+        float Dot = Vector3.Dot(Right, rigidbody.velocity);
+        rigidbody.velocity -= Right * Dot * PerpendicularFrictionCoef;
 
         Quaternion delta = Quaternion.FromToRotation(transform.up, UpNormal);//.ToAngleAxis(out float Angle, out Vector2 Axis);
         delta.ToAngleAxis(out float Angle, out Vector3 axis);
-
+        rigidbody.AddTorque(axis.normalized * Angle * AlignmentRotationSpeed, ForceMode.Acceleration);
 
         // Consume input vector
         float Forward = InputVector.z;
         float Rotation = InputVector.x;
-        InputVector = Vector3.ProjectOnPlane(transform.TransformDirection(Vector3.forward), UpNormal) * Forward;
-        rigidbody.AddForce(InputVector * LinearForce);
-        rigidbody.AddRelativeTorque(Vector3.up * Rotation * AngularForce);
-        rigidbody.AddTorque(axis.normalized * Angle, ForceMode.Acceleration);
         InputVector = Vector3.zero;
 
+        Vector3 ForwardInput = Vector3.ProjectOnPlane(transform.TransformDirection(Vector3.forward), UpNormal) * Forward;
+        Vector3 TurningInput = Vector3.up * Rotation;
+
         float Range = MaxHeight - MinHeight;
-
-        Vector3 SuspensionNormal = Vector3.zero;
-
+        float Hits = 0.0f;
         for (int i = 0; i < Normals.Count; i++)
         {
             Vector3 LocalOffset = transform.rotation * Offsets[i];
@@ -102,29 +152,21 @@ public class HoverController : MonoBehaviour
                 MaxHeight,
                 Mask))
             {
+                Hits += 1.0f;
                 Debug.DrawLine(Origin, hit.point, Color.red);
 
                 suspensionDistance = (hit.distance - MinHeight);
-                SuspensionNormal += hit.normal;
 
                 float suspensionCompression = Mathf.Clamp((Range - suspensionDistance) / Range, 0, MaxCompression);
                 float suspensionForce = suspensionCompression * SpringForce;
                 float damping = Damping * (PreviousHeights[i] - suspensionDistance) / Time.fixedDeltaTime;
                 suspensionForce += damping;
 
-                Vector3 Force = Vector3.zero;
                 if (suspensionForce > 0.0f)
                 {
-                    Force += suspensionForce * -Normal;
+                    Vector3 Force = suspensionForce * -Normal;
+                    rigidbody.AddForceAtPosition(Force, Origin);
                 }
-
-                Vector3 ForwardVelocity = Vector3.Project(rigidbody.velocity, transform.forward);
-                Vector3 PerpVelocity = rigidbody.velocity - ForwardVelocity;
-
-                //                Force -= ForwardVelocity * suspensionForce * AlignedFrictionCoef;
-                //               Force -= PerpVelocity * suspensionForce * PerpendicularFrictionCoef;
-
-                rigidbody.AddForceAtPosition(Force, Origin);
             }
             else
             {
@@ -133,17 +175,14 @@ public class HoverController : MonoBehaviour
             PreviousHeights[i] = suspensionDistance;
         }
 
-        if (SuspensionNormal == Vector3.zero)
-        {
-            UpNormal = Vector3.up;
-        }
-        else
-        {
-            UpNormal = SuspensionNormal.normalized;
-        }
         Debug.DrawLine(transform.position, transform.position + UpNormal * 3.0f);
 
+        // Gravitational pull
         rigidbody.AddForce(-UpNormal * 9.81f * 0.3f * Time.fixedDeltaTime);
+        // Input
+        rigidbody.AddForce(ForwardInput * LinearForce * Hits / Normals.Count);
+        rigidbody.AddRelativeTorque(TurningInput * AngularForce * Hits / Normals.Count);
+
 
         //float yVel = rigidbody.velocity.y;
         //Vector2 horizontalVel = Vector2.ClampMagnitude(new Vector2(rigidbody.velocity.x, rigidbody.velocity.z), MaxSpeed);
