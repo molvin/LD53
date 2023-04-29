@@ -9,10 +9,10 @@ public class CameraController : MonoBehaviour
     public Transform Target;
     private Vector3 velocity;
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         Vector3 targetPos = Target.transform.position + Target.localRotation * Offset;
-        transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, Smoothing * Time.deltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, Smoothing * Time.fixedDeltaTime);
         transform.LookAt(Target, Vector3.up);
     }
 
