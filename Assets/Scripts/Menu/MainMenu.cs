@@ -8,9 +8,13 @@ public class MainMenu : MonoBehaviour
 
     public GameObject mainMenuButtonGroup;
     public GameObject optionsMenuButtonGroup;
+    public GameObject LevelSelectMenuButtonGroup;
+
+    public GameObject levelSelectThing;
 
     public void Play()
     {
+        MainToLevelSelectTransition();
         Debug.Log("play");
     }
 
@@ -22,6 +26,27 @@ public class MainMenu : MonoBehaviour
         TriggerTransitionAnim();
         Debug.Log("options");
     }
+
+
+    public void MainToLevelSelectTransition()
+    {
+        LevelSelectMenuButtonGroup.SetActive(true);
+        mainMenuButtonGroup.SetActive(false);
+        levelSelectThing.SetActive(true);
+
+        MoveToLeftCornerAnim();
+
+    }
+
+    public void LevelSelectToMainTransition()
+    {
+        LevelSelectMenuButtonGroup.SetActive(false);
+        mainMenuButtonGroup.SetActive(true);
+        MoveToCenterAnim();
+        levelSelectThing.SetActive(false);
+
+    }
+
 
     public void BackToMainMenu()
     {
@@ -48,4 +73,15 @@ public class MainMenu : MonoBehaviour
     {
         animators.ForEach(e => e.SetTrigger("Transition"));
     }
+
+    private void MoveToLeftCornerAnim()
+    {
+        animators.ForEach(e => e.SetTrigger("Left"));
+    }
+
+    private void MoveToCenterAnim()
+    {
+        animators.ForEach(e => e.SetTrigger("Center"));
+    }
+
 }
