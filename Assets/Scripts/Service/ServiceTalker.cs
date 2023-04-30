@@ -7,6 +7,7 @@ using UnityEngine;
 using System.Text;
 using System;
 using UnityEngine.XR;
+using static Serializer;
 
 public class ServiceTalker : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class ServiceTalker : MonoBehaviour
     public string Ip = "192.168.1.241";
     public int Port = 5302;
     public int Version = 0;
+    public bool DebugGui;
 
     private Socket socket;
 
@@ -27,14 +29,17 @@ public class ServiceTalker : MonoBehaviour
 
     private void OnGUI()
     {
+        if (!DebugGui)
+            return;
+
         Dictionary<string, Action> funcs = new Dictionary<string, Action>();
-        funcs.Add(ServerStructs.Requests.MetaListRequest.ToString(), () => GetMetaList());
-        funcs.Add(ServerStructs.Requests.LevelCompleteRequest.ToString(), () => SendLevelComplete());
-        funcs.Add(ServerStructs.Requests.LevelDownloadRequest.ToString(), () => DownloadLevel());
-        funcs.Add(ServerStructs.Requests.LevelUploadRequest.ToString(), () => UploadLevel());
+        funcs.Add(Requests.MetaListRequest.ToString(), () => GetMetaList());
+        funcs.Add(Requests.LevelCompleteRequest.ToString(), () => SendLevelComplete());
+        funcs.Add(Requests.LevelDownloadRequest.ToString(), () => DownloadLevel(GetMetaList().Levels[0]));
+        funcs.Add(Requests.LevelUploadRequest.ToString(), () => UploadLevel(new LevelMeta(), "temp data"));
 
         int offset = 0;
-        foreach (string name in Enum.GetNames(typeof(ServerStructs.Requests)))
+        foreach (string name in Enum.GetNames(typeof(Requests)))
         {
             if (GUI.Button(new Rect(20, 20 + offset, 150, 35), name))
             {
@@ -44,74 +49,71 @@ public class ServiceTalker : MonoBehaviour
         }
     }
 
-    public ServerStructs.MetaFile GetMetaList()
+    public MetaFile GetMetaList()
     {
         Connect();
 
-        var request = new ServerStructs.MetaListRequest
+        var request = new MetaListRequest
         {
             Version = Version
         };
-        Send(JsonUtility.ToJson(request), (byte)ServerStructs.Requests.MetaListRequest);
+        Send(JsonUtility.ToJson(request), (byte)Requests.MetaListRequest);
 
         string response = Receive();
 
         Debug.Log($"Response: {response}");
 
-        return (ServerStructs.MetaFile) JsonUtility.FromJson(response, typeof(ServerStructs.MetaFile));
+        return (MetaFile) JsonUtility.FromJson(response, typeof(MetaFile));
     }
     public void SendLevelComplete()
     {
-        ServerStructs.MetaFile levelMeta = GetMetaList();
-        ServerStructs.LevelMeta level = levelMeta.Levels[0];
+        MetaFile levelMeta = GetMetaList();
+        LevelMeta level = levelMeta.Levels[0];
 
         Connect();
-        var request = new ServerStructs.LevelCompleteRequest
+        var request = new LevelCompleteRequest
         {
             Version = Version,
             Level = level.ID,
             Success = 1
         };
 
-        Send(JsonUtility.ToJson(request), (byte)ServerStructs.Requests.LevelCompleteRequest);
+        Send(JsonUtility.ToJson(request), (byte)Requests.LevelCompleteRequest);
 
         string response = Receive();
 
         Debug.Log(response);
     }
-    public void UploadLevel()
+    public void UploadLevel(LevelMeta meta, string json)
     {
         Connect();
-        var request = new ServerStructs.LevelUploadRequest {
+        var request = new LevelUploadRequest {
             Version = Version,
-            Meta = new ServerStructs.LevelMeta{ },
-            JsonData = "derå"
+            Meta = meta,
+            JsonData = json
         };
 
-        Send(JsonUtility.ToJson(request), (byte)ServerStructs.Requests.LevelUploadRequest);
+        Send(JsonUtility.ToJson(request), (byte)Requests.LevelUploadRequest);
 
         string response = Receive();
 
         Debug.Log(response);
     }
-    public void DownloadLevel()
+    public LevelData DownloadLevel(LevelMeta meta)
     {
-        ServerStructs.MetaFile levelMeta = GetMetaList();
-        ServerStructs.LevelMeta level = levelMeta.Levels[0];
-        
         Connect();
-        var request = new ServerStructs.LevelDownloadRequest
+        var request = new LevelDownloadRequest
         {
             Version = Version,
-            ID = level.ID,
-            Creator = level.Creator
+            ID = meta.ID,
+            Creator = meta.Creator
         };
 
-        Send(JsonUtility.ToJson(request), (byte) ServerStructs.Requests.LevelDownloadRequest);
+        Send(JsonUtility.ToJson(request), (byte) Requests.LevelDownloadRequest);
 
         string response = Receive();
 
-        Debug.Log(response);
+        return (LevelData) JsonUtility.FromJson(response, typeof(LevelData));
     }
 
     private void Connect()

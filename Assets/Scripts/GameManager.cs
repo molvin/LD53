@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public static class PersistentData
 {
     public static string LevelPath = null;
+    public static LevelMeta? LevelMeta = null;
 }
 
 public class GameManager : MonoBehaviour
