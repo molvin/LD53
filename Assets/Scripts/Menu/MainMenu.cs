@@ -36,6 +36,12 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public IEnumerator ActivateAfterTime(GameObject to_activate, float wait_time, bool state)
+    {
+        yield return new WaitForSeconds(wait_time);
+        to_activate.SetActive(state);
+    }
+
     public void Play()
     {
         if (PersistentData.PlayerName == "Default")
@@ -50,8 +56,7 @@ public class MainMenu : MonoBehaviour
     public void Options()
     {
         mainMenuButtonGroup.SetActive(false);
-        optionsMenuButtonGroup.SetActive(true);
-
+        StartCoroutine(ActivateAfterTime(optionsMenuButtonGroup, 1, true));
         TriggerTransitionAnim();
         Debug.Log("options");
     }
@@ -59,9 +64,10 @@ public class MainMenu : MonoBehaviour
 
     public void MainToLevelSelectTransition()
     {
-        LevelSelectMenuButtonGroup.SetActive(true);
+        StartCoroutine(ActivateAfterTime(LevelSelectMenuButtonGroup, 1, true));
+        StartCoroutine(ActivateAfterTime(levelSelectThing, 1, true));
+
         mainMenuButtonGroup.SetActive(false);
-        levelSelectThing.SetActive(true);
         creators.SetActive(false);
         MoveToLeftCornerAnim();
 
@@ -70,8 +76,9 @@ public class MainMenu : MonoBehaviour
     public void LevelSelectToMainTransition()
     {
         LevelSelectMenuButtonGroup.SetActive(false);
-        mainMenuButtonGroup.SetActive(true);
-        creators.SetActive(true);
+        StartCoroutine(ActivateAfterTime(mainMenuButtonGroup, 1, true));
+
+        StartCoroutine(ActivateAfterTime(creators, 1, true));
 
         MoveToCenterAnim();
         levelSelectThing.SetActive(false);
