@@ -4,15 +4,48 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<Animator> animators;
+
+    public GameObject mainMenuButtonGroup;
+    public GameObject optionsMenuButtonGroup;
+
+    public void Play()
     {
-        
+        Debug.Log("play");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Options()
     {
-        
+        mainMenuButtonGroup.SetActive(false);
+        optionsMenuButtonGroup.SetActive(true);
+
+        TriggerTransitionAnim();
+        Debug.Log("options");
+    }
+
+    public void BackToMainMenu()
+    {
+        optionsMenuButtonGroup.SetActive(false);
+        mainMenuButtonGroup.SetActive(true);
+
+        TriggerTransitionAnim();
+
+        Debug.Log("back to menu");
+    }
+
+    public void Editor()
+    {
+        Debug.Log("editor");
+    }
+
+    public void Exit()
+    {
+        Debug.Log("quit");
+        Application.Quit();
+    }
+
+    private void TriggerTransitionAnim()
+    {
+        animators.ForEach(e => e.SetTrigger("Transition"));
     }
 }
