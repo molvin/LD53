@@ -260,7 +260,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &683859644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   roll_speed: 1
-  splineDistance: 5
+  splineDistance: 4
   mouse_sensitivity: 1
   PCM: {fileID: 1418647745}
 --- !u!65 &683859645
@@ -373,7 +373,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1103054281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,7 +552,7 @@ MonoBehaviour:
   Prefab8X8: {fileID: 4349196496511800372, guid: d16fdb5175681ea458921e4b44470202,
     type: 3}
   GeoLayer: Tunnel
-  isoSurface: 0.5
+  isoSurface: 5
 --- !u!4 &1418647746
 Transform:
   m_ObjectHideFlags: 0

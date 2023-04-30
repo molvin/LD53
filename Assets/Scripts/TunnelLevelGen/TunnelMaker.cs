@@ -77,7 +77,7 @@ public class TunnelMaker : MonoBehaviour
     public float SuperNoise(Vector3 point)
     {
         //distance along spline X
-        float dist = SplineNoise3D.HoleNoise(point) / _HoleSize;
+        float dist = SplineNoise3D.SplineNoise(point) / _HoleSize;
         if (dist > 1f) dist = 1f;
         Perlin3D.scale = _InternalCaveNoise;
         float caveWalls = SplineNoise3D.SplineNoise(point) + Perlin3D.PerlinNoise3D(point) * _CaveWallAmount;
@@ -87,7 +87,7 @@ public class TunnelMaker : MonoBehaviour
     public float SuperNoiseHole(Vector3 point)
     {
         //distance along spline X
-        float dist = SplineNoise3D.HoleNoise(point) / _HoleSize;
+        float dist = SplineNoise3D.SplineNoise(point) / _HoleSize;
         if (dist > 1f) dist = 1f;
         Perlin3D.scale = _InternalCaveNoise;
         return dist;
