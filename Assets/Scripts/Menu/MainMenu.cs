@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
 
     public GameObject levelSelectThing;
 
-
+    public GameObject creators;
     public GameObject name_select;
 
 
@@ -62,7 +62,7 @@ public class MainMenu : MonoBehaviour
         LevelSelectMenuButtonGroup.SetActive(true);
         mainMenuButtonGroup.SetActive(false);
         levelSelectThing.SetActive(true);
-
+        creators.SetActive(false);
         MoveToLeftCornerAnim();
 
     }
@@ -71,6 +71,8 @@ public class MainMenu : MonoBehaviour
     {
         LevelSelectMenuButtonGroup.SetActive(false);
         mainMenuButtonGroup.SetActive(true);
+        creators.SetActive(true);
+
         MoveToCenterAnim();
         levelSelectThing.SetActive(false);
 
@@ -81,6 +83,7 @@ public class MainMenu : MonoBehaviour
     {
         optionsMenuButtonGroup.SetActive(false);
         mainMenuButtonGroup.SetActive(true);
+        creators.SetActive(true);
 
         TriggerTransitionAnim();
 
