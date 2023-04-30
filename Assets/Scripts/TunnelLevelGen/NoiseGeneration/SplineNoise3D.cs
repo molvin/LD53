@@ -184,6 +184,17 @@ public class SplineNoise3D
             left = rot * Vector3.left * Roundness.w
         });
     }
+    public static void InsertSplineSegment(int index, Vector3 pos, Quaternion rot, float radius, Vector4 Roundness)
+    {
+        SplineLine.Insert(index, new Spline {
+            pos = pos,
+            radius = radius,
+            up = rot * Vector3.up * Roundness.x,
+            right = rot * Vector3.right * Roundness.y,
+            down = rot * Vector3.down * Roundness.z,
+            left = rot * Vector3.left * Roundness.w
+        });
+    }
     public static Spline LerpSpline(Spline a, Spline b, float t)
     {
         return new Spline
