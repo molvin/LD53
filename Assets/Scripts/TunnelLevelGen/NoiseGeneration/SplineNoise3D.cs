@@ -170,6 +170,17 @@ public class SplineNoise3D
         SplineLine.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
         SplineHole.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
     }
+    public static void AddSplineSegment(Vector3 pos, Quaternion rot, float radius, Vector4 Roundness)
+    {
+        SplineLine.Add(new Spline {
+            pos = pos,
+            radius = radius,
+            up = rot * Vector3.up * Roundness.x,
+            right = rot * Vector3.right * Roundness.y,
+            down = rot * Vector3.down * Roundness.z,
+            left = rot * Vector3.left * Roundness.w
+        });
+    }
     public static Spline LerpSpline(Spline a, Spline b, float t)
     {
         return new Spline
