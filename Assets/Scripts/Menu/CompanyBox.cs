@@ -12,7 +12,7 @@ public class CompanyBox : MonoBehaviour
     public void Start()
     {
         company_name.text = PersistentData.PlayerName;
-        resources.text = "Resources" + PersistentData.ResourceCount;
+        resources.text = "Resources: " + PersistentData.ResourceCount;
 
     }
 
