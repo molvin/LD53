@@ -33,6 +33,19 @@ public class PointCloudManager : MonoBehaviour
                 for (int z = -halfExtend; z <= halfExtend; z++)
                     UpdateIsoSurfaceChunk(Chunk + new Vector3Int(x, y, z), initDef);
     }
+
+    public void CreateIsoSurfaceSphere(Vector3 brushPoint, float brushRadius, Func<Vector3, float> initDef)
+    {
+        int halfExtend = Mathf.FloorToInt(brushRadius / (size * 1f)) + 2;
+        Vector3Int Chunk = new Vector3Int((int)(brushPoint.x / (size * 1f)), (int)(brushPoint.y / (size * 1f)), (int)(brushPoint.z / (size * 1f)));
+
+        for (int x = -halfExtend; x <= halfExtend; x++)
+            for (int y = -halfExtend; y <= halfExtend; y++)
+                for (int z = -halfExtend; z <= halfExtend; z++)
+                    CreateIsoSurfaceChunk(Chunk + new Vector3Int(x, y, z), initDef);
+    }
+
+
     public void UpdateIsoSurfaceChunk(Vector3Int chunkId, Func<Vector3, float> initDef)
     {
         if (!meshGrid.ContainsKey(chunkId))
@@ -46,6 +59,22 @@ public class PointCloudManager : MonoBehaviour
         temp.gameObject.layer = LayerMask.NameToLayer(GeoLayer);
         CleanVerts(temp);
     }
+
+    public void CreateIsoSurfaceChunk(Vector3Int chunkId, Func<Vector3, float> initDef)
+    {
+        if (meshGrid.ContainsKey(chunkId))
+        {
+            return;
+        }
+        MarchingCubeMesh mesh = Instantiate(Prefab8X8, chunkId * size, Quaternion.identity, transform);
+        meshGrid.Add(chunkId, mesh);
+        MarchingCubeMesh temp = meshGrid[chunkId];
+        SetPointCloud(initDef, new Vector3(chunkId.x, chunkId.y, chunkId.z) * (size * 1f));
+        marchShader.MarchCloud(ref pointCloud, ref verts, ref tris);
+        temp.gameObject.layer = LayerMask.NameToLayer(GeoLayer);
+        CleanVerts(temp);
+    }
+
     private void CleanVerts(MarchingCubeMesh current)
     {
         int lastRealIndex = 0;
@@ -81,6 +110,16 @@ public class PointCloudManager : MonoBehaviour
                     pointCloud[id] = initDef.Invoke(pos + new Vector3(x, y, z));
                 }
     }
+
+    public void Clear()
+    {
+        foreach(Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        meshGrid.Clear();
+    }
+
     public void OnDestroy()
     {
         marchShader.Release();
