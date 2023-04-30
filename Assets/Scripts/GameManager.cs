@@ -10,15 +10,6 @@ public static class PersistentData
 
 public class GameManager : MonoBehaviour
 {
-    /*TODO: 
-    *      Load Level from saved file
-    *      Wait for player to finish level, or die
-    *          Finish Level
-    *               Go to Map screen (?) select new level or whatever
-    *          Die
-    *               UI for retry or back to map screen
-    *          
-    */
 
     private void OnGUI()
     {
@@ -57,4 +48,5 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    
 }

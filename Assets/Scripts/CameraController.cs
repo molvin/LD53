@@ -10,6 +10,10 @@ public class CameraController : MonoBehaviour
     public float Smoothing;
     private Vector3 velocity;
 
+    private void Start()
+    {
+        Target = FindObjectOfType<HoverController>().transform;
+    }
 
     private void FixedUpdate()
     {

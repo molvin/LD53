@@ -15,13 +15,23 @@ public class Serializer : MonoBehaviour
         public List<SplineNoise3D.Spline> SplineData;
     }
 
+    public bool ShowDebugUI;
     public PointCloudManager PointCloud;
 
     private string debugSavePath = "levels/level.json";
     private bool running;
     private float progress = 1.0f;
 
-    public string SerializeToJson()
+    private void Start()
+    {
+        if(PersistentData.LevelPath != null)
+        {
+            string data = File.ReadAllText(PersistentData.LevelPath);
+            InitializeFromJson(data);
+        }
+    }
+
+    public string SerializeLevelToJson()
     {
         LevelData data = new LevelData{
             Start = Vector3.zero,
@@ -56,24 +66,27 @@ public class Serializer : MonoBehaviour
         }
     }
 
+    public IEnumerator Generate(string j)
+    {
+        PointCloud.Clear();
+        running = true;
+        var iter = InitializeFromJson(j);
+        while (iter.MoveNext())
+        {
+            progress = (float)iter.Current;
+            yield return progress;
+        }
+        running = false;
+    }
+
     public void OnGUI()
     {
-        IEnumerator Generate(string j)
-        {
-            PointCloud.Clear();
-            running = true;
-            var iter = InitializeFromJson(j);
-            while (iter.MoveNext())
-            {
-                progress = (float) iter.Current;
-                yield return null;
-            }
-            running = false;
-        }
+        if (!ShowDebugUI)
+            return;
         debugSavePath = GUI.TextField(new Rect(20, 20, 200, 30), debugSavePath);
         if(GUI.Button(new Rect(220, 20, 110, 30), "Serialize To File"))
         {
-            string data = SerializeToJson();
+            string data = SerializeLevelToJson();
             string path = $"{Application.dataPath}/{debugSavePath}";
             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
             System.IO.File.WriteAllText(path, data);
