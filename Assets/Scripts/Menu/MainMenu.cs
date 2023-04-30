@@ -12,10 +12,39 @@ public class MainMenu : MonoBehaviour
 
     public GameObject levelSelectThing;
 
+
+    public GameObject name_select;
+
+
+    public void SetNameState()
+    {
+        name_select.SetActive(true);
+        mainMenuButtonGroup.SetActive(false);
+
+    }
+
+    public void SubmitName()
+    {
+
+        string name = name_select.GetComponentInChildren<TMPro.TMP_InputField>().text;
+
+        if (name != "Default" && name != "")
+        {
+            name_select.SetActive(false);
+            PersistentData.PlayerName = name;
+            MainToLevelSelectTransition();
+        }
+    }
+
     public void Play()
     {
-        MainToLevelSelectTransition();
-        Debug.Log("play");
+        if (PersistentData.PlayerName == "Default")
+        {
+            SetNameState();
+        } else
+        {
+            MainToLevelSelectTransition();
+        }
     }
 
     public void Options()

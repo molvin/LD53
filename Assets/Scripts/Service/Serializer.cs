@@ -109,7 +109,7 @@ public class Serializer : MonoBehaviour
                 Time = 30.0f,
                 ID = 0,
                 Creator = playerName,
-                Resource = 0
+                Resource = 100
             };
             Debug.Log($"Uploading {data}");
             service.UploadLevel(meta, data);

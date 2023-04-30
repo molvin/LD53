@@ -202,6 +202,8 @@ MonoBehaviour:
     type: 3}
   CameraPrefab: {fileID: 6319288320431453583, guid: 448de8a6e316a3f449fbb12cd52ac2dd,
     type: 3}
+  WinPrefab: {fileID: 1056586838042228963, guid: bc9e23dd7f55e024a89f11d2b0eeac5c,
+    type: 3}
 --- !u!114 &744809217
 MonoBehaviour:
   m_ObjectHideFlags: 0

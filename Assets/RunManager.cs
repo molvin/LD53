@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RunManager : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class RunManager : MonoBehaviour
     public ServiceTalker Service;
     public GameObject TruckPrefab;
     public GameObject CameraPrefab;
+    public GameObject WinPrefab;
+
+    private LevelMeta currentLevel;
 
     private void Start()
     {
@@ -25,8 +29,8 @@ public class RunManager : MonoBehaviour
             {
                 Debug.Log("Reading from service");
 
-                var meta = PersistentData.LevelMeta.Value;
-                Serializer.LevelData level = Service.DownloadLevel(meta);
+                currentLevel = PersistentData.LevelMeta.Value;
+                Serializer.LevelData level = Service.DownloadLevel(currentLevel);
                 data = JsonUtility.ToJson(level); //TODO: fix this
             }
             else if (PersistentData.LevelPath != null)
@@ -56,9 +60,20 @@ public class RunManager : MonoBehaviour
             Vector3 origin = SplineNoise3D.SplineLine[0].pos;
             Instantiate(TruckPrefab, origin, Quaternion.identity);
             Instantiate(CameraPrefab, origin, Quaternion.identity);
-
+            var lastSpline = SplineNoise3D.SplineLine[SplineNoise3D.SplineLine.Count - 1];
+            GameObject win = Instantiate(WinPrefab, lastSpline.pos, Quaternion.identity);
+            var winPoint = win.GetComponent<WinPoint>();
+            winPoint.Radius = lastSpline.radius;
+            winPoint.Manager = this;
         }
 
         StartCoroutine(Coroutine());
+    }
+
+    public void Win()
+    {
+        Debug.Log("Finished Level");
+        PersistentData.ResourceCount += currentLevel.Resource;
+        SceneManager.LoadScene(0);
     }
 }
