@@ -4,44 +4,59 @@ using UnityEngine;
 
 public class ServerStructs
 {
+    public enum Requests
+    {
+        MetaListRequest = 0,
+        LevelDownloadRequest = 1,
+        LevelCompleteRequest = 2,
+        LevelUploadRequest = 3
+    }
+
+    [System.Serializable]
     public struct MetaListRequest
     {
-        public int Version { get; set; }
+        public int Version;
     }
+    [System.Serializable]
     public struct LevelDownloadRequest
     {
-        public int Version { get; set; }
-        public int ID { get; set; }
-        public string Creator { get; set; }
+        public int Version;
+        public int ID;
+        public string Creator;
     }
+    [System.Serializable]
     public struct LevelCompleteRequest
     {
-        public int Version { get; set; }
-        public int Level { get; set; }
-        public int Success { get; set; }
+        public int Version;
+        public int Level;
+        public int Success;
     }
+    [System.Serializable]
     public struct LevelUploadRequest
     {
-        public int Version { get; set; }
-        public LevelMeta Meta { get; set; }
-        public string JsonData { get; set; }
+        public int Version;
+        public LevelMeta Meta;
+        public string JsonData;
     }
+    [System.Serializable]
     public struct Level
     {
-        public LevelMeta Meta { get; set; }
-        public string JsonData { get; set; }
+        public LevelMeta Meta;
+        public string JsonData;
     }
+    [System.Serializable]
     public struct LevelMeta
     {
-        public int Wins { get; set; }
-        public int Attempts { get; set; }
-        public float Time { get; set; }
-        public int ID { get; set; }
-        public string Creator { get; set; }
-        public int Resource { get; set; }
+        public int Wins;
+        public int Attempts;
+        public float Time;
+        public int ID;
+        public string Creator;
+        public int Resource;
     }
+    [System.Serializable]
     public struct MetaFile
     {
-        public List<LevelMeta> Levels { get; set; }
+        public List<LevelMeta> Levels;
     }
 }
