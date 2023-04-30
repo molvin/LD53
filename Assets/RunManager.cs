@@ -25,7 +25,11 @@ public class RunManager : MonoBehaviour
 
             string data;
             Debug.Log($"Starting run {serializer}");
-            if(PersistentData.LevelMeta != null)
+            if(PersistentData.Validating && PersistentData.OverrideLevel != null)
+            {
+
+            }
+            else if(PersistentData.LevelMeta != null)
             {
                 Debug.Log("Reading from service");
 
@@ -75,5 +79,11 @@ public class RunManager : MonoBehaviour
         Debug.Log("Finished Level");
         PersistentData.ResourceCount += currentLevel.Resource;
         SceneManager.LoadScene(0);
+    }
+
+    private void OnDestroy()
+    {
+        PersistentData.Validating = false;
+        PersistentData.OverrideLevel = null;
     }
 }

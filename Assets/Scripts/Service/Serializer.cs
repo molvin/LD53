@@ -98,8 +98,31 @@ public class Serializer : MonoBehaviour
 
 
         playerName = GUI.TextField(new Rect(400, 20, 200, 30), playerName);
-        if (GUI.Button(new Rect(400, 50, 110, 30), "Upload to level"))
+        if (GUI.Button(new Rect(400, 50, 110, 30), "Upload"))
         {
+            string data = SerializeLevelToJson();
+            var service = FindObjectOfType<ServiceTalker>();
+            LevelMeta meta = new LevelMeta
+            {
+                Wins = 0,
+                Attempts = 0,
+                Time = 30.0f,
+                ID = 0,
+                Creator = playerName,
+                Resource = 100
+            };
+            Debug.Log($"Uploading {data}");
+            service.UploadLevel(meta, data);
+            Debug.Log("Done Uploading");
+        }
+        if (GUI.Button(new Rect(400, 50, 110, 30), "Play and Upload"))
+        {
+            PersistentData.LevelMeta = new LevelMeta
+            {
+
+            };
+
+
             string data = SerializeLevelToJson();
             var service = FindObjectOfType<ServiceTalker>();
             LevelMeta meta = new LevelMeta

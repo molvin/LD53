@@ -22,6 +22,9 @@ public static class PersistentData
 
     public static string LevelPath = null;
     public static LevelMeta? LevelMeta = null;
+    public static Serializer.LevelData? OverrideLevel = null;
+    public static bool Validating = false;
+
 }
 
 public class GameManager : MonoBehaviour
