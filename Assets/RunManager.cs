@@ -11,6 +11,8 @@ public class RunManager : MonoBehaviour
     public GameObject CameraPrefab;
     public GameObject WinPrefab;
 
+    private LevelMeta currentLevel;
+
     private void Start()
     {
         StartRun();
@@ -27,8 +29,8 @@ public class RunManager : MonoBehaviour
             {
                 Debug.Log("Reading from service");
 
-                var meta = PersistentData.LevelMeta.Value;
-                Serializer.LevelData level = Service.DownloadLevel(meta);
+                currentLevel = PersistentData.LevelMeta.Value;
+                Serializer.LevelData level = Service.DownloadLevel(currentLevel);
                 data = JsonUtility.ToJson(level); //TODO: fix this
             }
             else if (PersistentData.LevelPath != null)
@@ -71,6 +73,7 @@ public class RunManager : MonoBehaviour
     public void Win()
     {
         Debug.Log("Finished Level");
+        PersistentData.ResourceCount += currentLevel.Resource;
         SceneManager.LoadScene(0);
     }
 }
