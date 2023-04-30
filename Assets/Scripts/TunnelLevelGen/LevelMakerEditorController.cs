@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.UIElements;
 
 public class LevelMakerEditorController : MonoBehaviour
@@ -22,7 +24,7 @@ public class LevelMakerEditorController : MonoBehaviour
     public float HandleDistance = 2f;
     public float AddDistance = 50f;
     public float MinRadius = 5f;
-    public float MaxRadius = 30f;
+    public float MaxRadius = 20f;
 
     private MeshRenderer CurrentSplineEdit;
     private List<GameObject> SplineTransforms = new List<GameObject>();
@@ -36,7 +38,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private Vector3 WorkingPos = Vector3.zero;
     private Quaternion WorkingRot = Quaternion.identity;
-    private float _WorkingScale = 20f;
+    private float _WorkingScale = 15f;
     float WorkScale => TransformScale(_WorkingScale);
 
     float TransformScale(float Value) => Mathf.Lerp(MinRadius, MaxRadius, (float)(Mathf.RoundToInt((Value - MinRadius) / (MaxRadius - MinRadius) * 3f)) / 3f);
@@ -44,6 +46,11 @@ public class LevelMakerEditorController : MonoBehaviour
     private int CurrentSelection;
     const float TilingX = 1f / 4f;
     const float TIlingY = 1f / 3f;
+
+    private void Awake()
+    {
+        _WorkingScale = (MinRadius + MaxRadius) * 0.5f;
+    }
 
     private void Update()
     {
@@ -124,6 +131,11 @@ public class LevelMakerEditorController : MonoBehaviour
             RotateAround();
         }
 
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            Delete();
+        }
+
         UpdatePointRotations();
         UpdateIntermediates();
 
@@ -141,8 +153,34 @@ public class LevelMakerEditorController : MonoBehaviour
             {
                 Transform Trans = SplineTransforms[i].transform;
                 SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales(i), GetShape(Shapes[i]));
+                if (i < SplineTransforms.Count - 1)
+                {
+                    Vector4 FirstShape = GetShape(Shapes[i]);
+                    Vector4 SecondShape = GetShape(Shapes[i + 1]);
+                    Vector4 Shape = Vector4.Lerp(FirstShape, SecondShape, 0.5f);
+                    float scale = (Scales(i) + Scales(i + 1)) * 0.5f;
+                    Transform IT = IntermediatePoints[i].transform;
+                    SplineNoise3D.AddSplineSegment(IT.position, IT.rotation, scale, Shape);
+                }
             }
             StartCoroutine(FindObjectOfType<Serializer>().Generate(FindObjectOfType<Serializer>().SerializeLevelToJson()));
+        }
+    }
+
+    private void Delete()
+    {
+        if (CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
+        {
+            int index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
+            GameObject cube = SplineTransforms[index];
+            SplineTransforms.RemoveAt(index);
+            Destroy(cube);
+            if (IntermediatePoints.Count > 0)
+            {
+                GameObject sphere = IntermediatePoints[0];
+                IntermediatePoints.RemoveAt(0);
+                Destroy(sphere);
+            }
         }
     }
 
@@ -288,23 +326,10 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        int IntermediateIndex = -1;
-        if (CurrentSplineEdit && IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
-        {
-            IntermediateIndex = IntermediatePoints.IndexOf(CurrentSplineEdit.gameObject);
-        }
-
         for (int i = 0; i < SplineTransforms.Count - 1; i++)
         {
-            if (i == IntermediateIndex)
-            {
-                Debug.DrawLine(SplineTransforms[i].transform.position, CurrentSplineEdit.transform.position, Color.red);
-                Debug.DrawLine(CurrentSplineEdit.transform.position, SplineTransforms[i + 1].transform.position, Color.red);
-            }
-            else
-            {
-                Debug.DrawLine(SplineTransforms[i].transform.position, SplineTransforms[i + 1].transform.position, Color.red);
-            }
+            Debug.DrawLine(SplineTransforms[i].transform.position, IntermediatePoints[i].transform.position, Color.red);
+            Debug.DrawLine(IntermediatePoints[i].transform.position, SplineTransforms[i + 1].transform.position, Color.red);
         }
 
         for (int i = 0; i < SplineTransforms.Count; i++)
@@ -312,20 +337,6 @@ public class LevelMakerEditorController : MonoBehaviour
             Gizmos.DrawWireSphere(SplineTransforms[i].transform.position, Scales(i));
         }
         Gizmos.DrawWireSphere(WorkingPos, WorkScale);
-
-        /*
-        for (int i = 0; i < SplineLine.Count; i++)
-        {
-            Transform trans = SplineTransforms[i].transform;
-            Gizmos.DrawLine(trans.position, trans.position + trans.up * SplineLine[i].radius);
-        }
-
-        if(SplineNoise3D.SplineLine.Count > 0)
-        {
-            Spline s = SplineNoise3D.getLerpSplineFromPoint(transform.position);
-            Debug.DrawLine(transform.position, s.pos, Color.magenta);
-        }
-        */
 
         Vector3 HandlePos = CurrentSplineEdit ? CurrentSplineEdit.transform.position : WorkingPos;
         Quaternion HandleRot = CurrentSplineEdit ? CurrentSplineEdit.transform.rotation : WorkingRot;
@@ -461,7 +472,24 @@ public class LevelMakerEditorController : MonoBehaviour
     {
         for (int i = 0; i < SplineTransforms.Count - 1; i++)
         {
-            Vector3 Pos = Vector3.Lerp(SplineTransforms[i].transform.position, SplineTransforms[i + 1].transform.position, 0.5f);
+            Vector3 Pos;
+            if (i > 0 && i < SplineTransforms.Count - 2)
+            {
+                float Distance = Vector3.Distance(SplineTransforms[i].transform.position, SplineTransforms[i + 1].transform.position);
+                Vector3 Dir1 = (SplineTransforms[i].transform.position - SplineTransforms[i - 1].transform.position).normalized;
+                Vector3 Dir2 = (SplineTransforms[i + 1].transform.position - SplineTransforms[i + 2].transform.position).normalized;
+                Vector3 Point1 = SplineTransforms[i].transform.position + Dir1 * Distance;
+                Vector3 Point2 = SplineTransforms[i + 1].transform.position + Dir2 * Distance;
+
+                Vector3 Point = (Point1 + Point2) * 0.5f;
+                Vector3 Pos1 = Vector3.Lerp(SplineTransforms[i].transform.position, Point, 0.4f);
+                Vector3 Pos2 = Vector3.Lerp(Point, SplineTransforms[i + 1].transform.position, 0.6f);
+                Pos = Vector3.Lerp(Pos1, Pos2, 0.5f);
+            }
+            else
+            {
+                Pos = Vector3.Lerp(SplineTransforms[i].transform.position, SplineTransforms[i + 1].transform.position, 0.5f);
+            }
 
             Transform InterTrans = IntermediatePoints[i].transform;
 
