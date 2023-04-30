@@ -31,7 +31,7 @@ public class Serializer : MonoBehaviour
         }
     }
 
-    public string SerializeToJson()
+    public string SerializeLevelToJson()
     {
         LevelData data = new LevelData{
             Start = Vector3.zero,
@@ -86,7 +86,7 @@ public class Serializer : MonoBehaviour
         debugSavePath = GUI.TextField(new Rect(20, 20, 200, 30), debugSavePath);
         if(GUI.Button(new Rect(220, 20, 110, 30), "Serialize To File"))
         {
-            string data = SerializeToJson();
+            string data = SerializeLevelToJson();
             string path = $"{Application.dataPath}/{debugSavePath}";
             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
             System.IO.File.WriteAllText(path, data);
