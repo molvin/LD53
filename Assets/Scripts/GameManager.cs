@@ -5,13 +5,27 @@ using UnityEngine.SceneManagement;
 
 public static class PersistentData
 {
+    public static string PlayerName
+    {
+        get => PlayerPrefs.GetString("PlayerName", "Default");
+        set => PlayerPrefs.SetString("PlayerName", value);
+    }
+    public static int PlayerId
+    {
+        get => PlayerPrefs.GetInt("PlayerId", Random.Range(0, int.MaxValue));
+    }
+    public static int ResourceCount
+    {
+        get => PlayerPrefs.GetInt("Resources", 0);
+        set => PlayerPrefs.SetInt("Resources", value);
+    }
+
     public static string LevelPath = null;
     public static LevelMeta? LevelMeta = null;
 }
 
 public class GameManager : MonoBehaviour
 {
-
     private void OnGUI()
     {
         string[] levels =
