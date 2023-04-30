@@ -259,6 +259,7 @@ MonoBehaviour:
   SpeedUp: 2.5
   VisualMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   VisualMeshMaterial: {fileID: 2100000, guid: bb098351584e5474597ed68d34b62d6d, type: 2}
+  SelectionUIMaterial: {fileID: 2100000, guid: 3f7f4862f93283e449878ba44931ec72, type: 2}
   TooCloseDistance: 3
   HandleLength: 3
   HandleDistance: 2

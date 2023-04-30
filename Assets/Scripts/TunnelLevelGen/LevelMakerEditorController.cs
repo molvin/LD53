@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,6 +15,8 @@ public class LevelMakerEditorController : MonoBehaviour
     public Mesh VisualMesh;
     public Material VisualMeshMaterial;
 
+    public Material SelectionUIMaterial;
+
     public float TooCloseDistance = 3f;
     public float HandleLength = 3f;
     public float HandleDistance = 2f;
@@ -24,17 +27,34 @@ public class LevelMakerEditorController : MonoBehaviour
     private MeshRenderer CurrentSplineEdit;
     private List<GameObject> SplineTransforms = new List<GameObject>();
     private List<GameObject> IntermediatePoints = new List<GameObject>();
-    private List<float> Scales = new List<float>();
+    private List<float> _Scales = new List<float>();
+    private List<int> Shapes = new List<int>();
+    float Scales(int Index) => TransformScale(_Scales[Index]);
 
     private float Yaw = 0f;
     private float Pitch = 0f;
 
     private Vector3 WorkingPos = Vector3.zero;
     private Quaternion WorkingRot = Quaternion.identity;
-    private float WorkingScale = 3f;
+    private float _WorkingScale = 20f;
+    float WorkScale => TransformScale(_WorkingScale);
+
+    float TransformScale(float Value) => Mathf.Lerp(MinRadius, MaxRadius, (float)(Mathf.RoundToInt((Value - MinRadius) / (MaxRadius - MinRadius) * 3f)) / 3f);
+
+    private int CurrentSelection;
+    const float TilingX = 1f / 4f;
+    const float TIlingY = 1f / 3f;
 
     private void Update()
     {
+        NumPress();
+        if (SelectionUIMaterial)
+        {
+            Vector2 Offset = new Vector2(1f + CurrentSelection % 4 * TilingX, 2f / 3f - (int)(CurrentSelection / 4) * TIlingY);
+            SelectionUIMaterial.SetTextureOffset("_BaseMap", Offset);
+            Graphics.DrawMesh(VisualMesh, transform.position + transform.forward * 5f - transform.right * 3f - transform.up * 2f, Quaternion.LookRotation(transform.forward, transform.up), SelectionUIMaterial, 0);
+        }
+
         float Horizontal = Input.GetAxisRaw("Horizontal");
         float Vertical = Input.GetAxisRaw("Vertical");
         float Up = Input.GetKey(KeyCode.E) ? 1f : 0f;
@@ -120,9 +140,60 @@ public class LevelMakerEditorController : MonoBehaviour
             for (int i = 0; i < SplineTransforms.Count; i++)
             {
                 Transform Trans = SplineTransforms[i].transform;
-                SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales[i], Vector4.one * 0.5f);
+                SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales(i), GetShape(Shapes[i]));
             }
             StartCoroutine(FindObjectOfType<Serializer>().Generate(FindObjectOfType<Serializer>().SerializeLevelToJson()));
+        }
+    }
+
+    private void NumPress()
+    {
+        int prev = CurrentSelection;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            CurrentSelection = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            CurrentSelection = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            CurrentSelection = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            CurrentSelection = 3;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            CurrentSelection = 4;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            CurrentSelection = 5;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            CurrentSelection = 6;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            CurrentSelection = 7;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            CurrentSelection = 8;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            CurrentSelection = 9;
+        }
+        
+        if (prev != CurrentSelection && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
+        {
+            int index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
+            Shapes[index] = CurrentSelection;
         }
     }
 
@@ -176,12 +247,15 @@ public class LevelMakerEditorController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+            int i = 0;
             foreach (var cube in SplineTransforms)
             {
                 if (cube.transform == hit.transform)
                 {
                     CurrentSplineEdit = cube.GetComponent<MeshRenderer>();
+                    CurrentSelection = Shapes[i];
                 }
+                i++;
             }
 
             foreach (var sphere in IntermediatePoints)
@@ -235,9 +309,9 @@ public class LevelMakerEditorController : MonoBehaviour
 
         for (int i = 0; i < SplineTransforms.Count; i++)
         {
-            Gizmos.DrawWireSphere(SplineTransforms[i].transform.position, Scales[i]);
+            Gizmos.DrawWireSphere(SplineTransforms[i].transform.position, Scales(i));
         }
-        Gizmos.DrawWireSphere(WorkingPos, WorkingScale);
+        Gizmos.DrawWireSphere(WorkingPos, WorkScale);
 
         /*
         for (int i = 0; i < SplineLine.Count; i++)
@@ -271,7 +345,8 @@ public class LevelMakerEditorController : MonoBehaviour
         cube.transform.rotation = WorkingRot;
         cube.transform.localScale = Vector3.one * MinRadius;
         SplineTransforms.Add(cube);
-        Scales.Add(WorkingScale);
+        Shapes.Add(CurrentSelection);
+        _Scales.Add(WorkScale);
         //SplineNoise3D.AddSplineSegment(WorkingPos, WorkingRot, Random.Range(1f, 10f), Roundness);
         WorkingPos += WorkingRot * Vector3.forward * AddDistance;
 
@@ -297,8 +372,10 @@ public class LevelMakerEditorController : MonoBehaviour
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = NewPos;
         cube.transform.rotation = NewRot;
+        cube.transform.localScale = Vector3.one * MinRadius;
         SplineTransforms.Insert(Index + 1, cube);
-        Scales.Insert(Index + 1, WorkingScale);
+        Shapes.Insert(Index + 1, CurrentSelection);
+        _Scales.Insert(Index + 1, WorkScale);
 
         //InsertSplineSegment(Index + 1, NewPos, NewRot, Random.Range(1f, 10f), Roundness);
 
@@ -317,6 +394,7 @@ public class LevelMakerEditorController : MonoBehaviour
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.position = AddPos;
             sphere.transform.rotation = AddRot;
+            sphere.transform.localScale = Vector3.one * MinRadius;
             IntermediatePoints.Insert(Index + 1, sphere);
         }
 
@@ -332,11 +410,11 @@ public class LevelMakerEditorController : MonoBehaviour
             if (CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
             {
                 int Index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
-                Scales[Index] = Mathf.Clamp(Scales[Index] + Scroll * 4, MinRadius, MaxRadius);
+                _Scales[Index] = Mathf.Clamp(_Scales[Index] + Scroll * 14f, MinRadius, MaxRadius);
             }
             else
             {
-                WorkingScale = Mathf.Clamp(WorkingScale + Scroll * 4, MinRadius, MaxRadius);
+                _WorkingScale = Mathf.Clamp(_WorkingScale + Scroll * 14f, MinRadius, MaxRadius);
             }
         }
     }
@@ -397,5 +475,28 @@ public class LevelMakerEditorController : MonoBehaviour
             }
             InterTrans.rotation = Rot;
         }
+    }
+
+    private Vector4 GetShape(int Selection)
+    {
+        // x = up
+        // y = right
+        // z = down
+        // w = left
+        Vector4 Shape = Vector4.zero;
+        switch (Selection)
+        {
+            case 0: { break; }
+            case 1: { Shape.x = 0.5f; break; }
+            case 2: { Shape.x = 0.5f; Shape.w = 0.5f; break; }
+            case 3: { Shape.x = 0.5f; Shape.y = 0.5f; break; }
+            case 4: { Shape.x = 0.5f; Shape.y = 0.5f; Shape.w = 0.5f; break; }
+            case 5: { Shape.z = 0.5f; break; }
+            case 6: { Shape.z = 0.5f; Shape.x = 0.5f; break; }
+            case 7: { Shape.z = 0.5f; Shape.x = 0.5f; Shape.w = 0.5f; break; }
+            case 8: { Shape.z = 0.5f; Shape.x = 0.5f; Shape.y = 0.5f; break; }
+            case 9: { Shape.z = 0.5f; Shape.x = 0.5f; Shape.y = 0.5f; Shape.w = 0.5f; break; }
+        }
+        return Shape;
     }
 }
