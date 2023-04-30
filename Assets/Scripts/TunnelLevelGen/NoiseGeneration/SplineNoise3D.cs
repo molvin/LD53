@@ -5,10 +5,29 @@ using UnityEngine;
 public class SplineNoise3D
 {
     public static List<Spline> SplineLine = new List<Spline>();
-    public static List<Spline> SplineHole = new List<Spline>();
     public static float SplineNoise(Vector3 point)
     {
-        return (getPointOnSpline(point) - point).magnitude;
+        Spline spline = getLerpSplineFromPoint(point);
+
+        float tunnel = (point - spline.pos).magnitude / spline.radius;
+        float wall = wallNoise(spline, point);
+        return Mathf.Max(tunnel, wall);
+    }
+    public static float wallNoise(Spline spline, Vector3 point)
+    {
+        Vector3 delta = point - spline.pos;
+        return Mathf.Max(
+            Mathf.Max(wallCalculate(spline.down, spline.radius, delta), wallCalculate(spline.right, spline.radius, delta)),
+            Mathf.Max(wallCalculate(spline.left, spline.radius, delta), wallCalculate(spline.up, spline.radius, delta))
+        );
+    }
+    public static float wallCalculate(Vector3 dir, float radius, Vector3 deltaPos)
+    {
+        float inDown = Vector3.Dot(dir.normalized, deltaPos);
+        if (inDown < 0f)
+            return 0f;
+        float floor = (1f - dir.magnitude) * radius;
+        return floor == 0 ? float.MaxValue : inDown / floor;
     }
     public static float SplineDistance(Vector3 point)
     {
@@ -35,40 +54,13 @@ public class SplineNoise3D
         }
         return 100;
     }
-    public static float HoleNoise(Vector3 point, int splineWindow = 10)
-    {
-        float smaletsFound = float.MaxValue;
-        int min = Mathf.Max(0, SplineHole.Count - splineWindow);
-        //OnLine
-        for (int i = min; i < SplineHole.Count - 1; i++)
-        {
-            if (IsOnLine(SplineHole[i].pos, SplineHole[i + 1].pos, point))
-            {
-                float value = LineDistance(SplineHole[i].pos, SplineHole[i + 1].pos, point);
-                if (value < smaletsFound)
-                    smaletsFound = value;
-            }
-        }
-        if (smaletsFound != float.MaxValue)
-            return smaletsFound;
-        //InJoint
-        for (int i = 1; i < SplineHole.Count - 1; i++)
-        {
-            float hypo = Vector3.Distance(point, SplineHole[i].pos);
-            if (smaletsFound > hypo)
-                smaletsFound = hypo;
-            
-            //if (hypo < SplineHole[i].radius)
-              //  return (LineDistance(SplineHole[i - 1].pos, SplineHole[i].pos, point) + LineDistance(SplineHole[i].pos, SplineHole[i + 1].pos, point)) / 2f;
-        }
-        return smaletsFound;
-    }
+  
 
     public static float LineDistance(Vector3 lineA, Vector3 lineB, Vector3 pointC)
     {
-        Vector3 AC = pointC - lineB;
         Vector3 AB = lineB - lineA;
-        return Vector3.Cross(AC, AB).magnitude / AB.magnitude;
+        Vector3 AC = pointC - lineA;
+        return Vector3.Dot(AB.normalized, AC);
     }
     public static float distanceOnLine(Vector3 lineA, Vector3 lineB, Vector3 pointC)
     {
@@ -97,28 +89,66 @@ public class SplineNoise3D
     }
     public static Vector3 getPointOnSpline(Vector3 pointC)
     {
+        Vector3 closest = Vector3.zero;
+        float shortest = float.MaxValue;
         for (int i = 0; i < SplineLine.Count - 1; i++)
         {
             if (IsOnLine(SplineLine[i].pos, SplineLine[i + 1].pos, pointC))
             {
                 float dis = LineDistance(SplineLine[i].pos, SplineLine[i + 1].pos, pointC);
                 Vector3 lineDir = (SplineLine[i + 1].pos - SplineLine[i].pos).normalized;
-                return SplineLine[i].pos + lineDir * dis;
+                Vector3 closePoint = SplineLine[i].pos + lineDir * dis;
+                float d = (closePoint - pointC).magnitude;
+                if (d < shortest)
+                {
+                    closest = closePoint;
+                    shortest = d;
+                }
             }
         }
         //InJoint
-        float shortest = float.MaxValue;
-        Vector3 joint = SplineLine[SplineLine.Count - 1].pos;
-        for (int i = 0; i < SplineHole.Count; i++)
+        for (int i = 0; i < SplineLine.Count; i++)
         {
-            float hypo = Vector3.Distance(pointC, SplineHole[i].pos);
-            if (shortest > hypo)
+            float hypo = Vector3.Distance(pointC, SplineLine[i].pos);
+            if (hypo < shortest)
             {
-                joint = SplineHole[i].pos;
+                closest = SplineLine[i].pos;
                 shortest = hypo;
             }
         }
-        return joint;
+        return closest;
+    }
+    public static Spline getLerpSplineFromPoint(Vector3 pointC)
+    {
+        Spline closest = new Spline { };
+        float shortest = float.MaxValue;
+        for (int i = 0; i < SplineLine.Count - 1; i++)
+        {
+            if (IsOnLine(SplineLine[i].pos, SplineLine[i + 1].pos, pointC))
+            {
+
+                float dis = LineDistance(SplineLine[i].pos, SplineLine[i + 1].pos, pointC);
+                float factor = dis / (SplineLine[i].pos - SplineLine[i + 1].pos).magnitude;
+                Spline s = LerpSpline(SplineLine[i], SplineLine[i + 1], factor);
+                float d = (s.pos - pointC).magnitude;
+                if (d < shortest)
+                {
+                    closest = s;
+                    shortest = d;
+                }
+            }
+        }
+        //InJoint
+        for (int i = 0; i < SplineLine.Count; i++)
+        {
+            float hypo = Vector3.Distance(pointC, SplineLine[i].pos);
+            if (hypo < shortest)
+            {
+                closest = SplineLine[i];
+                shortest = hypo;
+            }
+        }
+        return closest;
     }
     public static bool IsOnLine(Vector3 lineA, Vector3 lineB, Vector3 pointC)
     {
@@ -126,37 +156,55 @@ public class SplineNoise3D
         Vector3 BA = lineB - lineA;
         return alongLine > 0f && alongLine <= BA.magnitude;
     }
+    
     //Spline stuff
     public static void AddSplineSegment(Transform trans, float radius)
     {
-        SplineLine.Add(new Spline { pos = trans.position, radius = radius, up = trans.up });
-        SplineHole.Add(new Spline { pos = trans.position, radius = radius, up = trans.up });
+        SplineLine.Add(new Spline { 
+            pos = trans.position, 
+            radius = radius,
+            up = trans.up * 0.5f,
+            down = Vector3.zero,
+            right = Vector3.zero,
+            left = Vector3.zero
+        });
     }
     public static void AddSplineSegment(Vector3 pos, float radius)
     {
         SplineLine.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
-        SplineHole.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
     }
-    public static Spline LearpSpline(Spline a, Spline b, float t)
+    public static void AddSplineSegment(Vector3 pos, Quaternion rot, float radius, Vector4 Roundness)
+    {
+        SplineLine.Add(new Spline {
+            pos = pos,
+            radius = radius,
+            up = rot * Vector3.up * Roundness.x,
+            right = rot * Vector3.right * Roundness.y,
+            down = rot * Vector3.down * Roundness.z,
+            left = rot * Vector3.left * Roundness.w
+        });
+    }
+    public static Spline LerpSpline(Spline a, Spline b, float t)
     {
         return new Spline
         {
+            pos = Vector3.Lerp(a.pos, b.pos, t),
             radius = Mathf.Lerp(a.radius, b.radius, t),
             up = Vector3.Slerp(a.up, b.up, t),
-            downFactor = Mathf.Lerp(a.downFactor, b.downFactor, t),
-            rightFactor = Mathf.Lerp(a.rightFactor, b.rightFactor, t),
-            upFactor = Mathf.Lerp(a.upFactor, b.upFactor, t),
-            leftFactor = Mathf.Lerp(a.leftFactor, b.leftFactor, t)
+            down = Vector3.Slerp(a.down, b.down, t),
+            right = Vector3.Slerp(a.right, b.right, t),
+            left = Vector3.Slerp(a.left, b.left, t)
         };
     }
+    
+    [System.Serializable]
     public struct Spline
     {
         public Vector3 pos;
         public float radius;
         public Vector3 up;
-        public float downFactor;
-        public float rightFactor;
-        public float upFactor;
-        public float leftFactor;
+        public Vector3 right;
+        public Vector3 down;
+        public Vector3 left;
     }
 }
