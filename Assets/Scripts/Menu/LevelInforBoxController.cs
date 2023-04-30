@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelInforBoxController : MonoBehaviour
 {
 
-    ServerStructs.LevelMeta data;
+    LevelMeta data;
 
     public TMPro.TextMeshProUGUI Name;
     public TMPro.TextMeshProUGUI Wins;
@@ -15,7 +15,7 @@ public class LevelInforBoxController : MonoBehaviour
 
 
 
-    public void SetData(ServerStructs.LevelMeta data)
+    public void SetData(LevelMeta data)
     {
         this.data = data;
 

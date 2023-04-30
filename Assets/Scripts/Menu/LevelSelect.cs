@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static ServerStructs;
 
 public class LevelSelect : MonoBehaviour
 {
-    private List<ServerStructs.LevelMeta> levels;
+    private List<LevelMeta> levels;
     private List<Astroid_data_holder> currentLevelsOnDisplay;
 
     public int levelsOnDisplay = 6;
@@ -77,7 +76,7 @@ public class LevelSelect : MonoBehaviour
 
     private class Astroid_data_holder
     {
-        public Astroid_data_holder(GameObject game_object, float current_angle, float personal_offset, ServerStructs.LevelMeta data)
+        public Astroid_data_holder(GameObject game_object, float current_angle, float personal_offset, LevelMeta data)
         {
             this.game_object = game_object;
             this.current_angle = current_angle;
@@ -88,7 +87,7 @@ public class LevelSelect : MonoBehaviour
         public GameObject game_object;
         public float current_angle;
         public float personal_offset;
-        public ServerStructs.LevelMeta data;
+        public LevelMeta data;
     }
 
     public void Start()
@@ -101,14 +100,14 @@ public class LevelSelect : MonoBehaviour
     private void Enter()
     {
         currentLevelsOnDisplay = new List<Astroid_data_holder>();
-        levels = new List<ServerStructs.LevelMeta>();
-        levels.Add(new ServerStructs.LevelMeta() { Attempts = 8, Creator = "Niklas", ID = 0, Resource = 1, Time = 67, Wins = 7 });
-        levels.Add(new ServerStructs.LevelMeta() { Attempts = 8, Creator = "Daniel A", ID = 0, Resource = 1, Time = 67, Wins = 7 });
-        levels.Add(new ServerStructs.LevelMeta() { Attempts = 8, Creator = "Daniel F", ID = 0, Resource = 1, Time = 67, Wins = 7 });
-        levels.Add(new ServerStructs.LevelMeta() { Attempts = 8, Creator = "Mans", ID = 0, Resource = 1, Time = 67, Wins = 7 });
-        levels.Add(new ServerStructs.LevelMeta() { Attempts = 8, Creator = "Per", ID = 0, Resource = 1, Time = 67, Wins = 7 });
-        levels.Add(new ServerStructs.LevelMeta() { Attempts = 8, Creator = "Emma", ID = 0, Resource = 1, Time = 67, Wins = 7 });
-        levels.Add(new ServerStructs.LevelMeta() { Attempts = 8, Creator = "Niklas11", ID = 0, Resource = 1, Time = 67, Wins = 7 });
+        levels = new List<LevelMeta>();
+        levels.Add(new LevelMeta() { Attempts = 8, Creator = "Niklas", ID = 0, Resource = 1, Time = 67, Wins = 7 });
+        levels.Add(new LevelMeta() { Attempts = 8, Creator = "Daniel A", ID = 0, Resource = 1, Time = 67, Wins = 7 });
+        levels.Add(new LevelMeta() { Attempts = 8, Creator = "Daniel F", ID = 0, Resource = 1, Time = 67, Wins = 7 });
+        levels.Add(new LevelMeta() { Attempts = 8, Creator = "Mans", ID = 0, Resource = 1, Time = 67, Wins = 7 });
+        levels.Add(new LevelMeta() { Attempts = 8, Creator = "Per", ID = 0, Resource = 1, Time = 67, Wins = 7 });
+        levels.Add(new LevelMeta() { Attempts = 8, Creator = "Emma", ID = 0, Resource = 1, Time = 67, Wins = 7 });
+        levels.Add(new LevelMeta() { Attempts = 8, Creator = "Niklas11", ID = 0, Resource = 1, Time = 67, Wins = 7 });
 
 
         level_info_object.gameObject.SetActive(true);

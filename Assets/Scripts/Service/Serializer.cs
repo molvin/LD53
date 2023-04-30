@@ -19,20 +19,13 @@ public class Serializer : MonoBehaviour
     public PointCloudManager PointCloud;
 
     private string debugSavePath = "levels/level.json";
+    private string playerName = "tester";
     private bool running;
     private float progress = 1.0f;
 
-    private void Start()
-    {
-        if(PersistentData.LevelPath != null)
-        {
-            string data = File.ReadAllText(PersistentData.LevelPath);
-            InitializeFromJson(data);
-        }
-    }
-
     public string SerializeLevelToJson()
     {
+        Debug.Log(SplineNoise3D.SplineLine.Count);
         LevelData data = new LevelData{
             Start = Vector3.zero,
             End = Vector3.one,
@@ -45,6 +38,7 @@ public class Serializer : MonoBehaviour
 
     public IEnumerator InitializeFromJson(string json)
     {
+        Debug.Log($"initializing: {json}");
         LevelData level = (LevelData) JsonUtility.FromJson(json, typeof(LevelData));
         SplineNoise3D.SplineLine = level.SplineData;
         if (level.SplineData.Count < 2)
@@ -88,18 +82,39 @@ public class Serializer : MonoBehaviour
         {
             string data = SerializeLevelToJson();
             string path = $"{Application.dataPath}/{debugSavePath}";
-            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
-            System.IO.File.WriteAllText(path, data);
+            Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
+            File.WriteAllText(path, data);
         }
 
         if (GUI.Button(new Rect(20, 50, 110, 30), "Init From File"))
         {
             string path = $"{Application.dataPath}/{debugSavePath}";
-            string data = System.IO.File.ReadAllText(path);
+            string data = File.ReadAllText(path);
             if(!running)
                 StartCoroutine(Generate(data));
         }
+
         GUI.Label(new Rect(20, 90, 200, 30), $"Progress {progress:P0}");
+
+
+        playerName = GUI.TextField(new Rect(400, 20, 200, 30), playerName);
+        if (GUI.Button(new Rect(400, 50, 110, 30), "Upload to level"))
+        {
+            string data = SerializeLevelToJson();
+            var service = FindObjectOfType<ServiceTalker>();
+            LevelMeta meta = new LevelMeta
+            {
+                Wins = 0,
+                Attempts = 0,
+                Time = 30.0f,
+                ID = 0,
+                Creator = playerName,
+                Resource = 0
+            };
+            Debug.Log($"Uploading {data}");
+            service.UploadLevel(meta, data);
+            Debug.Log("Done Uploading");
+        }
     }
 
 }
