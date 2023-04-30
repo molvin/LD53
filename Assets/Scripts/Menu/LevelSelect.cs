@@ -23,6 +23,13 @@ public class LevelSelect : MonoBehaviour
     private Astroid_data_holder selected_level;
 
     public LevelInforBoxController level_info_object;
+    public LevelSelectHelper level_select_helper;
+
+    public void PlayLevel()
+    {
+        level_select_helper.PlayLevel(selected_level.data);
+    }
+
 
     public void BackToMainMenu()
     {
@@ -99,7 +106,10 @@ public class LevelSelect : MonoBehaviour
 
     private void Enter()
     {
+        level_select_helper.Refresh();
+        levels = level_select_helper.GetLevels();
         currentLevelsOnDisplay = new List<Astroid_data_holder>();
+        /*
         levels = new List<LevelMeta>();
         levels.Add(new LevelMeta() { Attempts = 8, Creator = "Niklas", ID = 0, Resource = 1, Time = 67, Wins = 7 });
         levels.Add(new LevelMeta() { Attempts = 8, Creator = "Daniel A", ID = 0, Resource = 1, Time = 67, Wins = 7 });
@@ -108,7 +118,7 @@ public class LevelSelect : MonoBehaviour
         levels.Add(new LevelMeta() { Attempts = 8, Creator = "Per", ID = 0, Resource = 1, Time = 67, Wins = 7 });
         levels.Add(new LevelMeta() { Attempts = 8, Creator = "Emma", ID = 0, Resource = 1, Time = 67, Wins = 7 });
         levels.Add(new LevelMeta() { Attempts = 8, Creator = "Niklas11", ID = 0, Resource = 1, Time = 67, Wins = 7 });
-
+        */
 
         level_info_object.gameObject.SetActive(true);
 
