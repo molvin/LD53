@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.Audio;
 using UnityEngine;
 
 public class HoverController : MonoBehaviour
@@ -27,6 +28,11 @@ public class HoverController : MonoBehaviour
     public float GravitationalPull = 0.2f;
     public float OverrideGravity = 12.0f;
     public LayerMask Mask;
+    [Header("audio")]
+    public AudioSource LoopingAudioSource;
+    
+    
+
 
     private new Rigidbody rigidbody;
     private List<Vector3> Offsets = new List<Vector3>();
@@ -104,7 +110,7 @@ public class HoverController : MonoBehaviour
         LocalInput += Input.GetAxisRaw("Forward") * Vector3.forward;
         InputVector += Vector3.ClampMagnitude(LocalInput, 1.0f) * Time.deltaTime;
         //InputVector += Vector3.ProjectOnPlane(transform.rotation * LocalInput, UpNormal).normalized * Time.deltaTime;
-    
+
         if (Input.GetButton("Slide"))
             rightCoef = SlideFrictionCoef;
         rightCoef = Mathf.SmoothDamp(rightCoef, PerpendicularFrictionCoef, ref slideDelta, SlideSmoothing);
