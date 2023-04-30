@@ -13,8 +13,9 @@ public class LevelSelect : MonoBehaviour
 
     public int y_min, y_max, x_min, x_max;
     public int y_offset_between_astroids;
-
+    public float x_max_offset;
     public GameObject prefab;
+    public Transform origo;
 
     [SerializeField]
     float moveSpeed, radius, wheelSpeed;
@@ -24,6 +25,9 @@ public class LevelSelect : MonoBehaviour
 
     public LevelInforBoxController level_info_object;
     public LevelSelectHelper level_select_helper;
+
+
+    public List<Sprite> sprites;
 
     public void PlayLevel()
     {
@@ -57,7 +61,7 @@ public class LevelSelect : MonoBehaviour
             currentLevelsOnDisplay[i].game_object.transform.position =
                 new Vector3(Mathf.Cos(currentLevelsOnDisplay[i].current_angle), Mathf.Sin(currentLevelsOnDisplay[i].current_angle), 0)
                 * (radius + currentLevelsOnDisplay[i].personal_offset)
-                + (this.transform.position - new Vector3(radius, 0, 0))
+                + (origo.position)
                 ;
 
         }
@@ -124,8 +128,11 @@ public class LevelSelect : MonoBehaviour
 
         for (int i = 0; i < levels.Count; i++)
         {
-            var x = Instantiate(prefab, this.transform.position + new Vector3((x_min + x_max) / 2, y_max + y_offset_between_astroids * i, 0), Quaternion.identity, this.transform);
-            var data = new Astroid_data_holder(x, 0.15f * i, Random.Range(0, 250), levels[i]);
+            //+ new Vector3((x_min + x_max) / 2, y_max + y_offset_between_astroids * i, 0)
+            var x = Instantiate(prefab, this.transform.position , Quaternion.identity, this.transform);
+            int image_index = Random.Range(0, sprites.Count - 1);
+            x.GetComponent<Image>().sprite = sprites[image_index];
+            var data = new Astroid_data_holder(x, 0.5f * i, Random.Range(0, x_max_offset), levels[i]);
             currentLevelsOnDisplay.Add(data);
             x.GetComponent<Button>().onClick.AddListener(() => OnLevelClick(data)); 
         }

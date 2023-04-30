@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CompanyBox : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class CompanyBox : MonoBehaviour
 
     public void goToEditor()
     {
+        SceneManager.LoadScene(2);
+
       //  FindObjectOfType<LevelSelectHelper>(true).playEditor();
     }
 
