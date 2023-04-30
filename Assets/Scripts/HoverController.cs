@@ -38,6 +38,8 @@ public class HoverController : MonoBehaviour
     private float rightCoef;
     private float slideDelta;
 
+    public Transform[] Thrusters;
+
     public Vector3 GroundNormal => UpNormal;
 
     private List<Vector3> IcoNormals = new List<Vector3>()
@@ -67,26 +69,27 @@ public class HoverController : MonoBehaviour
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
-        rigidbody.centerOfMass = Vector3.down;
+        rigidbody.centerOfMass = Vector3.down * 0.5f;
+        rigidbody.inertiaTensor = new Vector3(1.42f, 1.67f, 0.42f);
+        rigidbody.inertiaTensorRotation = Quaternion.identity;
         //Offsets.Add(new Vector3(0.5f, -0.5f, 0.5f));
         //Offsets.Add(new Vector3(0.5f, -0.5f, -0.5f));
         //Offsets.Add(new Vector3(-0.5f, -0.5f, 0.5f));
         //Offsets.Add(new Vector3(-0.5f, -0.5f, -0.5f));
-
         // Front
-        Offsets.Add(new Vector3(1.0f, -0.5f, 2.0f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, 2.0f));
+        Offsets.Add( new Vector3(1.0f, -0.4f, 2.0f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, 2.0f) * 0.5f);
         // Mid
-        Offsets.Add(new Vector3(1.0f, -0.5f, 0.67f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, 0.67f));
-        Offsets.Add(new Vector3(1.0f, -0.5f, -0.67f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, -0.67f));
+        Offsets.Add(new Vector3(1.0f, -0.4f, 0.67f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, 0.67f) * 0.5f);
+        Offsets.Add(new Vector3(1.0f, -0.4f, -0.67f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, -0.67f) * 0.5f);
         // Back
-        Offsets.Add(new Vector3(1.0f, -0.5f, -2.0f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, -2.0f));
+        Offsets.Add(new Vector3(1.0f, -0.4f, -2.0f) * 0.5f);
+        Offsets.Add( new Vector3(-1.0f, -0.4f, -2.0f) * 0.5f);
         // Central
-        Offsets.Add(new Vector3(0.0f, -0.5f, 1.0f));
-        Offsets.Add(new Vector3(0.0f, -0.5f, -1.0f));
+        Offsets.Add(new Vector3(0.0f, -0.4f, 1.0f) * 0.5f);
+        Offsets.Add(new Vector3(0.0f, -0.4f, -1.0f) * 0.5f);
 
 
         for (int i = 0; i < Offsets.Count; i++)
