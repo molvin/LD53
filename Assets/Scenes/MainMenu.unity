@@ -2983,7 +2983,10 @@ MonoBehaviour:
   y_max: 500
   x_min: -250
   x_max: 250
+  y_offset_between_astroids: 150
   prefab: {fileID: 5371849492985129910, guid: f187228370ac0924b8eea7d5d9f43e53, type: 3}
+  moveSpeed: 3
+  radius: 500
 --- !u!1 &1616614488
 GameObject:
   m_ObjectHideFlags: 0
