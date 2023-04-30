@@ -6,17 +6,35 @@ using UnityEngine.UI;
 public class LevelSelect : MonoBehaviour
 {
     private List<string> levels;
-    private List<string> currentLevelsOnDisplay;
+    private List<(GameObject, float)> currentLevelsOnDisplay;
 
     public int levelsOnDisplay = 6;
 
     public int y_min, y_max, x_min, x_max;
-
+    public int y_offset_between_astroids;
 
     public GameObject prefab;
 
+    [SerializeField]
+    float moveSpeed, radius;
+    float angle;
+
+    void Update()
+    {
+        List<GameObject> toRemove = new List<GameObject>();
+        foreach((GameObject gmo, float ang) in currentLevelsOnDisplay)
+        {
+            //gmo.transform.RotateAround(this.transform.position - new Vector3(radius, 0, 0), new Vector3(0, 0, 1), ang * moveSpeed * Time.deltaTime);
+            gmo.transform.position -= new Vector3(0, 10, 0);
+        }
+  
+
+
+    }
+
     public void Start()
     {
+        currentLevelsOnDisplay = new List<(GameObject, float)>();
         levels = new List<string>();
         levels.Add("space cowboy 1");
         levels.Add("space cowboy 2");
@@ -32,20 +50,18 @@ public class LevelSelect : MonoBehaviour
         levels.Add("space cowboy 12");
         levels.Add("space cowboy 13");
 
-        SpawnNewLevel();
+        Enter();
     }
 
-    private void SpawnNewLevel()
+    private void Enter()
     {
-        var g_1 = Instantiate(prefab, this.transform.position + new Vector3(x_min, y_min, 0), Quaternion.identity, this.transform);
-        var g_2 = Instantiate(prefab, this.transform.position + new Vector3(x_min, y_max, 0), Quaternion.identity, this.transform);
 
-        var g_3 = Instantiate(prefab, this.transform.position + new Vector3(x_max, y_min, 0), Quaternion.identity, this.transform);
-        var g_4 = Instantiate(prefab, this.transform.position + new Vector3(x_max, y_max, 0), Quaternion.identity, this.transform);
-    }
+        for(int i = 0; i < levels.Count; i++)
+        {
+            var x = Instantiate(prefab, this.transform.position + new Vector3((x_min + x_max) / 2, y_max + y_offset_between_astroids * i, 0), Quaternion.identity, this.transform);
+            currentLevelsOnDisplay.Add((x, 0.15f * i));
+        }
 
-    private void MoveLevels()
-    {
 
     }
 
@@ -54,8 +70,8 @@ public class LevelSelect : MonoBehaviour
 
     }
 
-    private void DespawnLevel()
+    private void DespawnLevel(GameObject gameObject)
     {
-
+        GameObject.Destroy(gameObject);
     }
 }
