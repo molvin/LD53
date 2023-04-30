@@ -20,6 +20,7 @@ public class PointCloudManager : MonoBehaviour
 
     public void Awake()
     {
+        Perlin3D.scale = 20f;
         marchShader = new MarchingCubeShaderAPI(out pointCloud, out verts, out tris);
         marchShader.IsoSurface = isoSurface;
     }

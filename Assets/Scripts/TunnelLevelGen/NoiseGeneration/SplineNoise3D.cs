@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SplineNoise3D
 {
+    private static float penaltySize = 1f;
     public static List<Spline> SplineLine = new List<Spline>();
     public static float SplineNoise(Vector3 point)
     {
@@ -17,8 +18,8 @@ public class SplineNoise3D
     {
         Vector3 delta = point - spline.pos;
         return Mathf.Max(
-            Mathf.Max(wallCalculate(spline.down, spline.radius, delta), wallCalculate(spline.right, spline.radius, delta)),
-            Mathf.Max(wallCalculate(spline.left, spline.radius, delta), wallCalculate(spline.up, spline.radius, delta))
+            Mathf.Max(wallCalculate(spline.down, spline.radius, delta), penaltyWallCalculate(spline.right, spline.radius, delta)),
+            Mathf.Max(penaltyWallCalculate(spline.left, spline.radius, delta), penaltyWallCalculate(spline.up, spline.radius, delta))
         );
     }
     public static float wallCalculate(Vector3 dir, float radius, Vector3 deltaPos)
@@ -27,6 +28,14 @@ public class SplineNoise3D
         if (inDown < 0f)
             return 0f;
         float floor = (1f - dir.magnitude) * radius;
+        return floor == 0 ? float.MaxValue : inDown / floor;
+    }
+    public static float penaltyWallCalculate(Vector3 dir, float radius, Vector3 deltaPos)
+    {
+        float inDown = Vector3.Dot(dir.normalized, deltaPos);
+        if (inDown < 0f)
+            return 0f;
+        float floor = (1f - dir.magnitude) * radius + ((0.5f - Perlin3D.PerlinNoise3D(deltaPos)) * penaltySize * radius);
         return floor == 0 ? float.MaxValue : inDown / floor;
     }
     public static float SplineDistance(Vector3 point)
