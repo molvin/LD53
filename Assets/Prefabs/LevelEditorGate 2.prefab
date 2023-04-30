@@ -10,12 +10,17 @@ PrefabInstance:
     - target: {fileID: 1213006467055301536, guid: 8156eddb80b1f1341a1f4c7da12d4e11,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5303251916406420023, guid: 8156eddb80b1f1341a1f4c7da12d4e11,
         type: 3}
       propertyPath: m_Name
       value: LevelEditorGate 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5371992105989895579, guid: 8156eddb80b1f1341a1f4c7da12d4e11,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5691826268769334977, guid: 8156eddb80b1f1341a1f4c7da12d4e11,
         type: 3}
