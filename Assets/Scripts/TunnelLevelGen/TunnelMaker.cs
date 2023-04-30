@@ -18,10 +18,6 @@ public class TunnelMaker : MonoBehaviour
         {
             Debug.DrawLine(SplineNoise3D.SplineLine[i].pos, SplineNoise3D.SplineLine[i + 1].pos, Color.red);
         }
-        for (int i = 0; i < SplineNoise3D.SplineHole.Count - 1; i++)
-        {
-            Debug.DrawLine(SplineNoise3D.SplineHole[i].pos, SplineNoise3D.SplineHole[i + 1].pos, Color.green);
-        }
         for (int i = 0; i < SplineNoise3D.SplineLine.Count; i++)
         {
             Gizmos.DrawSphere(SplineNoise3D.SplineLine[i].pos, 0.2f);
@@ -59,15 +55,14 @@ public class TunnelMaker : MonoBehaviour
         _InternalCaveAmount = InternalCaveAmount;
         _InternalCaveNoise = InternalCaveNoise;
         int color = 0;
-        SplineNoise3D.SplineHole = new List<SplineNoise3D.Spline>();
         SplineNoise3D.SplineLine = new List<SplineNoise3D.Spline>();
         makeSpline(segmentCount, sporadicFactor, noiseScale);
         for (int i = 0 ; i < segmentCount; i++)
         {
-            Light a = Instantiate(lights, SplineNoise3D.SplineHole[i].pos, Quaternion.identity, PCM.transform).GetComponent<Light>();
+            //Light a = Instantiate(lights, SplineNoise3D.SplineHole[i].pos, Quaternion.identity, PCM.transform).GetComponent<Light>();
             color++;
             color = color % colors.Count;
-            a.color = colors[color];
+            //a.color = colors[color];
             addOne(SplineNoise3D.SplineLine[i].pos);
             Progress?.Invoke(i);
             yield return null;

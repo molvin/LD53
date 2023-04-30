@@ -20,10 +20,6 @@ public class TunnelGenController : MonoBehaviour
         {
             Debug.DrawLine(SplineNoise3D.SplineLine[i].pos, SplineNoise3D.SplineLine[i + 1].pos, Color.red);
         }
-        for (int i = 0; i < SplineNoise3D.SplineHole.Count - 1; i++)
-        {
-            Debug.DrawLine(SplineNoise3D.SplineHole[i].pos, SplineNoise3D.SplineHole[i + 1].pos, Color.green);
-        }
         for (int i = 0; i < SplineNoise3D.SplineLine.Count; i++)
         {
             Gizmos.DrawSphere(SplineNoise3D.SplineLine[i].pos, 0.2f);

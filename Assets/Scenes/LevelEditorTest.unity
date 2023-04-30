@@ -275,7 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   roll_speed: 1
-  splineDistance: 4
+  splineDistance: 5
   mouse_sensitivity: 1
   PCM: {fileID: 1418647745}
 --- !u!65 &683859645
@@ -530,6 +530,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1418647746}
   - component: {fileID: 1418647745}
+  - component: {fileID: 1418647747}
   m_Layer: 0
   m_Name: PointCloudManager
   m_TagString: Untagged
@@ -552,7 +553,7 @@ MonoBehaviour:
   Prefab8X8: {fileID: 4349196496511800372, guid: d16fdb5175681ea458921e4b44470202,
     type: 3}
   GeoLayer: Tunnel
-  isoSurface: 5
+  isoSurface: 1
 --- !u!4 &1418647746
 Transform:
   m_ObjectHideFlags: 0
@@ -568,3 +569,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1418647747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418647744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c46e577efc87d046a68b176a5c44859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

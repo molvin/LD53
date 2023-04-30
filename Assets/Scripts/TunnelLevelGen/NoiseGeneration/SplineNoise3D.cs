@@ -5,23 +5,21 @@ using UnityEngine;
 public class SplineNoise3D
 {
     public static List<Spline> SplineLine = new List<Spline>();
-    public static List<Spline> SplineHole = new List<Spline>();
     public static float SplineNoise(Vector3 point)
     {
         Spline spline = getLerpSplineFromPoint(point);
 
         float tunnel = (point - spline.pos).magnitude / spline.radius;
         float wall = wallNoise(spline, point);
-        return tunnel + wall;
+        return Mathf.Max(tunnel, wall);
     }
     public static float wallNoise(Spline spline, Vector3 point)
     {
         Vector3 delta = point - spline.pos;
-        //down 
-        return wallCalculate(spline.down, spline.radius, delta) +
-        wallCalculate(spline.down, spline.radius, delta) +
-        wallCalculate(spline.down, spline.radius, delta) +
-        wallCalculate(spline.down, spline.radius, delta);
+        return Mathf.Max(
+            Mathf.Max(wallCalculate(spline.down, spline.radius, delta), wallCalculate(spline.right, spline.radius, delta)),
+            Mathf.Max(wallCalculate(spline.left, spline.radius, delta), wallCalculate(spline.up, spline.radius, delta))
+        );
     }
     public static float wallCalculate(Vector3 dir, float radius, Vector3 deltaPos)
     {
@@ -109,12 +107,12 @@ public class SplineNoise3D
             }
         }
         //InJoint
-        for (int i = 0; i < SplineHole.Count; i++)
+        for (int i = 0; i < SplineLine.Count; i++)
         {
-            float hypo = Vector3.Distance(pointC, SplineHole[i].pos);
+            float hypo = Vector3.Distance(pointC, SplineLine[i].pos);
             if (hypo < shortest)
             {
-                closest = SplineHole[i].pos;
+                closest = SplineLine[i].pos;
                 shortest = hypo;
             }
         }
@@ -141,12 +139,12 @@ public class SplineNoise3D
             }
         }
         //InJoint
-        for (int i = 0; i < SplineHole.Count; i++)
+        for (int i = 0; i < SplineLine.Count; i++)
         {
-            float hypo = Vector3.Distance(pointC, SplineHole[i].pos);
+            float hypo = Vector3.Distance(pointC, SplineLine[i].pos);
             if (hypo < shortest)
             {
-                closest = SplineHole[i];
+                closest = SplineLine[i];
                 shortest = hypo;
             }
         }
@@ -162,13 +160,18 @@ public class SplineNoise3D
     //Spline stuff
     public static void AddSplineSegment(Transform trans, float radius)
     {
-        SplineLine.Add(new Spline { pos = trans.position, radius = radius, up = trans.up });
-        SplineHole.Add(new Spline { pos = trans.position, radius = radius, up = trans.up });
+        SplineLine.Add(new Spline { 
+            pos = trans.position, 
+            radius = radius,
+            up = trans.up * 0.5f,
+            down = Vector3.zero,
+            right = Vector3.zero,
+            left = Vector3.zero
+        });
     }
     public static void AddSplineSegment(Vector3 pos, float radius)
     {
         SplineLine.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
-        SplineHole.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
     }
     public static Spline LerpSpline(Spline a, Spline b, float t)
     {
@@ -182,6 +185,8 @@ public class SplineNoise3D
             left = Vector3.Slerp(a.left, b.left, t)
         };
     }
+    
+    [System.Serializable]
     public struct Spline
     {
         public Vector3 pos;
