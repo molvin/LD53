@@ -851,6 +851,7 @@ GameObject:
   - component: {fileID: 718192286}
   - component: {fileID: 718192285}
   - component: {fileID: 718192283}
+  - component: {fileID: 718192289}
   m_Layer: 9
   m_Name: DeliveryBox
   m_TagString: Untagged
@@ -871,7 +872,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Owner: {fileID: 1032575317}
-  Offset: {x: 0, y: 0.5, z: -1}
+  Damping: 3
+  LerpDistance: 0.1
+  MaxDistance: 1
+  MaxDeltaVelocity: 50
 --- !u!65 &718192285
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -943,13 +947,29 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 718192282}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.2193275, y: 1.9215395, z: -6.4}
+  m_LocalPosition: {x: -0.2193275, y: 1.723, z: -6.4}
   m_LocalScale: {x: 1, y: 0.6, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &718192289
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718192282}
+  serializedVersion: 2
+  m_Mass: 0.01
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &796132990
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,6 +1114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LinearForce: 300
   AngularForce: 50
+  RollForce: 750
   MinHeight: 0.5
   MaxHeight: 1.5
   VisionHeight: 20
@@ -1101,7 +1122,10 @@ MonoBehaviour:
   SpringForce: 20
   Damping: 3
   AlignedFrictionCoef: 0.3
+  ForwardFictionCoef: 0.2
   PerpendicularFrictionCoef: 0.8
+  SlideFrictionCoef: 0.2
+  SlideSmoothing: 0.01
   AlignmentRotationSpeed: 0.5
   GravitationalPull: 0.2
   OverrideGravity: 12
@@ -1475,9 +1499,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ea6955fbe93984ba64cedbff2a2828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Offset: {x: 0, y: 3, z: -5}
-  Smoothing: 30
   Target: {fileID: 1184034}
+  TargetOffset: {x: 0, y: 4, z: -8}
+  LookOffset: {x: 0, y: 0, z: 0}
+  Smoothing: 30
 --- !u!114 &2104746263
 MonoBehaviour:
   m_ObjectHideFlags: 0
