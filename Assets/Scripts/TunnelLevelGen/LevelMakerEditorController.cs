@@ -79,8 +79,9 @@ public class LevelMakerEditorController : MonoBehaviour
         // Select Point
         if (!IsUsingUI && Input.GetMouseButtonDown(0))
         {
+            bool WasSelected = CurrentSplineEdit != null;
             SelectSplinePoint();
-            DidASelect = CurrentSplineEdit != null;
+            DidASelect = !WasSelected && CurrentSplineEdit != null;
         }
 
         if (Input.GetMouseButtonUp(0))
