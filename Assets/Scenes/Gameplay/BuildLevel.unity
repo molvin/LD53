@@ -1206,12 +1206,6 @@ MonoBehaviour:
   doodadPlacer: {fileID: 282869425}
   gatePlacer: {fileID: 282869426}
   doodads:
-<<<<<<< HEAD
-  - {fileID: 5303251916406420023, guid: b69dde0cac3a18a45b7eb4d0d9d69e83, type: 3}
-  - {fileID: 5303251916406420023, guid: d2d2aa81ca206f74c939f578fcd76d6e, type: 3}
-  UiLayer: 0
---- !u!1 &579057756
-=======
   - {fileID: 7603432496127553144, guid: ef8c3121e348401478c46c15750732cf, type: 3}
   - {fileID: 8041626028812238768, guid: cc13946c66eb89e41bb96f51d938f195, type: 3}
   - {fileID: 6172865164907274984, guid: cc31238df55893346af093d778991428, type: 3}
@@ -1220,7 +1214,6 @@ MonoBehaviour:
   - {fileID: 7657004550599615650, guid: 171a3d695a2e2ae45937d16c70ab46de, type: 3}
   UiLayer: 5
 --- !u!1 &502697965
->>>>>>> 1578f5b058c569c5411f351738b4ae8227d2152d
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
