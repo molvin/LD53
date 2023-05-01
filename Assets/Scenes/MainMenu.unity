@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028413, g: 0.22571428, b: 0.30692282, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028444, g: 0.2257148, b: 0.30692396, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5358,8 +5358,8 @@ MonoBehaviour:
   prefab: {fileID: 5371849492985129910, guid: f187228370ac0924b8eea7d5d9f43e53, type: 3}
   origo: {fileID: 1553072979}
   moveSpeed: 0.05
-  radius: 250
-  wheelSpeed: -1000
+  radius: 350
+  wheelSpeed: -1500
   level_info_object: {fileID: 86651589}
   level_select_helper: {fileID: 1794764866}
   loadingScreen: {fileID: 2010594398}
