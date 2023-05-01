@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1867868566349744361}
   - component: {fileID: 1867868566349744366}
   - component: {fileID: 1867868566349744365}
+  - component: {fileID: 282869425}
   m_Layer: 0
   m_Name: EditorController
   m_TagString: MainCamera
@@ -27,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1867868566349744362}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -131,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b581181c80bbb4e81d33ff2a68abf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 10
+  MoveSpeed: 50
   TurnSpeed: 3
   SpeedUp: 2.5
   AddPrefab: {fileID: 5303251916406420023, guid: 2509e556659a75e478491c46d4a4c6f4,
@@ -152,9 +153,34 @@ MonoBehaviour:
   SelectionMask:
     serializedVersion: 2
     m_Bits: 16384
-  VisualMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  SelectionUIMaterial: {fileID: 2100000, guid: 3f7f4862f93283e449878ba44931ec72, type: 2}
   MinRadius: 3
   MaxRadius: 10
   DisableEdit: 0
+  IsUsingUI: 0
+--- !u!114 &282869425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867868566349744362}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e886fad123ba74597917fdd57a917a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Doodads:
+  - {fileID: 4505068109348423274, guid: 06dd272bd1e49054ca951ac143bdc294, type: 3}
+  - {fileID: 8371534817691361273, guid: c578edf0ccb3a104285771a9ee7079e1, type: 3}
+  - {fileID: 8041626028812238768, guid: cc13946c66eb89e41bb96f51d938f195, type: 3}
+  - {fileID: 6172865164907274984, guid: cc31238df55893346af093d778991428, type: 3}
+  - {fileID: 643434257793875266, guid: 400337e34d97b574180871e004dd46f1, type: 3}
+  - {fileID: 5583904091514196798, guid: bba1cc14c1a81b34998cc850a8365111, type: 3}
+  - {fileID: 8278824985969330044, guid: 9af1e4952aaf0dc4d91f604ea58f5ab3, type: 3}
+  ConnectorMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  DoodadMask:
+    serializedVersion: 2
+    m_Bits: 2048
   IsUsingUI: 0
