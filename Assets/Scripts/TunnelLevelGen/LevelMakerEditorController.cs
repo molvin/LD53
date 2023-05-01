@@ -105,18 +105,25 @@ public class LevelMakerEditorController : MonoBehaviour
             }
         }
 
-        if (!CurrentSplineEdit)
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (CurrentSplineEdit != null && IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
             {
-                AddSplinePoint();
+                if (CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color != Color.red)
+                {
+                    InsertSplinePoint();
+                }
             }
-        }
-        else if (IntermediatePoints.Contains(CurrentSplineEdit.gameObject) && CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color != Color.red)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
+            else
             {
-                InsertSplinePoint();
+                if (CurrentSplineEdit != null)
+                {
+                    CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
+                    CurrentSplineEdit = null;
+                }
+
+                AddSplinePoint();
             }
         }
 
@@ -319,6 +326,8 @@ public class LevelMakerEditorController : MonoBehaviour
                 {
                     CurrentSplineEdit = cube;
                     CurrentSelection = Shapes[i];
+                    _WorkingScale = _Scales[i];
+                    WorkingRot = CurrentSplineEdit.transform.rotation;
                 }
                 i++;
             }
@@ -451,14 +460,11 @@ public class LevelMakerEditorController : MonoBehaviour
         float Scroll = Input.GetAxisRaw("Mouse ScrollWheel");
         if (Mathf.Abs(Scroll) > float.Epsilon)
         {
+            Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, WorkingRot * Vector3.forward);
+            WorkingRot *= delta;
             if (CurrentSplineEdit != null)
             {
-                CurrentSplineEdit.transform.RotateAroundLocal(Vector3.forward, Scroll * 2f);
-            }
-            else
-            {
-                Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, WorkingRot * Vector3.forward);
-                WorkingRot *= delta;
+                CurrentSplineEdit.transform.rotation = WorkingRot;
             }
         }
     }
