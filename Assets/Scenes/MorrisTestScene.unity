@@ -318,12 +318,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &396853263 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8098728701403824975, guid: 79d07df60e2c09b4f831043a9c7d62e2,
-    type: 3}
-  m_PrefabInstance: {fileID: 899873472}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &548924809
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,7 +558,10 @@ MonoBehaviour:
   Mask:
     serializedVersion: 2
     m_Bits: 0
-  LoopingAudioSource: {fileID: 0}
+  PlayerAudioSource: {fileID: 0}
+  AudioClipsLooping: []
+  OneShotAudioClips: []
+  Thrusters: []
 --- !u!65 &699528511
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -650,114 +647,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioSource
-      value: 
-      objectReference: {fileID: 899873477}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.size
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: SourcesLoopingAudio.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[0]
-      value: 
-      objectReference: {fileID: 8300000, guid: 119132741cff86d4fa996b456a028eea, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[1]
-      value: 
-      objectReference: {fileID: 8300000, guid: fc6f764ab57e3724fa5a335eabb9a503, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[2]
-      value: 
-      objectReference: {fileID: 8300000, guid: 7cabd03628e9f1841b3ac5d206a897a7, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[3]
-      value: 
-      objectReference: {fileID: 8300000, guid: b17c69dcf6de6064abe6aa6af0d60fa7, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[4]
-      value: 
-      objectReference: {fileID: 8300000, guid: 758def0c5f5b15d479ba45618de4cf1d, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[5]
-      value: 
-      objectReference: {fileID: 8300000, guid: da4fac6dc1c63174fb63d4fab3961d34, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[6]
-      value: 
-      objectReference: {fileID: 8300000, guid: cb9ca1f2e77b62b4d8ad2992dd820231, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[7]
-      value: 
-      objectReference: {fileID: 8300000, guid: d75d6a20211a5154ea6a0ea77824f1a7, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[8]
-      value: 
-      objectReference: {fileID: 8300000, guid: be62602ecf9af764ebd51e3157ade8b8, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[9]
-      value: 
-      objectReference: {fileID: 8300000, guid: 09137e99afb300341a0d2d5aab5b3910, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[10]
-      value: 
-      objectReference: {fileID: 8300000, guid: 7694187e3b0d8784793c5675010062ba, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[11]
-      value: 
-      objectReference: {fileID: 8300000, guid: cd6683ace878af9439d8258ad3146467, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[12]
-      value: 
-      objectReference: {fileID: 8300000, guid: f0514a79634444040b357fddd7669cea, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[13]
-      value: 
-      objectReference: {fileID: 8300000, guid: 1a7d175d771c3094da025a5958522c1d, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[14]
-      value: 
-      objectReference: {fileID: 8300000, guid: 81d0da7176b23384e87e68b5ece26d63, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[15]
-      value: 
-      objectReference: {fileID: 8300000, guid: d27c99cdecc5d3945a06ef9f0e7f6f59, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[16]
-      value: 
-      objectReference: {fileID: 8300000, guid: d59dc005aae99934c93a099afa5441e8, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: LoopingAudioClips.Array.data[17]
-      value: 
-      objectReference: {fileID: 8300000, guid: c43e7606ffe4f6f479d20cc563d61aa7, type: 3}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: SourcesLoopingAudio.Array.data[0]
-      value: 
-      objectReference: {fileID: 899873477}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: SourcesLoopingAudio.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: SourcesLoopingAudio.Array.data[2]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: SourcesLoopingAudio.Array.data[3]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: SourcesLoopingAudio.Array.data[4]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
-      propertyPath: SourcesLoopingAudio.Array.data[5]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8098728701403824975, guid: 79d07df60e2c09b4f831043a9c7d62e2,
         type: 3}
       propertyPath: m_Name
@@ -826,102 +715,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 899873472}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &899873477
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 396853263}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1001 &938677249
 PrefabInstance:
   m_ObjectHideFlags: 0
