@@ -170,16 +170,6 @@ public class HoverController : MonoBehaviour
         CurrentCooldownSlideSound = CurrentCooldownSlideSound - Time.deltaTime;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(transform.position, transform.position + UpNormal * 3.0f);
-        Gizmos.color = Color.blue;
-        foreach (var IcoNormal in IcoNormals)
-        {
-            Gizmos.DrawLine(transform.position, transform.position + IcoNormal * VisionHeight);
-        }
-    }
-
     private void FixedUpdate()
     {
         UpNormal = Vector3.up;
@@ -231,7 +221,6 @@ public class HoverController : MonoBehaviour
                 Mask))
             {
                 Hits += 1.0f;
-                Debug.DrawLine(Origin, hit.point, Color.red);
 
                 suspensionDistance = (hit.distance - MinHeight);
 
@@ -248,7 +237,6 @@ public class HoverController : MonoBehaviour
             }
             else
             {
-                Debug.DrawLine(Origin, Origin + Normal * MaxHeight, Color.green);
             }
             PreviousHeights[i] = suspensionDistance;
         }
