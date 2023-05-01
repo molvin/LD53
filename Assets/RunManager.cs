@@ -13,9 +13,7 @@ public class RunManager : MonoBehaviour
     public GameObject CameraPrefab;
     public GameObject WinPrefab;
     public TextMeshProUGUI Timer;
-    public GameObject GameOverUi;
-    public Button Retry;
-    public Button ToMenu;
+    public GameMenu GameMenu;
 
     private LevelMeta currentLevel;
     private float startTime;
@@ -33,7 +31,6 @@ public class RunManager : MonoBehaviour
     {
         IEnumerator Coroutine()
         {
-            GameOverUi.SetActive(false);
             if (Timer != null)
                 Timer.enabled = false;
             yield return new WaitForSeconds(0.5f);
@@ -59,7 +56,13 @@ public class RunManager : MonoBehaviour
             else
             {
                 Debug.LogError("No Level Path Set");
-                yield break;
+                currentLevel = new LevelMeta
+                {
+                    ID = PersistentData.PlayerId,
+                    Creator = PersistentData.PlayerName
+                };
+                Serializer.LevelData level = Service.DownloadLevel(currentLevel);
+                data = JsonUtility.ToJson(level); //TODO: fix this
             }
             
             var generateIter = serializer.Generate(data);
@@ -100,8 +103,6 @@ public class RunManager : MonoBehaviour
 
     private IEnumerator RunGame()
     {
-        GameOverUi.SetActive(false);
-
         float t = 0.0f;
         while (t < currentLevel.Time || PersistentData.Validating)
         {
@@ -112,9 +113,15 @@ public class RunManager : MonoBehaviour
                 Timer.text = $"{(!PersistentData.Validating ? (currentLevel.Time - t) : t):0}";
             }
 
+            //TODO: remove when pause works
             if (Input.GetKeyDown(KeyCode.R))
             {
                 Restart();
+            }
+
+            if (Input.GetButtonDown("Pause"))
+            {
+                Pause();
             }
 
             yield return null;
@@ -167,23 +174,30 @@ public class RunManager : MonoBehaviour
         won = true;
 
         truck.GetComponent<HoverController>().enabled = false;
-        GameOverUi.SetActive(true);
-        Retry.onClick.RemoveAllListeners();
-        Retry.onClick.AddListener(() => { Restart(); won = false; StartCoroutine(RunGame()); });
-        ToMenu.onClick.RemoveAllListeners();
-        ToMenu.onClick.AddListener(() => FinishLevel());
         StopAllCoroutines();
+
+        GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
+        GameMenu.BackToMainMenu = () => FinishLevel();
+  
+        float t = Time.time - startTime;
+        GameMenu.Win(t, currentLevel.Resource);
     }
 
     public void Lose()
     {
         truck.GetComponent<HoverController>().enabled = false;
-        GameOverUi.SetActive(true);
-        Retry.onClick.RemoveAllListeners();
-        Retry.onClick.AddListener(() => { Restart(); StartCoroutine(RunGame()); });
-        ToMenu.onClick.RemoveAllListeners();
-        ToMenu.onClick.AddListener(() => SceneManager.LoadScene(0));    //TODO: correct scene
         StopAllCoroutines();
+
+        GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
+        GameMenu.BackToMainMenu = () => SceneManager.LoadScene(0);
+
+        GameMenu.Lose();
+    }
+
+    public void Pause()
+    {
+        GameMenu.togglePause();
+        GameMenu.Resume = () => { };
     }
 
     private void Restart()
