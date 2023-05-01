@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7799404698725411966}
   - component: {fileID: 5254879129398381684}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LevelEditorAddSymbol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 5344887269158314979}
   - component: {fileID: 7719318816552595857}
   - component: {fileID: 886715201817213910}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
