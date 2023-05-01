@@ -12,6 +12,7 @@ public class LevelInforBoxController : MonoBehaviour
     public TMPro.TextMeshProUGUI Attempts;
     public TMPro.TextMeshProUGUI Time;
 
+    public TMPro.TextMeshProUGUI Resources;
 
 
 
@@ -22,10 +23,8 @@ public class LevelInforBoxController : MonoBehaviour
         Name.text = data.Creator;
         Wins.text = "Wins: " + data.Wins;
         Attempts.text = "Attempts: " + data.Attempts;
-        Time.text = "Best Time: " + data.Time + " sec";
-       
-
-
+        Time.text = "Time to beat: " + data.Time + " sec";
+        Resources.text = "Resources to gain: " + data.Resource;
     }
 
 
