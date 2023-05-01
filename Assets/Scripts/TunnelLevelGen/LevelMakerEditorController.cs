@@ -553,8 +553,9 @@ public class LevelMakerEditorController : MonoBehaviour
         return Shape;
     }
 
-    public void InitFromSpline()
+    public void InitFromSpline(Serializer.LevelData level)
     {
+        SplineNoise3D.SplineLine = level.SplineData ?? new List<SplineNoise3D.Spline>();
         Vector3 pos = Vector3.zero;
         Quaternion rot = Quaternion.identity;
 
