@@ -78,6 +78,7 @@ public class RunManager : MonoBehaviour
                 LoadingScreen.setProgress(progress);
                 yield return null;
             }
+            Camera.main.transform.position = SplineNoise3D.SplineLine[0].pos;
             bool wait = true;
             LoadingScreen.finished_fade_out = () => wait = false;
             LoadingScreen.fadeOut();

@@ -18,8 +18,6 @@ public class ServiceTalker : MonoBehaviour
      * level upload
      */
 
-    public string Ip = "192.168.1.241";
-    public int Port = 5302;
     public int Version = 0;
     public bool DebugGui;
 
@@ -126,7 +124,8 @@ public class ServiceTalker : MonoBehaviour
     {
         IPAddress ip = IPAddress.Any;
         socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        socket.Connect(new IPEndPoint(IPAddress.Parse(Ip), Port));
+        var address = System.Net.Dns.GetHostAddresses(PersistentData.Ip)[0];
+        socket.Connect(new IPEndPoint(address, PersistentData.Port));
     }
 
     private void Send(string json, byte code)
