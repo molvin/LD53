@@ -91,6 +91,8 @@ public class BuildUIController : MonoBehaviour
 
     public void Validate()
     {
+        if (SplineLine.Count < 2)
+            return;
         PersistentData.Validating = true;
         PersistentData.OverrideLevel = (Serializer.LevelData)JsonUtility.FromJson(Serializer.SerializeLevelToJson(), typeof(Serializer.LevelData));
         SceneManager.LoadScene(3);

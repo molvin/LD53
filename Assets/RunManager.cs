@@ -22,7 +22,7 @@ public class RunManager : MonoBehaviour
     public LayerMask CollisionLayer;
 
     private GameObject winCutscene;
-    private LevelMeta currentLevel;
+    public LevelMeta currentLevel;
     private float startTime;
     GameObject truck;
     BoxScript deliveryBox;
@@ -203,7 +203,11 @@ public class RunManager : MonoBehaviour
                 }
                 catch { }
 
-                PersistentData.ResourceCount += currentLevel.Resource;
+                if(!PlayerPrefs.HasKey($"{currentLevel.Creator}+{currentLevel.ID}"))
+                {
+                    PersistentData.ResourceCount += currentLevel.Resource;
+                    PlayerPrefs.SetInt($"{currentLevel.Creator}+{currentLevel.ID}", 1);
+                }
             }
             PersistentData.Validating = false;
             PersistentData.OverrideLevel = null;
@@ -220,7 +224,7 @@ public class RunManager : MonoBehaviour
         GameMenu.BackToMainMenu = () => FinishLevel();
   
         timeAtFinish = Time.time - startTime;
-        GameMenu.Win(timeAtFinish, currentLevel.Resource);
+        GameMenu.Win(timeAtFinish, !PlayerPrefs.HasKey($"{currentLevel.Creator}+{currentLevel.ID}") ? currentLevel.Resource : 0);
     }
 
     public void Lose(bool FailedDelivery = false)
