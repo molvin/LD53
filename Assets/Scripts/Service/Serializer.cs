@@ -24,6 +24,7 @@ public class Serializer : MonoBehaviour
     public bool ShowDebugUI;
     public PointCloudManager PointCloud;
     public List<Doodad> DoodadPrefabs;
+    public GameObject SplineParticlePrefab;
 
     private string debugSavePath = "levels/level.json";
     private bool running;
@@ -78,6 +79,12 @@ public class Serializer : MonoBehaviour
         {
             var doodad = Instantiate(DoodadPrefabs[doodadStruct.doodad], doodadStruct.position, Quaternion.identity);
             doodad.ID = doodadStruct.doodad;
+        }
+
+        foreach(var spline in SplineNoise3D.SplineLine)
+        {
+            if(SplineParticlePrefab)
+                Instantiate(SplineParticlePrefab, spline.pos, spline.rot);
         }
     }
 

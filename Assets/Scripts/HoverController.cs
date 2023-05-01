@@ -33,7 +33,9 @@ public class HoverController : MonoBehaviour
     public AudioClip[] AudioClipsLooping;
     public AudioClip[] OneShotAudioClips;
     private int SoundStateLooping;
-
+    public AudioSource Idle;
+    public AudioSource Accelerate;
+    public AudioSource TopSpeed;
 
     private new Rigidbody rigidbody;
     private List<Vector3> Offsets = new List<Vector3>();
@@ -45,6 +47,9 @@ public class HoverController : MonoBehaviour
     private Vector3 UpNormal;
     private float rightCoef;
     private float slideDelta;
+    private float CurrentSpeed;
+    private float CurrentAcceleration;
+    private float PreviousSpeed;
 
     public Transform[] Thrusters;
 
@@ -122,6 +127,7 @@ public class HoverController : MonoBehaviour
             rightCoef = SlideFrictionCoef;
         rightCoef = Mathf.SmoothDamp(rightCoef, PerpendicularFrictionCoef, ref slideDelta, SlideSmoothing);
         // Debug.Log(" SPEED : " + rigidbody.velocity.magnitude);
+        /*
         if (Input.GetAxisRaw("Forward") > 0 && SoundStateLooping != 2 && rigidbody.velocity.magnitude > 25)
         {
             //Debug.Log("  JAG HÄNDER !!! " + SoundStateLooping + "   ANNDD    " + rigidbody.velocity.magnitude);
@@ -147,6 +153,14 @@ public class HoverController : MonoBehaviour
             PlayerAudioSource.clip = AudioClipsLooping[SoundStateLooping];
             PlayerAudioSource.Play();
         }
+        */
+        float SpeedVolume = Mathf.Clamp01(CurrentSpeed / 20f);
+        float AccelerationVolume = Mathf.Clamp01(CurrentAcceleration / 20f);
+        float IdleVolume = ((1f - Mathf.Clamp01(CurrentSpeed / 20f)) + 1f) * 0.5f;
+
+        Idle.volume = Mathf.Lerp(Idle.volume, IdleVolume, 4f * Time.deltaTime);
+        TopSpeed.volume = Mathf.Lerp(TopSpeed.volume, SpeedVolume, 4f * Time.deltaTime);
+        Accelerate.volume = Mathf.Lerp(Accelerate.volume, AccelerationVolume, 4f * Time.deltaTime);
     }
 
     private void OnDrawGizmos()
@@ -260,5 +274,9 @@ public class HoverController : MonoBehaviour
         //float yVel = rigidbody.velocity.y;
         //Vector2 horizontalVel = Vector2.ClampMagnitude(new Vector2(rigidbody.velocity.x, rigidbody.velocity.z), MaxSpeed);
         //rigidbody.velocity = new Vector3(horizontalVel.x, yVel, horizontalVel.y);
+
+        CurrentSpeed = rigidbody.velocity.magnitude;
+        CurrentAcceleration = (CurrentSpeed - PreviousSpeed) / Time.fixedDeltaTime;
+        PreviousSpeed = CurrentSpeed;
     }
 }

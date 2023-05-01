@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1218227703811384421}
   - component: {fileID: 2830468596381559744}
   - component: {fileID: 45932617021284106}
+  - component: {fileID: 8371534816978426090}
   m_Layer: 0
   m_Name: square_lamp
   m_TagString: Untagged
@@ -25,14 +26,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1991667495828192991}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.015, y: 0.012, z: 0.566}
-  m_LocalScale: {x: 1.7077793, y: 1.707779, z: 1.707779}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.013329, y: 0.013674, z: 0.71686}
+  m_LocalScale: {x: 2.51508, y: 2.51508, z: 2.51508}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8371534817691361222}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &2830468596381559744
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -83,6 +84,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8371534816978426090
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991667495828192991}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.09342623, y: 0.08481126, z: 0.6379946}
+  m_Center: {x: 0.2732868, y: 0.27759445, z: 0.0010027955}
 --- !u!1 &8371534816122768140
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,14 +141,14 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 10
+  m_Color: {r: 0.9898519, g: 1, b: 0.8632076, a: 1}
+  m_Intensity: 8
+  m_Range: 40
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -209,6 +223,7 @@ GameObject:
   - component: {fileID: 8371534817321402767}
   - component: {fileID: 8371534817321402765}
   - component: {fileID: 8371534817321402764}
+  - component: {fileID: 8371534816978426089}
   m_Layer: 0
   m_Name: square_lamp (1)
   m_TagString: Untagged
@@ -223,14 +238,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8371534817321402766}
-  m_LocalRotation: {x: 0.0038460281, y: -0.7069729, z: -0.7072197, w: -0.003847361}
-  m_LocalPosition: {x: -0.016561003, y: 0.012328999, z: -0.37915}
-  m_LocalScale: {x: 1.7077793, y: 1.707779, z: 1.707779}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0.7071068, w: 0}
+  m_LocalPosition: {x: 0.0076705, y: 0.014304, z: -0.67586}
+  m_LocalScale: {x: 2.51508, y: 2.51508, z: 2.51508}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8371534817691361222}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: -180.623}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: -180}
 --- !u!33 &8371534817321402765
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -281,6 +296,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8371534816978426089
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8371534817321402766}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.08894102, y: 0.084811404, z: 0.6379946}
+  m_Center: {x: 0.27552935, y: 0.27759445, z: 0.0010027481}
 --- !u!1 &8371534817691361273
 GameObject:
   m_ObjectHideFlags: 0

@@ -343,7 +343,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private void AddSplinePoint()
     {
-        AddSplinePoint((byte)CurrentSelection, WorkingPos, WorkingRot, MinRadius);
+        AddSplinePoint((byte)CurrentSelection, WorkingPos, WorkingRot, _WorkingScale);
  
         WorkingPos += WorkingRot * Vector3.forward * AddDistance;
         UpdateConnector();
