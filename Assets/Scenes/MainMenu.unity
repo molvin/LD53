@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028444, g: 0.2257148, b: 0.30692396, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028413, g: 0.22571428, b: 0.30692282, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1848,7 +1848,8 @@ MonoBehaviour:
   m_text: Company co.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7e76f2581afb7843ac62478724f5411, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -1159236789393713060, guid: c7e76f2581afb7843ac62478724f5411,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2195,7 +2196,8 @@ MonoBehaviour:
   m_text: 'Resources: 99999999'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7e76f2581afb7843ac62478724f5411, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -1159236789393713060, guid: c7e76f2581afb7843ac62478724f5411,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5873,7 +5875,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Play
+  m_text: Take Delivery contract
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7e76f2581afb7843ac62478724f5411, type: 2}
   m_sharedMaterial: {fileID: -1159236789393713060, guid: c7e76f2581afb7843ac62478724f5411,
@@ -5901,14 +5903,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -5976,18 +5978,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700554226}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.2014715, w: 0.9794944}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 774363837}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 23.246}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -337, y: 209}
-  m_SizeDelta: {x: 230.51, y: 100}
+  m_AnchoredPosition: {x: -439.4, y: 174.7}
+  m_SizeDelta: {x: 170.5645, y: 78.2193}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1700554228
 MonoBehaviour:
@@ -6103,8 +6105,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -178, y: -452}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -61, y: -415.58588}
+  m_SizeDelta: {x: 508.0293, y: 102.8284}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1780235860
 MonoBehaviour:
@@ -6127,7 +6129,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0, g: 1, b: 0.87058824, a: 0.20392157}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -6182,7 +6184,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 559020828, guid: 4c0efff301ca70d4ebb75f4882319b40, type: 3}
+  m_Sprite: {fileID: -515692676, guid: 5b07c133c37300547ab2b76147ad3507, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7866,8 +7868,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -89, y: 246}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -154, y: 226.09158}
+  m_SizeDelta: {x: 424.7725, y: 89.8168}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2147292781
 MonoBehaviour:
@@ -7889,10 +7891,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Build level
+  m_text: Carve your astroid
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7e76f2581afb7843ac62478724f5411, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -1159236789393713060, guid: c7e76f2581afb7843ac62478724f5411,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
