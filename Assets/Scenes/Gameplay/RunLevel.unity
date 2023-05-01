@@ -285,7 +285,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 744809212}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f37dd3fe4c1327c41b0c3d01962a3a75, type: 3}
   m_Name: 
@@ -342,6 +342,7 @@ MonoBehaviour:
     type: 3}
   Timer: {fileID: 418976955}
   GameMenu: {fileID: 1332692915}
+  LoadingScreen: {fileID: 907114150}
 --- !u!114 &744809217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,6 +359,18 @@ MonoBehaviour:
   Port: 5302
   Version: 0
   DebugGui: 0
+--- !u!114 &907114150 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7015254974985369868, guid: f164bc050405b7c40ac31393ee76dad0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1012390669}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d06cc9c20d979314b8dbb7b2aae915f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1012390669
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -365,6 +378,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7015254974985369868, guid: f164bc050405b7c40ac31393ee76dad0,
+        type: 3}
+      propertyPath: action_called
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7015254974985369868, guid: f164bc050405b7c40ac31393ee76dad0,
+        type: 3}
+      propertyPath: start_as_hidden
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7015254974985369871, guid: f164bc050405b7c40ac31393ee76dad0,
         type: 3}
       propertyPath: m_Name
@@ -373,7 +396,7 @@ PrefabInstance:
     - target: {fileID: 7015254974985369871, guid: f164bc050405b7c40ac31393ee76dad0,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7015254974985369904, guid: f164bc050405b7c40ac31393ee76dad0,
         type: 3}

@@ -14,6 +14,7 @@ public class RunManager : MonoBehaviour
     public GameObject WinPrefab;
     public TextMeshProUGUI Timer;
     public GameMenu GameMenu;
+    public LoadingScreen LoadingScreen;
 
     private LevelMeta currentLevel;
     private float startTime;
@@ -71,8 +72,14 @@ public class RunManager : MonoBehaviour
             while (generateIter.MoveNext())
             {
                 float progress = (float)generateIter.Current;
+                LoadingScreen.setProgress(progress);
                 yield return null;
             }
+            bool wait = true;
+            LoadingScreen.finished_fade_out = () => wait = false;
+            LoadingScreen.fadeOut();
+            while (wait)
+                yield return null;
 
             PersistentData.LevelMeta = PersistentData.LevelMeta = null;
 
