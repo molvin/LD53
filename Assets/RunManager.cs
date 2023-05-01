@@ -295,9 +295,7 @@ public class RunManager : MonoBehaviour
         truck.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         deliveryBox.transform.position = truck.transform.position + deliveryBox.Offset;
         deliveryBox.transform.rotation = truck.transform.rotation;
-        deliveryBox.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        deliveryBox.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        deliveryBox.GetComponent<Rigidbody>().isKinematic = true;
+        deliveryBox.Reset();
         startTime = Time.time;
     }
 
