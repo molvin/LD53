@@ -11,11 +11,11 @@ public class Serializer : MonoBehaviour
     public struct LevelData
     {
         public List<SplineNoise3D.Spline> SplineData;
-        public List<Doodad> DoodadData;
+        public List<DoodadStruct> DoodadData;
     }
 
     [System.Serializable]
-    public struct Doodad
+    public struct DoodadStruct
     {
         public Vector3 position;
         public int doodad;
@@ -31,10 +31,20 @@ public class Serializer : MonoBehaviour
 
     public string SerializeLevelToJson()
     {
-        FindObjectsOfType<Doodad>
+        var doodads = FindObjectsOfType<Doodad>();
+        List<DoodadStruct> doods = new List<DoodadStruct>();
+        foreach(var doodad in doodads)
+        {
+            doods.Add(new DoodadStruct
+            {
+                position = doodad.transform.position,
+                doodad = doodad.ID
+            });
+        }
 
         LevelData data = new LevelData{
-            SplineData = SplineNoise3D.SplineLine
+            SplineData = SplineNoise3D.SplineLine,
+            DoodadData = doods
         };
 
 
@@ -123,9 +133,7 @@ public class Serializer : MonoBehaviour
         if (SplineNoise3D.SplineLine.Count > 1 && GUI.Button(new Rect(400, 90, 110, 30), "Play and Upload"))
         {
             PersistentData.Validating = true;
-            PersistentData.OverrideLevel = new LevelData {
-                SplineData = SplineNoise3D.SplineLine
-            };
+            PersistentData.OverrideLevel = (LevelData) JsonUtility.FromJson(SerializeLevelToJson(), typeof(LevelData));
             SceneManager.LoadScene(3);
         }
     }

@@ -62,7 +62,7 @@ public class BuildUIController : MonoBehaviour
         else
         {
             if (value >= doodads.Count) return;
-            doodadPlacer.SetDoodad(doodads[value]);
+            doodadPlacer.SetDoodad(value);
         }      
     }
     private void NumPress()
