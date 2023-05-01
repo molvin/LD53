@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SplineNoise3D
 {
-    private static float penaltySize = 10f;
+    private static float penaltySize = 3f;
     public static List<Spline> SplineLine = new List<Spline>();
     public static float SplineNoise(Vector3 point)
     {
