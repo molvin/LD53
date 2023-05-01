@@ -10,7 +10,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject OptionMenuButtonGroup;
     public List<Animator> animators;
     GameMenu parentMenu;
-
+    public TMPro.TextMeshProUGUI back_to_menu_button_text;
     public void Init(GameMenu parentMenu)
     {
         this.parentMenu = parentMenu;
@@ -33,6 +33,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ToggleEnabled()
     {
+        back_to_menu_button_text.text = PersistentData.Validating ? "Back to builder" : "Back to menu";
         bool desierd_stade = !menu.activeSelf;
         Debug.Log(desierd_stade);
         if(desierd_stade)

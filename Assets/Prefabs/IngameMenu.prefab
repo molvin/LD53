@@ -770,6 +770,7 @@ MonoBehaviour:
   - {fileID: 7454070065635840184}
   - {fileID: 7454070065946741393}
   - {fileID: 7454070066190292195}
+  back_to_menu_button_text: {fileID: 7454070066572241047}
 --- !u!1 &5004997438652261789
 GameObject:
   m_ObjectHideFlags: 0
