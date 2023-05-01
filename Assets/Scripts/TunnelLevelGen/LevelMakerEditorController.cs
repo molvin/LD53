@@ -165,25 +165,25 @@ public class LevelMakerEditorController : MonoBehaviour
         AddPrefab.transform.rotation = WorkingRot;
         AddPrefab.transform.localScale = Vector3.one * WorkScale;
 
+        SplineNoise3D.SplineLine.Clear();
+        for (int i = 0; i < SplineTransforms.Count; i++)
+        {
+            Transform Trans = SplineTransforms[i].transform;
+            SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales(i), GetShape(Shapes[i]), (byte) Shapes[i]);
+            if (i < SplineTransforms.Count - 1)
+            {
+                Vector4 FirstShape = GetShape(Shapes[i]);
+                Vector4 SecondShape = GetShape(Shapes[i + 1]);
+                Vector4 Shape = Vector4.Lerp(FirstShape, SecondShape, 0.5f);
+                float scale = (Scales(i) + Scales(i + 1)) * 0.5f;
+                Transform IT = IntermediatePoints[i].transform;
+                // NOTE: Uncomment to add intermediate points
+                //SplineNoise3D.AddSplineSegment(IT.position, IT.rotation, scale, Shape);
+            }
+        }
         // Build/generate level
         if (!IsUsingUI && Input.GetKeyDown(KeyCode.B))
         {
-            SplineNoise3D.SplineLine.Clear();
-            for (int i = 0; i < SplineTransforms.Count; i++)
-            {
-                Transform Trans = SplineTransforms[i].transform;
-                SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales(i), GetShape(Shapes[i]), (byte) Shapes[i]);
-                if (i < SplineTransforms.Count - 1)
-                {
-                    Vector4 FirstShape = GetShape(Shapes[i]);
-                    Vector4 SecondShape = GetShape(Shapes[i + 1]);
-                    Vector4 Shape = Vector4.Lerp(FirstShape, SecondShape, 0.5f);
-                    float scale = (Scales(i) + Scales(i + 1)) * 0.5f;
-                    Transform IT = IntermediatePoints[i].transform;
-                    // NOTE: Uncomment to add intermediate points
-                    //SplineNoise3D.AddSplineSegment(IT.position, IT.rotation, scale, Shape);
-                }
-            }
             StartCoroutine(FindObjectOfType<Serializer>().Generate(FindObjectOfType<Serializer>().SerializeLevelToJson()));
         }
     }
