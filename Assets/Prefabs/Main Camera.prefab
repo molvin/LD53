@@ -135,7 +135,8 @@ MonoBehaviour:
   TargetOffset: {x: 0, y: 3, z: -5}
   LookOffset: {x: 0, y: 0, z: 5}
   Smoothing: 8
-  SplineWeight: 0.5
+  SplineWeight: 0.2
+  LerpSpeed: 0.1
   SplineLookAheadDist: 10
   Steps: 25
   StepLength: 0.5
