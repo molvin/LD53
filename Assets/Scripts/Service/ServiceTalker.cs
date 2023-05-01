@@ -34,7 +34,7 @@ public class ServiceTalker : MonoBehaviour
 
         Dictionary<string, Action> funcs = new Dictionary<string, Action>();
         funcs.Add(Requests.MetaListRequest.ToString(), () => GetMetaList());
-        funcs.Add(Requests.LevelCompleteRequest.ToString(), () => SendLevelComplete());
+        funcs.Add(Requests.LevelCompleteRequest.ToString(), () => SendLevelComplete(GetMetaList().Levels[0], 0));
         funcs.Add(Requests.LevelDownloadRequest.ToString(), () => DownloadLevel(GetMetaList().Levels[0]));
         funcs.Add(Requests.LevelUploadRequest.ToString(), () => UploadLevel(new LevelMeta(), "temp data"));
 
@@ -65,17 +65,17 @@ public class ServiceTalker : MonoBehaviour
 
         return (MetaFile) JsonUtility.FromJson(response, typeof(MetaFile));
     }
-    public void SendLevelComplete()
+    public void SendLevelComplete(LevelMeta meta, int success)
     {
-        MetaFile levelMeta = GetMetaList();
-        LevelMeta level = levelMeta.Levels[0];
+        GetMetaList();
 
         Connect();
         var request = new LevelCompleteRequest
         {
             Version = Version,
-            Level = level.ID,
-            Success = 1
+            ID = meta.ID,
+            Creator = meta.Creator,
+            Success = success
         };
 
         Send(JsonUtility.ToJson(request), (byte)Requests.LevelCompleteRequest);
@@ -92,6 +92,9 @@ public class ServiceTalker : MonoBehaviour
             Meta = meta,
             JsonData = json
         };
+
+        Debug.Log($"Uploading {meta.Creator} {meta.ID}");
+        Debug.Log(json);
 
         Send(JsonUtility.ToJson(request), (byte)Requests.LevelUploadRequest);
 
