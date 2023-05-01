@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -335,6 +335,8 @@ MonoBehaviour:
   serializer: {fileID: 744809215}
   Service: {fileID: 744809217}
   TruckPrefab: {fileID: 8098728701403824975, guid: 79d07df60e2c09b4f831043a9c7d62e2,
+    type: 3}
+  DeliveryBoxPrefab: {fileID: 5557186646560472846, guid: 9473bc7304e5d6c46a102362b551a57c,
     type: 3}
   CameraPrefab: {fileID: 6319288320431453583, guid: 448de8a6e316a3f449fbb12cd52ac2dd,
     type: 3}

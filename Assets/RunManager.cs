@@ -10,6 +10,7 @@ public class RunManager : MonoBehaviour
     public Serializer serializer;
     public ServiceTalker Service;
     public GameObject TruckPrefab;
+    public GameObject DeliveryBoxPrefab;
     public GameObject CameraPrefab;
     public GameObject WinPrefab;
     public TextMeshProUGUI Timer;
@@ -19,6 +20,7 @@ public class RunManager : MonoBehaviour
     private LevelMeta currentLevel;
     private float startTime;
     GameObject truck;
+    BoxScript deliveryBox;
     new GameObject camera;
     Vector3 origin;
 
@@ -88,6 +90,9 @@ public class RunManager : MonoBehaviour
             DestroyImmediate(Camera.main.gameObject);
             origin = SplineNoise3D.SplineLine[0].pos;
             truck = Instantiate(TruckPrefab, origin, Quaternion.identity);
+            deliveryBox = Instantiate(DeliveryBoxPrefab, origin, Quaternion.identity).GetComponent<BoxScript>();
+            deliveryBox.transform.position += deliveryBox.Offset;
+            deliveryBox.Owner = truck.GetComponent<HoverController>();
             camera = Instantiate(CameraPrefab, origin, Quaternion.identity);
             var lastSpline = SplineNoise3D.SplineLine[SplineNoise3D.SplineLine.Count - 1];
             GameObject win = Instantiate(WinPrefab, lastSpline.pos, Quaternion.identity);
@@ -240,6 +245,8 @@ public class RunManager : MonoBehaviour
         truck.transform.rotation = camera.transform.rotation = Quaternion.identity;
         truck.GetComponent<Rigidbody>().velocity = Vector3.zero;
         truck.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        deliveryBox.transform.position = truck.transform.position + deliveryBox.Offset;
+        deliveryBox.transform.rotation = truck.transform.rotation;
         startTime = Time.time;
         won = false;
     }

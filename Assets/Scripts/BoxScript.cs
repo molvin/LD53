@@ -11,8 +11,6 @@ public class BoxScript : MonoBehaviour
     public float MaxDistance = 1.0f;
     public float MaxDeltaVelocity = 50.0f;
 
-    private Vector3 Offset = new Vector3(0.0f, 0.35f, -1.0f);
-
     private Vector3 PreviousPosition;
     private Vector3 PreviousVelocity;
 
@@ -20,15 +18,15 @@ public class BoxScript : MonoBehaviour
     private new BoxCollider collider;
 
     private List<Vector3> Vertices = new List<Vector3>();
+    [HideInInspector]
+    public Vector3 Offset = new Vector3(0f, 0.15f, -0.7f);
 
-    private void Awake()
+    private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.isKinematic = true;
         collider = GetComponent<BoxCollider>();
         collider.enabled = false;
-
-        Offset = transform.position - Owner.transform.position;
 
         PreviousPosition = transform.position;
 
