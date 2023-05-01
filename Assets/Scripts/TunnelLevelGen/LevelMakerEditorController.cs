@@ -145,7 +145,7 @@ public class LevelMakerEditorController : MonoBehaviour
         UpdateIntermediates();
         for (int i = 0; i < SplineTransforms.Count; i++)
         {
-            SplineTransforms[i].transform.localScale = Vector3.one * Scales(i);
+            SplineTransforms[i].transform.localScale = new Vector3(Scales(i), Scales(i), 1f);
         }
 
         if (SplineTransforms.Count > 0)
@@ -196,6 +196,7 @@ public class LevelMakerEditorController : MonoBehaviour
                 Destroy(sphere);
             }
         }
+        UpdateAllConnectors();
     }
 
     private void NumPress()
@@ -373,7 +374,7 @@ public class LevelMakerEditorController : MonoBehaviour
         GameObject cube = Instantiate(ShapePrefabs[CurrentSelection]);
         cube.transform.position = WorkingPos;
         cube.transform.rotation = WorkingRot;
-        cube.transform.localScale = Vector3.one * MinRadius;
+        cube.transform.localScale = new Vector3(MinRadius, MinRadius, 1f);
         SplineTransforms.Add(cube);
         Shapes.Add(CurrentSelection);
         _Scales.Add(WorkScale);
@@ -391,6 +392,7 @@ public class LevelMakerEditorController : MonoBehaviour
             sphere.transform.localScale = Vector3.one * MinRadius;
             IntermediatePoints.Add(sphere);
         }
+        UpdateAllConnectors();
     }
 
     private void InsertSplinePoint()
@@ -403,7 +405,7 @@ public class LevelMakerEditorController : MonoBehaviour
         GameObject cube = Instantiate(ShapePrefabs[CurrentSelection]);
         cube.transform.position = NewPos;
         cube.transform.rotation = NewRot;
-        cube.transform.localScale = Vector3.one * MinRadius;
+        cube.transform.localScale = new Vector3(MinRadius, MinRadius, 1f);
         SplineTransforms.Insert(Index + 1, cube);
         Shapes.Insert(Index + 1, CurrentSelection);
         _Scales.Insert(Index + 1, WorkScale);
@@ -431,6 +433,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
         CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
         CurrentSplineEdit = null;
+        UpdateAllConnectors();
     }
 
     private void Scale()
@@ -519,6 +522,15 @@ public class LevelMakerEditorController : MonoBehaviour
                 InterTrans.position = Pos;
             }
             InterTrans.rotation = Rot;
+        }
+    }
+
+    private void UpdateAllConnectors()
+    {
+        for(int i=0;i< SplineTransforms.Count-1; i++)
+        {
+            LevelBuilderConnector connector = SplineTransforms[i].GetComponentInChildren<LevelBuilderConnector>();
+            connector.finish = SplineTransforms[i + 1].transform;
         }
     }
 

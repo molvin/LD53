@@ -59,9 +59,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01375874c1283fe45811b17f45b9906c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: {fileID: 0}
   finish: {fileID: 0}
-  LR: {fileID: 2364971950775904262}
+  ConnectorPrefab: {fileID: 0}
 --- !u!120 &2364971950775904262
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -82,7 +81,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: -4973734387028869240, guid: 41273ac62adbf704fb9c83785eb2e5a9, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
