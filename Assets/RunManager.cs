@@ -15,6 +15,8 @@ public class RunManager : MonoBehaviour
     public GameObject WinPrefab;
     public GameObject WinCutscene;
     public TextMeshProUGUI Timer;
+    public Image Timer_image;
+
     public GameMenu GameMenu;
     public LoadingScreen LoadingScreen;
     public LayerMask CollisionLayer;
@@ -40,7 +42,7 @@ public class RunManager : MonoBehaviour
         IEnumerator Coroutine()
         {
             if (Timer != null)
-                Timer.enabled = false;
+                Timer.enabled = Timer_image.enabled = false;
             yield return new WaitForSeconds(0.5f);
 
             string data;
@@ -137,8 +139,8 @@ public class RunManager : MonoBehaviour
             t = Time.time - startTime;
             if (Timer)
             {
-                Timer.enabled = true;
-                Timer.text = $"{(!PersistentData.Validating ? (currentLevel.AuthorTime - t) : t):F2}";
+                Timer.enabled = Timer_image.enabled = true;
+                Timer.text = $"{(!PersistentData.Validating ? (currentLevel.AuthorTime - t) : t):00.00}";
             }
 
             if (Input.GetButtonDown("Pause"))
