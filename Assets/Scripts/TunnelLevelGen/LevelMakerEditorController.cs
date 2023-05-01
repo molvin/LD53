@@ -433,7 +433,7 @@ public class LevelMakerEditorController : MonoBehaviour
             if (CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
             {
                 int Index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
-                _Scales[Index] = Mathf.Clamp(_Scales[Index] + Scroll * 14f, MinRadius, MaxRadius);
+                _Scales[Index] = _WorkingScale = Mathf.Clamp(_Scales[Index] + Scroll * 14f, MinRadius, MaxRadius);
             }
             else
             {
