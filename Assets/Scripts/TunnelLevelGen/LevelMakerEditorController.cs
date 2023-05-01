@@ -116,6 +116,12 @@ public class LevelMakerEditorController : MonoBehaviour
             {
                 if (CurrentSplineEdit != null)
                 {
+                    if (SplineTransforms.Contains(CurrentSplineEdit.gameObject))
+                    {
+                        int ind = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
+                        _WorkingScale = _Scales[ind];
+                    }
+
                     CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
                     CurrentSplineEdit = null;
                 }
@@ -189,6 +195,8 @@ public class LevelMakerEditorController : MonoBehaviour
             int index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
             GameObject cube = SplineTransforms[index];
             SplineTransforms.RemoveAt(index);
+            Shapes.RemoveAt(index);
+            _Scales.RemoveAt(index);
             Destroy(cube);
             if (IntermediatePoints.Count > 0)
             {
