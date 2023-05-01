@@ -29,7 +29,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9004064766185725364}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8098728701403824975
 GameObject:
@@ -96,26 +96,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b7aea4b7c254f4485da7565f5682ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LinearForce: 1750
-  AngularForce: 750
-  RollForce: 1000
-  MinHeight: 0.3
-  MaxHeight: 2
+  LinearForce: 700
+  AngularForce: 700
+  RollForce: 350
+  MinHeight: 0.4
+  MaxHeight: 1.5
   VisionHeight: 10
-  MaxCompression: 0.9
-  SpringForce: 5
-  Damping: 4
-  AlignedFrictionCoef: 0.1
+  MaxCompression: 0.8
+  SpringForce: 8
+  Damping: 1.5
+  AlignedFrictionCoef: 0.6
   ForwardFictionCoef: 0.025
-  PerpendicularFrictionCoef: 0.3
+  PerpendicularFrictionCoef: 1.8
   SlideFrictionCoef: 0
   SlideSmoothing: 0.15
-  AlignmentRotationSpeed: 8.52
-  GravitationalPull: 6
-  OverrideGravity: 18
+  AlignmentRotationSpeed: 8
+  GravitationalPull: 1
+  OverrideGravity: 150
   Mask:
     serializedVersion: 2
     m_Bits: 128
+  LoopingAudioSource: {fileID: 0}
   Thrusters:
   - {fileID: 0}
   - {fileID: 0}
