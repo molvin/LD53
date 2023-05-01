@@ -26,8 +26,8 @@ public class LevelInforBoxController : MonoBehaviour
         Name.text = data.Creator;
         Wins.text = "Wins: " + data.Wins;
         Attempts.text = "Attempts: " + data.Attempts;
-        Time.text = "Time to beat: " + data.AuthorTime + " sec";
-        Best_time.text = "Best time: " + data.RecordTime + " sec";
+        Time.text = $"Time to beat: {data.AuthorTime:F2} sec";
+        Best_time.text = $"Best time: {data.RecordTime:F2} sec";
         Champion.text = "Record holder: " + data.RecordName;
 
         //TODO: set record name and best time
