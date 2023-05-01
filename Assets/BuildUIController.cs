@@ -26,7 +26,7 @@ public class BuildUIController : MonoBehaviour
         for (int i = 0; i < doodads.Length; i++)
         {
             int x = i;
-            doodads[i].onClick.AddListener(() => setPlacer(x));
+            gates[i].onClick.AddListener(() => setPlacer(x));
         }
     }
 
