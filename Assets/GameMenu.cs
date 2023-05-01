@@ -11,24 +11,7 @@ public class GameMenu : MonoBehaviour
 
     public WinLoseMenu winLoseMenu;
 
-    public void Update()
-    {
-        if (Input.GetButtonDown("Pause") && !winLoseMenu.menuObj.gameObject.activeSelf)
-        {
-            togglePause();
-        }
 
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            Lose();
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Win(26.4f, 8);
-        }
-    }
 
 
 
@@ -50,19 +33,16 @@ public class GameMenu : MonoBehaviour
 
     public void Win(float time, int resourcesGaind)
     {
+
+        //TODO: check validating
+        bool b = PersistentData.Validating;
         winLoseMenu.Win(time, resourcesGaind);
 
     }
 
-    public void Retry()
-    {
-       
-        //TODO: per do you thinkg
-    }
-    public void BackToMainMenu()
-    {
-        SceneManager.LoadScene(0);
-    }
+    public System.Action Retry;
+    public System.Action Resume;
+    public System.Action BackToMainMenu;
 
     public void ExitGame()
     {
