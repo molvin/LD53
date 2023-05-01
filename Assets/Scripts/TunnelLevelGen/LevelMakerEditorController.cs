@@ -32,6 +32,7 @@ public class LevelMakerEditorController : MonoBehaviour
     private float _WorkingScale = 15f;
     private float TooCloseDistance => MinRadius * 2f;
     float WorkScale => TransformScale(_WorkingScale);
+    int CurrentResource => PersistentData.ResourceCount + PersistentData.ResourceDelta;
 
     float TransformScale(float Value) => Mathf.Lerp(MinRadius, MaxRadius, (float)(Mathf.RoundToInt((Value - MinRadius) / (MaxRadius - MinRadius) * 3f)) / 3f);
 
@@ -184,6 +185,7 @@ public class LevelMakerEditorController : MonoBehaviour
     {
         if (CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
         {
+            PersistentData.ResourceDelta++;
             int index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
             GameObject cube = SplineTransforms[index];
             SplineTransforms.RemoveAt(index);
@@ -343,6 +345,10 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private void AddSplinePoint()
     {
+        if (CurrentResource <= 0)
+        {
+            return;
+        }
         AddSplinePoint((byte)CurrentSelection, WorkingPos, WorkingRot, _WorkingScale);
  
         WorkingPos += WorkingRot * Vector3.forward * AddDistance;
@@ -351,6 +357,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private void AddSplinePoint(byte selection, Vector3 pos, Quaternion rot, float radius)
     {
+        PersistentData.ResourceDelta--;
         GameObject cube = Instantiate(ShapePrefabs[selection]);
         cube.transform.position = pos;
         cube.transform.rotation = rot;
@@ -376,6 +383,10 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private void InsertSplinePoint()
     {
+        if (CurrentResource <= 0)
+        {
+            return;
+        }
         int Index = IntermediatePoints.IndexOf(CurrentSplineEdit.gameObject);
         Vector3 NewPos = CurrentSplineEdit.transform.position;
         Quaternion NewRot = CurrentSplineEdit.transform.rotation;
@@ -556,6 +567,8 @@ public class LevelMakerEditorController : MonoBehaviour
     public void InitFromSpline(Serializer.LevelData level)
     {
         SplineNoise3D.SplineLine = level.SplineData ?? new List<SplineNoise3D.Spline>();
+        PersistentData.ResourceDelta += SplineNoise3D.SplineLine.Count;
+
         Vector3 pos = Vector3.zero;
         Quaternion rot = Quaternion.identity;
 

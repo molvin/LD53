@@ -25,6 +25,7 @@ public static class PersistentData
         get => PlayerPrefs.GetInt("Resources", 0);
         set => PlayerPrefs.SetInt("Resources", value);
     }
+    public static int ResourceDelta = 0;
 
     public static string LevelPath = null;
     public static LevelMeta? LevelMeta = null;
