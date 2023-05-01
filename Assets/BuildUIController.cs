@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static Serializer;
 using static SplineNoise3D;
 
 public class BuildUIController : MonoBehaviour
@@ -23,7 +25,7 @@ public class BuildUIController : MonoBehaviour
         }
 
         Button[] gates = GateView.GetComponentsInChildren<Button>(true);
-        for (int i = 0; i < doodads.Length; i++)
+        for (int i = 0; i < gates.Length; i++)
         {
             int x = i;
             gates[i].onClick.AddListener(() => setPlacer(x));
@@ -87,6 +89,20 @@ public class BuildUIController : MonoBehaviour
             setPlacer(9);
     }
 
+    public void Validate()
+    {
+        PersistentData.Validating = true;
+        PersistentData.OverrideLevel = new LevelData
+        {
+            SplineData = SplineNoise3D.SplineLine
+        };
+        SceneManager.LoadScene(3);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
     //Returns 'true' if we touched or hovering on Unity UI element.
     private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
     {
