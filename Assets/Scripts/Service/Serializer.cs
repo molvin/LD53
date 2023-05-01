@@ -71,7 +71,7 @@ public class Serializer : MonoBehaviour
             for(int i = 0; i < resolution; i++)
             {
                 var lerpedSpline = SplineNoise3D.LerpSpline(previous, spline, i / (float)resolution);
-                PointCloud.CreateIsoSurfaceSphere(lerpedSpline.pos, lerpedSpline.radius, SplineNoise3D.SplineNoise);
+                PointCloud.CreateIsoSurfaceSphere(lerpedSpline.pos, lerpedSpline.radius * 1.1f, SplineNoise3D.SplineNoise);
                 yield return ++current / (float) iterations;
             }
             previous = spline;

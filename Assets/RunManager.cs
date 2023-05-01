@@ -98,6 +98,7 @@ public class RunManager : MonoBehaviour
             deliveryBox = Instantiate(DeliveryBoxPrefab, origin, Quaternion.identity).GetComponent<BoxScript>();
             deliveryBox.transform.position += deliveryBox.Offset;
             deliveryBox.Owner = truck.GetComponent<HoverController>();
+            deliveryBox.GetComponent<Rigidbody>().isKinematic = true;
             camera = Instantiate(CameraPrefab, origin, Quaternion.identity);
             var cameraController = camera.GetComponent<CameraController>();
             cameraController.Target = truck.transform;
@@ -225,7 +226,7 @@ public class RunManager : MonoBehaviour
 
         try
         {
-            if (currentLevel.ID != 0)
+            if (currentLevel.ID != 0 && !PersistentData.Validating)
             {
                 currentLevel.RecordTime = float.MaxValue;
                 currentLevel.RecordName = PersistentData.PlayerName;
@@ -283,6 +284,9 @@ public class RunManager : MonoBehaviour
         truck.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         deliveryBox.transform.position = truck.transform.position + deliveryBox.Offset;
         deliveryBox.transform.rotation = truck.transform.rotation;
+        deliveryBox.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        deliveryBox.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        deliveryBox.GetComponent<Rigidbody>().isKinematic = true;
         startTime = Time.time;
     }
 
