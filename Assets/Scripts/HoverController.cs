@@ -27,6 +27,7 @@ public class HoverController : MonoBehaviour
     public float AlignmentRotationSpeed = 3.5f;
     public float GravitationalPull = 0.2f;
     public float OverrideGravity = 12.0f;
+    public float ExtraHillPush = 3.0f;
     public LayerMask Mask;
     [Header("audio")]
     public AudioSource PlayerAudioSource;
@@ -268,7 +269,7 @@ public class HoverController : MonoBehaviour
         // Input
         if (ForwardInput.y > 0 && GravitationalPull > 0)
         {
-            ForwardInput.y *= 2;
+            ForwardInput.y *= ExtraHillPush;
         }
 
         rigidbody.AddForce(ForwardInput * LinearForce * GroundConnectedness);
