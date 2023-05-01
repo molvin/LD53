@@ -156,7 +156,7 @@ public class RunManager : MonoBehaviour
                     Wins = 0,
                     Attempts = 0,
                     AuthorTime = Mathf.CeilToInt(timeAtFinish * 1.1f),
-                    BestTime = Mathf.CeilToInt(timeAtFinish * 1.1f),
+                    RecordTime = Mathf.CeilToInt(timeAtFinish * 1.1f),
                     RecordName = PersistentData.PlayerName,
                     ID = PersistentData.PlayerId,
                     Creator = PersistentData.PlayerName,
@@ -173,7 +173,7 @@ public class RunManager : MonoBehaviour
                     if (currentLevel.ID != 0)
                     {
                         currentLevel.RecordName = PersistentData.PlayerName;
-                        currentLevel.BestTime = timeAtFinish;
+                        currentLevel.RecordTime = timeAtFinish;
                         Service.SendLevelComplete(currentLevel, 1);
                     }
                     else
@@ -206,10 +206,25 @@ public class RunManager : MonoBehaviour
         truck.GetComponent<HoverController>().enabled = false;
         StopAllCoroutines();
 
-        GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
+        GameMenu.Retry = () => { Restart(false); StartCoroutine(RunGame()); };
         GameMenu.BackToMainMenu = () => SceneManager.LoadScene(0);
 
         GameMenu.Lose();
+
+        try
+        {
+            if (currentLevel.ID != 0)
+            {
+                currentLevel.RecordTime = float.MaxValue;
+                currentLevel.RecordName = PersistentData.PlayerName;
+                Service.SendLevelComplete(currentLevel, 0);
+                Debug.Log($"Updated attempts {currentLevel.ID} {currentLevel.Creator}");
+                Service.GetMetaList();
+            }
+            else
+                Debug.Log("Current level not set, cant update attempts");
+        }
+        catch { }
     }
 
     public void Pause()
@@ -220,11 +235,11 @@ public class RunManager : MonoBehaviour
         Time.timeScale = paused ? 0 : 1;
         GameMenu.togglePause();
         GameMenu.Resume = () => { Time.timeScale = 1.0f; paused = false; truck.GetComponent<HoverController>().enabled = true; };
-        GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
+        GameMenu.Retry = () => { StopAllCoroutines(); Restart(); StartCoroutine(RunGame()); };
         GameMenu.BackToMainMenu = () => SceneManager.LoadScene(0);
     }
 
-    private void Restart()
+    private void Restart(bool updateAttempt = true)
     {
         Time.timeScale = 1.0f;
         paused = false;
@@ -233,11 +248,15 @@ public class RunManager : MonoBehaviour
         {
             if (currentLevel.ID != 0)
             {
-                currentLevel.BestTime = float.MaxValue;
-                currentLevel.RecordName = PersistentData.PlayerName;
-                Service.SendLevelComplete(currentLevel, 0);
-                Debug.Log($"Updated attempts {currentLevel.ID} {currentLevel.Creator}");
-                Service.GetMetaList();
+                if(updateAttempt)
+                {
+                    currentLevel.RecordTime = float.MaxValue;
+                    currentLevel.RecordName = PersistentData.PlayerName;
+                    Service.SendLevelComplete(currentLevel, 0);
+                    Debug.Log($"Updated attempts {currentLevel.ID} {currentLevel.Creator}");
+                    Service.GetMetaList();
+                }
+
             }
             else
                 Debug.Log("Current level not set, cant update attempts");

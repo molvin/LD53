@@ -75,14 +75,17 @@ public class ServiceTalker : MonoBehaviour
             Version = Version,
             ID = meta.ID,
             Creator = meta.Creator,
-            Success = success
+            Success = success,
+            Time = meta.RecordTime,
+            RecordName = meta.RecordName
         };
 
+        Debug.Log(JsonUtility.ToJson(request));
         Send(JsonUtility.ToJson(request), (byte)Requests.LevelCompleteRequest);
 
         string response = Receive();
 
-        Debug.Log(response);
+        Debug.Log("Finished upload level complete " + response);
     }
     public void UploadLevel(LevelMeta meta, string json)
     {
@@ -93,8 +96,8 @@ public class ServiceTalker : MonoBehaviour
             JsonData = json
         };
 
-        Debug.Log($"Uploading {meta.Creator} {meta.ID}");
-        Debug.Log(json);
+        Debug.Log($"Uploading {JsonUtility.ToJson(meta)}");
+        Debug.Log($"Level data: {json}");
 
         Send(JsonUtility.ToJson(request), (byte)Requests.LevelUploadRequest);
 
