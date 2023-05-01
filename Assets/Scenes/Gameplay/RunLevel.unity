@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.00301834, g: 0.002957032, b: 0.0029338556, a: 1}
+  m_IndirectSpecularColor: {r: 0.0030212146, g: 0.002974086, b: 0.0029360796, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -353,6 +353,8 @@ MonoBehaviour:
   CameraPrefab: {fileID: 6319288320431453583, guid: 448de8a6e316a3f449fbb12cd52ac2dd,
     type: 3}
   WinPrefab: {fileID: 1056586838042228963, guid: bc9e23dd7f55e024a89f11d2b0eeac5c,
+    type: 3}
+  WinCutscene: {fileID: 212956579251401939, guid: 2ef0c39f4ebaa964e960240fae985234,
     type: 3}
   Timer: {fileID: 418976955}
   GameMenu: {fileID: 1332692915}
