@@ -11,7 +11,6 @@ public class BuildUIController : MonoBehaviour
     public GameObject GateView;
     public LevelMakerDoodadPlacer doodadPlacer;
     public LevelMakerEditorController gatePlacer;
-    public List<GameObject> doodads;
     public int UiLayer;
 
     public void Start()
@@ -61,7 +60,6 @@ public class BuildUIController : MonoBehaviour
         }
         else
         {
-            if (value >= doodads.Count) return;
             doodadPlacer.SetDoodad(value);
         }      
     }

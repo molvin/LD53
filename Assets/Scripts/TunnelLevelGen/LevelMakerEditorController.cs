@@ -13,9 +13,6 @@ public class LevelMakerEditorController : MonoBehaviour
     public List<GameObject> ShapePrefabs;
     public LayerMask SelectionMask;
 
-    public Mesh VisualMesh;
-    public Material SelectionUIMaterial;
-
     public float MinRadius = 3f;
     public float MaxRadius = 10f;
     float AddDistance => MaxRadius * 2f;
@@ -75,13 +72,6 @@ public class LevelMakerEditorController : MonoBehaviour
         if (DisableEdit)
         {
             return;
-        }
-
-        if (SelectionUIMaterial)
-        {
-            Vector2 Offset = new Vector2(1f + CurrentSelection % 4 * TilingX, 2f / 3f - (int)(CurrentSelection / 4) * TIlingY);
-            SelectionUIMaterial.SetTextureOffset("_BaseMap", Offset);
-            Graphics.DrawMesh(VisualMesh, transform.position + transform.forward * 5f - transform.right * 3f - transform.up * 2f, Quaternion.LookRotation(transform.forward, transform.up), SelectionUIMaterial, 0);
         }
 
         // Select Point

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelMakerDoodadPlacer : MonoBehaviour
 {
-    private int CurrentDoodad;
+    private int currentDoodad;
     public List<GameObject> Doodads;
     private GameObject doodadPrefab;
     private GameObject shadowObject;
@@ -15,6 +15,7 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
     // Update is called once per frame
     public void SetDoodad(int doodad)
     {
+        currentDoodad = doodad;
         doodadPrefab = Doodads[doodad];
         if (shadowObject != null)
             GameObject.Destroy(shadowObject);
@@ -30,7 +31,7 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
                 GameObject.Destroy(shadowObject);
             shadowObject = null;
         }
-        RemoveOld();
+        if( RemoveOld()) return;
         UpdateShadow();
     }
     private void UpdateShadow()
@@ -53,7 +54,7 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 shadowObject = null;
-                SetDoodad(doodadPrefab);
+                SetDoodad(currentDoodad);
             }
         }
         else
@@ -67,9 +68,9 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
             }
         }
     }
-    private void RemoveOld()
+    private bool RemoveOld()
     {
-        if (IsUsingUI) return;
+        if (IsUsingUI) return false;
         Vector3 p1 = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         Vector3 p2 = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 100));
         Vector3 direction = p2 - p1;
@@ -85,7 +86,9 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
                 if (shadowObject != null)
                     GameObject.Destroy(shadowObject);
                 shadowObject = hit.collider.gameObject;
+                return true;
             }
         }
+        return false;
     }
 }
