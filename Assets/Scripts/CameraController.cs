@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
         {
             if (Hit.distance < toDesired.magnitude)
             {
-                desired = Target.transform.position + toDesired.normalized * Hit.distance;
+                desired = Vector3.Lerp(desired, Target.transform.position + toDesired.normalized * Hit.distance, LerpSpeed);
             }
         }
         transform.position = desired;

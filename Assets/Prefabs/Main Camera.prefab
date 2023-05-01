@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  TargetOffset: {x: 0, y: 3, z: -5}
+  TargetOffset: {x: 0, y: 2, z: -5}
   LookOffset: {x: 0, y: 0, z: 5}
   Smoothing: 8
   SplineWeight: 0.2
