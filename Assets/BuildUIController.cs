@@ -25,7 +25,7 @@ public class BuildUIController : MonoBehaviour
         }
 
         Button[] gates = GateView.GetComponentsInChildren<Button>(true);
-        for (int i = 0; i < doodads.Length; i++)
+        for (int i = 0; i < gates.Length; i++)
         {
             int x = i;
             gates[i].onClick.AddListener(() => setPlacer(x));
