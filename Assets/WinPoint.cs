@@ -7,12 +7,9 @@ public class WinPoint : MonoBehaviour
     public float Radius;
     public LayerMask PlayerLayer;
     public RunManager Manager;
-    public bool won;
 
     private void Update()
     {
-        if (won)
-            return;
         Collider[] colls = Physics.OverlapSphere(transform.position, Radius, PlayerLayer);
         foreach(Collider coll in colls)
         {
@@ -20,7 +17,6 @@ public class WinPoint : MonoBehaviour
             if(player)
             {
                 Manager.Win();
-                won = true;
             }
         }
     }
