@@ -48,7 +48,9 @@ public struct LevelMeta
 {
     public int Wins;
     public int Attempts;
-    public float Time;
+    public float AuthorTime;
+    public float BestTime;
+    public string RecordName;
     public int ID;
     public string Creator;
     public int Resource;

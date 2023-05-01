@@ -21,6 +21,7 @@ public class RunManager : MonoBehaviour
     GameObject truck;
     new GameObject camera;
     Vector3 origin;
+    private float timeAtFinish;
 
     bool won;
     private bool paused;
@@ -97,9 +98,9 @@ public class RunManager : MonoBehaviour
 
             startTime = Time.time;
 
-            if (currentLevel.Time == 0)
+            if (currentLevel.AuthorTime == 0)
             {
-                currentLevel.Time = 30;
+                currentLevel.AuthorTime = 30;
                 Debug.Log("No time set in level, defaulting to 30s");
             }
 
@@ -112,13 +113,13 @@ public class RunManager : MonoBehaviour
     private IEnumerator RunGame()
     {
         float t = 0.0f;
-        while (t < currentLevel.Time || PersistentData.Validating)
+        while (t < currentLevel.AuthorTime || PersistentData.Validating)
         {
             t = Time.time - startTime;
             if (Timer)
             {
                 Timer.enabled = true;
-                Timer.text = $"{(!PersistentData.Validating ? (currentLevel.Time - t) : t):0}";
+                Timer.text = $"{(!PersistentData.Validating ? (currentLevel.AuthorTime - t) : t):0}";
             }
 
             //TODO: remove when pause works
@@ -154,7 +155,9 @@ public class RunManager : MonoBehaviour
                 {
                     Wins = 0,
                     Attempts = 0,
-                    Time = Mathf.CeilToInt((Time.time - startTime) * 1.1f),
+                    AuthorTime = Mathf.CeilToInt(timeAtFinish * 1.1f),
+                    BestTime = Mathf.CeilToInt(timeAtFinish * 1.1f),
+                    RecordName = PersistentData.PlayerName,
                     ID = PersistentData.PlayerId,
                     Creator = PersistentData.PlayerName,
                     Resource = 100
@@ -168,7 +171,11 @@ public class RunManager : MonoBehaviour
                 try
                 {
                     if (currentLevel.ID != 0)
+                    {
+                        currentLevel.RecordName = PersistentData.PlayerName;
+                        currentLevel.BestTime = timeAtFinish;
                         Service.SendLevelComplete(currentLevel, 1);
+                    }
                     else
                         Debug.Log("Current level not set, cant update attempts");
                 }
@@ -190,8 +197,8 @@ public class RunManager : MonoBehaviour
         GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
         GameMenu.BackToMainMenu = () => FinishLevel();
   
-        float t = Time.time - startTime;
-        GameMenu.Win(t, currentLevel.Resource);
+        timeAtFinish = Time.time - startTime;
+        GameMenu.Win(timeAtFinish, currentLevel.Resource);
     }
 
     public void Lose()
@@ -226,6 +233,8 @@ public class RunManager : MonoBehaviour
         {
             if (currentLevel.ID != 0)
             {
+                currentLevel.BestTime = float.MaxValue;
+                currentLevel.RecordName = PersistentData.PlayerName;
                 Service.SendLevelComplete(currentLevel, 0);
                 Debug.Log($"Updated attempts {currentLevel.ID} {currentLevel.Creator}");
                 Service.GetMetaList();

@@ -100,7 +100,9 @@ public class Serializer : MonoBehaviour
             {
                 Wins = 0,
                 Attempts = 0,
-                Time = 60.0f,
+                AuthorTime = 60.0f,
+                BestTime = 60.0f,
+                RecordName = PersistentData.PlayerName,
                 ID = PersistentData.PlayerId,
                 Creator = PersistentData.PlayerName,
                 Resource = 100
