@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
     public float SplineLookAheadDist = 10.0f;
     public int Steps = 10;
     public float StepLength = 1.0f;
+    public LayerMask collisionMask;
     private Vector3 velocity;
 
     private void Start()
@@ -42,7 +43,7 @@ public class CameraController : MonoBehaviour
         Vector3 targetPos = Target.transform.position + forward * TargetOffset;
         Vector3 desired = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, Smoothing * Time.fixedDeltaTime);
         Vector3 toDesired = (desired - Target.transform.position);
-        if (Physics.SphereCast(Target.transform.position, 0.5f, toDesired.normalized, out RaycastHit Hit))
+        if (Physics.SphereCast(Target.transform.position, 0.5f, toDesired.normalized, out RaycastHit Hit, collisionMask))
         {
             if (Hit.distance < toDesired.magnitude)
             {
