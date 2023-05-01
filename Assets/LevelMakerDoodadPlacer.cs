@@ -25,19 +25,19 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
         Vector3 p1 = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         Vector3 p2 = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 100));
         Vector3 direction = p2 - p1;
-        Debug.DrawLine(p1, p2);
         RaycastHit hit;
         Physics.Raycast(p1, direction.normalized, out hit, 100000f, ConnectorMask);
 
         //is on spline
         if(hit.collider != null)
         {
-            Debug.DrawLine(p1, hit.point, Color.magenta);
             SplineNoise3D.Spline s = SplineNoise3D.getLerpSplineFromPoint(hit.point);
+            Debug.DrawLine(s.pos, s.pos + Vector3.up * 10f, Color.black);
             shadowObject.transform.position = s.pos;
             shadowObject.transform.rotation = s.rot;
+            shadowObject.transform.localScale = Vector3.one * s.radius;
 
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(0))
             {
                 shadowObject = null;
                 SetDoodad(doodadPrefab);
