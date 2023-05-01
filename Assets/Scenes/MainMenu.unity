@@ -182,6 +182,7 @@ MonoBehaviour:
   Wins: {fileID: 306117240}
   Attempts: {fileID: 2019260440}
   Time: {fileID: 1791953070}
+  Resources: {fileID: 940709860}
 --- !u!1 &163144973
 GameObject:
   m_ObjectHideFlags: 0
