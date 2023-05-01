@@ -73,6 +73,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: wind_particle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5270138257580202450, guid: 33542c07a99e82648af2f2370faf77cb,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.05490196
+      objectReference: {fileID: 0}
     - target: {fileID: 5270138257580202453, guid: 33542c07a99e82648af2f2370faf77cb,
         type: 3}
       propertyPath: m_RootOrder

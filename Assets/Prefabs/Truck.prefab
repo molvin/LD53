@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LinearForce: 500
-  AngularForce: 868.29
+  AngularForce: 1120
   RollForce: 350
   MinHeight: 0.4
   MaxHeight: 1.5
@@ -237,6 +237,7 @@ MonoBehaviour:
   AlignmentRotationSpeed: 2
   GravitationalPull: 1
   OverrideGravity: 150
+  ExtraHillPush: 3
   Mask:
     serializedVersion: 2
     m_Bits: 128

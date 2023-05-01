@@ -15,7 +15,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
     public float MinRadius = 3f;
     public float MaxRadius = 10f;
-    float AddDistance => MaxRadius * 2f;
+    float AddDistance => MaxRadius * 4f;
 
     private GameObject CurrentSplineEdit;
     private List<GameObject> SplineTransforms = new List<GameObject>();
@@ -116,6 +116,12 @@ public class LevelMakerEditorController : MonoBehaviour
             {
                 if (CurrentSplineEdit != null)
                 {
+                    if (SplineTransforms.Contains(CurrentSplineEdit.gameObject))
+                    {
+                        int ind = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
+                        _WorkingScale = _Scales[ind];
+                    }
+
                     CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
                     CurrentSplineEdit = null;
                 }
@@ -189,6 +195,8 @@ public class LevelMakerEditorController : MonoBehaviour
             int index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
             GameObject cube = SplineTransforms[index];
             SplineTransforms.RemoveAt(index);
+            Shapes.RemoveAt(index);
+            _Scales.RemoveAt(index);
             Destroy(cube);
             if (IntermediatePoints.Count > 0)
             {
@@ -263,9 +271,9 @@ public class LevelMakerEditorController : MonoBehaviour
             }
 
             Vector3 fromRef = SplineTransforms[Index].transform.position - Reference;
-            if (fromRef.magnitude > 4f * MaxRadius)
+            if (fromRef.magnitude > AddDistance * 2f)
             {
-                SplineTransforms[Index].transform.position = Reference + fromRef.normalized * 4f * MaxRadius;
+                SplineTransforms[Index].transform.position = Reference + fromRef.normalized * AddDistance * 2f;
             }
         }
         UpdateConnector();
@@ -433,7 +441,7 @@ public class LevelMakerEditorController : MonoBehaviour
             if (CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
             {
                 int Index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
-                _Scales[Index] = Mathf.Clamp(_Scales[Index] + Scroll * 14f, MinRadius, MaxRadius);
+                _Scales[Index] = _WorkingScale = Mathf.Clamp(_Scales[Index] + Scroll * 14f, MinRadius, MaxRadius);
             }
             else
             {

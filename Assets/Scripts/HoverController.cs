@@ -27,6 +27,7 @@ public class HoverController : MonoBehaviour
     public float AlignmentRotationSpeed = 3.5f;
     public float GravitationalPull = 0.2f;
     public float OverrideGravity = 12.0f;
+    public float ExtraHillPush = 3.0f;
     public LayerMask Mask;
     [Header("audio")]
     public AudioSource PlayerAudioSource;
@@ -261,19 +262,16 @@ public class HoverController : MonoBehaviour
         delta.ToAngleAxis(out float Angle, out Vector3 axis);
         rigidbody.AddTorque(axis.normalized * Angle * AlignmentRotationSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
 
-        Debug.DrawLine(transform.position, transform.position + UpNormal * 3.0f);
-        Debug.DrawLine(transform.position, transform.position + AlignmentNormal * 3.0f, Color.yellow);
-        Debug.DrawLine(transform.position, transform.position + ForwardInput * 100.0f, Color.green);
-
         Vector3 Gravity = -AlignmentNormal * OverrideGravity * GravitationalPull * Time.fixedDeltaTime;
         Gravity += Vector3.down * (OverrideGravity - 9.81f) * Time.fixedDeltaTime;
         // Gravitational pull
         rigidbody.AddForce(Gravity);
         // Input
-        if (ForwardInput.z > 0 && GravitationalPull > 0)
+        if (ForwardInput.y > 0 && GravitationalPull > 0)
         {
-            ForwardInput.z *= GravitationalPull;
+            ForwardInput.y *= ExtraHillPush;
         }
+
         rigidbody.AddForce(ForwardInput * LinearForce * GroundConnectedness);
         rigidbody.AddRelativeTorque(TurningInput * AngularForce * GroundConnectedness);
         rigidbody.AddRelativeTorque(RollInput * RollForce * (1.0f - GroundConnectedness));
