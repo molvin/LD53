@@ -37,6 +37,7 @@ public class HoverController : MonoBehaviour
     public AudioSource Idle;
     public AudioSource Accelerate;
     public AudioSource TopSpeed;
+    private float CooldownSlideSoundMax, CurrentCooldownSlideSound;
 
     private new Rigidbody rigidbody;
     private List<Vector3> Offsets = new List<Vector3>();
@@ -114,6 +115,9 @@ public class HoverController : MonoBehaviour
             PreviousHeights.Add(MaxHeight);
         }
         SoundStateLooping = 4;
+        CooldownSlideSoundMax = 5f;
+        CurrentCooldownSlideSound = 1f;
+
     }
 
     private void Update()
@@ -125,36 +129,37 @@ public class HoverController : MonoBehaviour
         //InputVector += Vector3.ProjectOnPlane(transform.rotation * LocalInput, UpNormal).normalized * Time.deltaTime;
 
         if (Input.GetButton("Slide"))
+        {
             rightCoef = SlideFrictionCoef;
+            if(CurrentCooldownSlideSound <= 0)
+            {
+                Idle.PlayOneShot(OneShotAudioClips[3], 2f);
+                Idle.PlayOneShot(OneShotAudioClips[4], 1f);
+                CurrentCooldownSlideSound = CooldownSlideSoundMax;
+            }
+
+        }
+            
         rightCoef = Mathf.SmoothDamp(rightCoef, PerpendicularFrictionCoef, ref slideDelta, SlideSmoothing);
-        // Debug.Log(" SPEED : " + rigidbody.velocity.magnitude);
-        /*
+        
         if (Input.GetAxisRaw("Forward") > 0 && SoundStateLooping != 2 && rigidbody.velocity.magnitude > 25)
         {
-            //Debug.Log("  JAG HÄNDER !!! " + SoundStateLooping + "   ANNDD    " + rigidbody.velocity.magnitude);
-            //SONIC BOOM PLAY ONCE!
+            //SONICBOOM PLAY ONCE
             SoundStateLooping = 2;
-            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1.5f);
-            PlayerAudioSource.clip = AudioClipsLooping[SoundStateLooping];
-            PlayerAudioSource.Play();
+            Idle.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1.5f);
         }
         else if((Input.GetAxisRaw("Forward") > 0 || Input.GetAxisRaw("Forward") < 0) && SoundStateLooping != 1 && rigidbody.velocity.magnitude <= 15)
         {
             //ENGINE EXPLOSION?! PLAY ONCE
             SoundStateLooping = 1;
-            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1.2f);
-            PlayerAudioSource.clip = AudioClipsLooping[SoundStateLooping];
-            PlayerAudioSource.Play();
+            Idle.PlayOneShot(OneShotAudioClips[SoundStateLooping], 0.8f);
         }
         else if(Input.GetAxisRaw("Forward") == 0 && SoundStateLooping != 0 && rigidbody.velocity.magnitude <= 12)
         {
             //BREAK NOISE PLAY ONCE
             SoundStateLooping = 0;
-            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1f);
-            PlayerAudioSource.clip = AudioClipsLooping[SoundStateLooping];
-            PlayerAudioSource.Play();
+            Idle.PlayOneShot(OneShotAudioClips[SoundStateLooping], 0.8f);
         }
-        */
         float SpeedVolume = Mathf.Clamp01(CurrentSpeed / 20f);
         float AccelerationVolume = Mathf.Clamp01(CurrentAcceleration / 20f);
         float IdleVolume = ((1f - Mathf.Clamp01(CurrentSpeed / 20f)) + 1f) * 0.5f;
@@ -162,6 +167,7 @@ public class HoverController : MonoBehaviour
         Idle.volume = Mathf.Lerp(Idle.volume, IdleVolume, 4f * Time.deltaTime);
         TopSpeed.volume = Mathf.Lerp(TopSpeed.volume, SpeedVolume, 4f * Time.deltaTime);
         Accelerate.volume = Mathf.Lerp(Accelerate.volume, AccelerationVolume, 4f * Time.deltaTime);
+        CurrentCooldownSlideSound = CurrentCooldownSlideSound - Time.deltaTime;
     }
 
     private void OnDrawGizmos()
