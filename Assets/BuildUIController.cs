@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static Serializer;
 using static SplineNoise3D;
 
 public class BuildUIController : MonoBehaviour
 {
     public GameObject DoodadView;
     public GameObject GateView;
+    public Serializer Serializer;
     public LevelMakerDoodadPlacer doodadPlacer;
     public LevelMakerEditorController gatePlacer;
     public int UiLayer;
@@ -92,10 +92,7 @@ public class BuildUIController : MonoBehaviour
     public void Validate()
     {
         PersistentData.Validating = true;
-        PersistentData.OverrideLevel = new LevelData
-        {
-            SplineData = SplineNoise3D.SplineLine
-        };
+        PersistentData.OverrideLevel = (Serializer.LevelData)JsonUtility.FromJson(Serializer.SerializeLevelToJson(), typeof(Serializer.LevelData));
         SceneManager.LoadScene(3);
     }
 
