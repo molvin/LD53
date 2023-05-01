@@ -24,8 +24,8 @@ public class LevelMakerEditorController : MonoBehaviour
     private List<int> Shapes = new List<int>();
     float Scales(int Index) => TransformScale(_Scales[Index]);
 
-    private float Yaw = 0f;
-    private float Pitch = 75f;
+    public float Yaw = 0f;
+    public float Pitch = 75f;
 
     private Vector3 WorkingPos = Vector3.zero;
     private Quaternion WorkingRot = Quaternion.identity;

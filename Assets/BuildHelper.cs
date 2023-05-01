@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildHelper : MonoBehaviour
 {
@@ -46,6 +47,11 @@ public class BuildHelper : MonoBehaviour
 
         LevelEditor.InitFromSpline(myLevel);
         DoodadPlacer.InitFromLevel(myLevel);
+
+        var buttons = FindObjectsOfType<Button>(true);
+        var audio = FindObjectOfType<MenuAudioController>();
+        foreach (var button in buttons)
+            button.onClick.AddListener(() => audio.playButtonHover());
 
     }
 
