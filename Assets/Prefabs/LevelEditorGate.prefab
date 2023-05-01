@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3644672581036674094}
   - component: {fileID: 5194240698405029108}
   - component: {fileID: 835710824145701552}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 3591209423167781417}
   - component: {fileID: 7955142475634463259}
   - component: {fileID: 8128104874371500627}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 7799404698725411966}
   - component: {fileID: 6945210225584186330}
   - component: {fileID: 371829283345389311}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LevelEditorGate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 3153311531333635416}
   - component: {fileID: 6364856848048759592}
   - component: {fileID: 1141150769627070523}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5968696291268163366}
   - component: {fileID: 1562945991100809136}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: ConnectorColllider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -373,7 +373,7 @@ GameObject:
   - component: {fileID: 515536797935443451}
   - component: {fileID: 6387164586231655474}
   - component: {fileID: 520691505360466291}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,7 +456,7 @@ GameObject:
   - component: {fileID: 5344887269158314979}
   - component: {fileID: 7719318816552595857}
   - component: {fileID: 886715201817213910}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,7 +539,7 @@ GameObject:
   - component: {fileID: 6692470394109091259}
   - component: {fileID: 2631409687644463138}
   - component: {fileID: 1539384087527663550}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}

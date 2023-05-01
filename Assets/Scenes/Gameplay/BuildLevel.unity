@@ -545,6 +545,7 @@ MonoBehaviour:
   doodads:
   - {fileID: 5303251916406420023, guid: b69dde0cac3a18a45b7eb4d0d9d69e83, type: 3}
   - {fileID: 5303251916406420023, guid: d2d2aa81ca206f74c939f578fcd76d6e, type: 3}
+  UiLayer: 0
 --- !u!1 &579057756
 GameObject:
   m_ObjectHideFlags: 0
