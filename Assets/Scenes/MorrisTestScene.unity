@@ -564,7 +564,10 @@ MonoBehaviour:
   Mask:
     serializedVersion: 2
     m_Bits: 0
-  LoopingAudioSource: {fileID: 0}
+  PlayerAudioSource: {fileID: 0}
+  AudioClipsLooping: []
+  OneShotAudioClips: []
+  Thrusters: []
 --- !u!65 &699528511
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -651,17 +654,41 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: PlayerAudioSource
+      value: 
+      objectReference: {fileID: 899873477}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
       propertyPath: LoopingAudioSource
       value: 
       objectReference: {fileID: 899873477}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: AudioClipsLooping.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
       propertyPath: LoopingAudioClips.Array.size
       value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: OneShotAudioClips.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
       propertyPath: SourcesLoopingAudio.Array.size
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: AudioClipsLooping.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 05bfe14272929974b8705f71c7ca15f6, type: 3}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: AudioClipsLooping.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 118846e2efabcf54682d990a40157252, type: 3}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: AudioClipsLooping.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 201fa1c4cd6c3f940baef71387ed89d2, type: 3}
     - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
       propertyPath: LoopingAudioClips.Array.data[0]
       value: 
@@ -702,6 +729,18 @@ PrefabInstance:
       propertyPath: LoopingAudioClips.Array.data[9]
       value: 
       objectReference: {fileID: 8300000, guid: 09137e99afb300341a0d2d5aab5b3910, type: 3}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: OneShotAudioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 14938c0a075d88746b03bf98c1798278, type: 3}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: OneShotAudioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 7e1d3a74ac9f348489a521229e736986, type: 3}
+    - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
+      propertyPath: OneShotAudioClips.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: c0aa0f74e04cd4f4b9b1617a66753a49, type: 3}
     - target: {fileID: 1184033, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
       propertyPath: LoopingAudioClips.Array.data[10]
       value: 
@@ -835,12 +874,13 @@ AudioSource:
   m_GameObject: {fileID: 396853263}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7f830d539ddd324458deb7868ce8af8c,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 05bfe14272929974b8705f71c7ca15f6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
