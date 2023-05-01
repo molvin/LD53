@@ -98,7 +98,7 @@ public class PauseMenu : MonoBehaviour
     public IEnumerator MenuAfterTime(float wait_time)
     {
         yield return new WaitForSecondsRealtime(wait_time);
-        SceneManager.LoadScene(0);
+        parentMenu.BackToMainMenu();
     }
     public IEnumerator QutiAfterTime(float wait_time)
     {

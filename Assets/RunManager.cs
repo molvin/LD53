@@ -84,8 +84,6 @@ public class RunManager : MonoBehaviour
             while (wait)
                 yield return null;
 
-            PersistentData.LevelMeta = PersistentData.LevelMeta = null;
-
             yield return new WaitForSeconds(0.5f);
 
             DestroyImmediate(Camera.main.gameObject);
@@ -190,6 +188,7 @@ public class RunManager : MonoBehaviour
             }
             PersistentData.Validating = false;
             PersistentData.OverrideLevel = null;
+            PersistentData.LevelMeta = null;
             SceneManager.LoadScene(0);
         }
 
@@ -212,7 +211,7 @@ public class RunManager : MonoBehaviour
         StopAllCoroutines();
 
         GameMenu.Retry = () => { Restart(false); StartCoroutine(RunGame()); };
-        GameMenu.BackToMainMenu = () => SceneManager.LoadScene(0);
+        GameMenu.BackToMainMenu = () => BackToMenu();
 
         GameMenu.Lose();
 
@@ -241,7 +240,7 @@ public class RunManager : MonoBehaviour
         GameMenu.togglePause();
         GameMenu.Resume = () => { Time.timeScale = 1.0f; paused = false; truck.GetComponent<HoverController>().enabled = true; };
         GameMenu.Retry = () => { StopAllCoroutines(); Restart(); StartCoroutine(RunGame()); };
-        GameMenu.BackToMainMenu = () => SceneManager.LoadScene(0);
+        GameMenu.BackToMainMenu = () => BackToMenu();
     }
 
     private void Restart(bool updateAttempt = true)
@@ -278,6 +277,19 @@ public class RunManager : MonoBehaviour
         startTime = Time.time;
         won = false;
     }
+
+    private void BackToMenu()
+    {
+        if(PersistentData.Validating)
+        {
+            SceneManager.LoadScene(2);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
+
 
     private void OnDestroy()
     {
