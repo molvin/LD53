@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,25 +13,36 @@ public class BuildHelper : MonoBehaviour
     private void Start()
     {
         Serializer.LevelData myLevel = new Serializer.LevelData();
-        try
+        if (PersistentData.Validating)
         {
-            Debug.Log(PersistentData.PlayerId);
-            Debug.Log(PersistentData.PlayerName);
+            if(PersistentData.OverrideLevel.HasValue)
+                myLevel = PersistentData.OverrideLevel.Value;
 
-            myLevel = Service.DownloadLevel(new LevelMeta
+            PersistentData.Validating = false;
+            PersistentData.OverrideLevel = null;
+        }
+        else
+        {
+            try
             {
-                ID = PersistentData.PlayerId,
-                Creator = PersistentData.PlayerName
-            });
-
-            Debug.Log($"My Level from server: {JsonUtility.ToJson(myLevel)}");
+                Debug.Log(PersistentData.PlayerId);
+                Debug.Log(PersistentData.PlayerName);
 
 
+                myLevel = Service.DownloadLevel(new LevelMeta
+                {
+                    ID = PersistentData.PlayerId,
+                    Creator = PersistentData.PlayerName
+                });
+
+                Debug.Log($"My Level from server: {JsonUtility.ToJson(myLevel)}");
+            }
+            catch
+            {
+                Debug.Log("Player has no saved level");
+            }
         }
-        catch
-        {
-            Debug.Log("Player has no saved level");
-        }
+
 
         LevelEditor.InitFromSpline(myLevel);
         DoodadPlacer.InitFromLevel(myLevel);

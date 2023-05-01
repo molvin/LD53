@@ -25,7 +25,7 @@ public class LevelMakerEditorController : MonoBehaviour
     float Scales(int Index) => TransformScale(_Scales[Index]);
 
     private float Yaw = 0f;
-    private float Pitch = 0f;
+    private float Pitch = 75f;
 
     private Vector3 WorkingPos = Vector3.zero;
     private Quaternion WorkingRot = Quaternion.identity;
@@ -555,7 +555,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
     public void InitFromSpline(Serializer.LevelData level)
     {
-        SplineNoise3D.SplineLine = level.SplineData;
+        SplineNoise3D.SplineLine = level.SplineData ?? new List<SplineNoise3D.Spline>();
         Vector3 pos = Vector3.zero;
         Quaternion rot = Quaternion.identity;
 
