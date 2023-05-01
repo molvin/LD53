@@ -46,6 +46,8 @@ public class LevelMakerEditorController : MonoBehaviour
     const float TilingX = 1f / 4f;
     const float TIlingY = 1f / 3f;
 
+    public bool DisableEdit = false;
+
     private void Awake()
     {
         _WorkingScale = (MinRadius + MaxRadius) * 0.5f;
@@ -54,14 +56,6 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private void Update()
     {
-        NumPress();
-        if (SelectionUIMaterial)
-        {
-            Vector2 Offset = new Vector2(1f + CurrentSelection % 4 * TilingX, 2f / 3f - (int)(CurrentSelection / 4) * TIlingY);
-            SelectionUIMaterial.SetTextureOffset("_BaseMap", Offset);
-            Graphics.DrawMesh(VisualMesh, transform.position + transform.forward * 5f - transform.right * 3f - transform.up * 2f, Quaternion.LookRotation(transform.forward, transform.up), SelectionUIMaterial, 0);
-        }
-
         float Horizontal = Input.GetAxisRaw("Horizontal");
         float Vertical = Input.GetAxisRaw("Vertical");
         float Up = Input.GetKey(KeyCode.E) ? 1f : 0f;
@@ -81,27 +75,40 @@ public class LevelMakerEditorController : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(Pitch, Yaw, 0f);
 
+        if (DisableEdit)
+        {
+            return;
+        }
+
+        NumPress();
+        if (SelectionUIMaterial)
+        {
+            Vector2 Offset = new Vector2(1f + CurrentSelection % 4 * TilingX, 2f / 3f - (int)(CurrentSelection / 4) * TIlingY);
+            SelectionUIMaterial.SetTextureOffset("_BaseMap", Offset);
+            Graphics.DrawMesh(VisualMesh, transform.position + transform.forward * 5f - transform.right * 3f - transform.up * 2f, Quaternion.LookRotation(transform.forward, transform.up), SelectionUIMaterial, 0);
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             SelectSplinePoint();
         }
 
-        if (Input.GetMouseButton(0) && CurrentSplineEdit)
+        if (Input.GetMouseButton(0) && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
         {
             DragCurrent();
+        }
 
-            if (IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
+        if (CurrentSplineEdit && IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
+        {
+            int Index = IntermediatePoints.IndexOf(CurrentSplineEdit.gameObject);
+            if (Vector3.Distance(SplineTransforms[Index].transform.position, CurrentSplineEdit.transform.position) < TooCloseDistance
+            || Vector3.Distance(SplineTransforms[Index + 1].transform.position, CurrentSplineEdit.transform.position) < TooCloseDistance)
             {
-                int Index = IntermediatePoints.IndexOf(CurrentSplineEdit.gameObject);
-                if (Vector3.Distance(SplineTransforms[Index].transform.position, CurrentSplineEdit.transform.position) < TooCloseDistance
-                || Vector3.Distance(SplineTransforms[Index + 1].transform.position, CurrentSplineEdit.transform.position) < TooCloseDistance)
-                {
-                    CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
-                }
-                else
-                {
-                    CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
-                }
+                CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+            }
+            else
+            {
+                CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
             }
         }
 
@@ -319,6 +326,11 @@ public class LevelMakerEditorController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+            if (hit.transform == AddPrefab.transform)
+            {
+
+            }
+
             int i = 0;
             foreach (var cube in SplineTransforms)
             {
@@ -342,6 +354,11 @@ public class LevelMakerEditorController : MonoBehaviour
                     {
                         IsTooClose = true;
                     }
+                    else
+                    {
+                        InsertSplinePoint();
+                    }
+                    break;
                 }
             }
         }
@@ -492,6 +509,18 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private void UpdateIntermediates()
     {
+        for (int i = 0; i < IntermediatePoints.Count; i++)
+        {
+            Transform First = SplineTransforms[i].transform;
+            Transform Second = SplineTransforms[i + 1].transform;
+
+            Vector3 Pos = Vector3.Lerp(First.position, Second.position, 0.5f);
+            Quaternion Rot = Quaternion.Slerp(First.rotation, Second.rotation, 0.5f);
+
+            IntermediatePoints[i].transform.position = Pos;
+            IntermediatePoints[i].transform.rotation = Rot;
+        }
+            /*
         for (int i = 0; i < SplineTransforms.Count - 1; i++)
         {
             Vector3 Pos;
@@ -525,6 +554,7 @@ public class LevelMakerEditorController : MonoBehaviour
             }
             InterTrans.rotation = Rot;
         }
+            */
     }
 
     private Vector4 GetShape(int Selection)
