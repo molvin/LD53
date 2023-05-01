@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public class HelpMenu : MonoBehaviour
 {
     public Button HelpButton;
+    public Button Ok;
     public List<GameObject> Objects;
     private bool toggled;
 
     private void Start()
     {
         HelpButton.onClick.AddListener(() => Toggle());
-        if(PlayerPrefs.GetInt("Help", 0) == 0)
+        Ok.onClick.AddListener(() => Toggle());
+        if (PlayerPrefs.GetInt("Help", 0) == 0)
         {
             PlayerPrefs.SetInt("Help", 1);
             Toggle();
