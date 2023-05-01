@@ -43,7 +43,7 @@ public class LoadingScreen : MonoBehaviour
             anim_object_group.SetActive(true);
             if (!action_called)
             {
-                finished_fade_in();
+                finished_fade_in?.Invoke();
                 action_called = true;
             }
         }
@@ -54,11 +54,17 @@ public class LoadingScreen : MonoBehaviour
         if(time == 0 && !action_called)
         {
            
-            finished_fade_out();
+            finished_fade_out?.Invoke();
             action_called = true;
            
         }
     }
+
+    public void setProgress(float v)
+    {
+
+    }
+
     public void fadeIn()
     {
         time_direction = 1;
