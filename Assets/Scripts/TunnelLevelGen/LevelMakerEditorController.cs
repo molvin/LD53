@@ -9,7 +9,9 @@ public class LevelMakerEditorController : MonoBehaviour
     public float SpeedUp = 2.5f;
 
     public GameObject AddPrefab;
+    public GameObject IntermediatePrefab;
     public List<GameObject> ShapePrefabs;
+    public LayerMask SelectionMask;
 
     public Mesh VisualMesh;
     public Material SelectionUIMaterial;
@@ -151,7 +153,7 @@ public class LevelMakerEditorController : MonoBehaviour
         UpdateIntermediates();
         for (int i = 0; i < SplineTransforms.Count; i++)
         {
-            SplineTransforms[i].transform.localScale = Vector3.one * Scales(i);
+            SplineTransforms[i].transform.localScale = Vector3.one * Scales(i) * 2f;
         }
 
         if (SplineTransforms.Count > 0)
@@ -163,7 +165,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
         AddPrefab.transform.position = WorkingPos;
         AddPrefab.transform.rotation = WorkingRot;
-        AddPrefab.transform.localScale = Vector3.one * WorkScale;
+        AddPrefab.transform.localScale = Vector3.one * WorkScale * 2f;
 
         SplineNoise3D.SplineLine.Clear();
         for (int i = 0; i < SplineTransforms.Count; i++)
@@ -245,7 +247,7 @@ public class LevelMakerEditorController : MonoBehaviour
     private void DragCurrent()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == CurrentSplineEdit.transform)
+        if (Physics.Raycast(ray, out RaycastHit hit, 10000f, SelectionMask) && hit.transform == CurrentSplineEdit.transform)
         {
             hit.transform.position = ray.origin + ray.direction * (hit.transform.position - ray.origin).magnitude;
         }
@@ -287,7 +289,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
         bool IsTooClose = false;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, 10000f, SelectionMask))
         {
             if (hit.transform == AddPrefab.transform)
             {
@@ -362,7 +364,7 @@ public class LevelMakerEditorController : MonoBehaviour
         GameObject cube = Instantiate(ShapePrefabs[selection]);
         cube.transform.position = pos;
         cube.transform.rotation = rot;
-        cube.transform.localScale = Vector3.one * radius;
+        cube.transform.localScale = Vector3.one * radius * 2f;
 
         SplineTransforms.Add(cube);
         Shapes.Add(CurrentSelection);
@@ -373,10 +375,10 @@ public class LevelMakerEditorController : MonoBehaviour
             Vector3 Pos = Vector3.Lerp(SplineTransforms[SplineTransforms.Count - 1].transform.position, SplineTransforms[SplineTransforms.Count - 2].transform.position, 0.5f);
             Quaternion Rot = Quaternion.Slerp(SplineTransforms[SplineTransforms.Count - 1].transform.rotation, SplineTransforms[SplineTransforms.Count - 2].transform.rotation, 0.5f);
 
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            GameObject sphere = Instantiate(IntermediatePrefab);
             sphere.transform.position = Pos;
             sphere.transform.rotation = Rot;
-            sphere.transform.localScale = Vector3.one * radius;
+            sphere.transform.localScale = Vector3.one * radius * 2f;
             IntermediatePoints.Add(sphere);
         }
         UpdateConnector();
@@ -388,11 +390,10 @@ public class LevelMakerEditorController : MonoBehaviour
         Vector3 NewPos = CurrentSplineEdit.transform.position;
         Quaternion NewRot = CurrentSplineEdit.transform.rotation;
 
-        //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         GameObject cube = Instantiate(ShapePrefabs[CurrentSelection]);
         cube.transform.position = NewPos;
         cube.transform.rotation = NewRot;
-        cube.transform.localScale = Vector3.one * MinRadius;
+        cube.transform.localScale = Vector3.one * MinRadius * 2f;
         SplineTransforms.Insert(Index + 1, cube);
         Shapes.Insert(Index + 1, CurrentSelection);
         _Scales.Insert(Index + 1, WorkScale);
@@ -411,10 +412,10 @@ public class LevelMakerEditorController : MonoBehaviour
             Vector3 AddPos = Vector3.Lerp(SplineTransforms[Index + 1].transform.position, SplineTransforms[Index + 2].transform.position, 0.5f);
             Quaternion AddRot = Quaternion.Slerp(SplineTransforms[Index + 1].transform.rotation, SplineTransforms[Index + 2].transform.rotation, 0.5f);
 
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            GameObject sphere = Instantiate(IntermediatePrefab);
             sphere.transform.position = AddPos;
             sphere.transform.rotation = AddRot;
-            sphere.transform.localScale = Vector3.one * MinRadius;
+            sphere.transform.localScale = Vector3.one * MinRadius * 2f;
             IntermediatePoints.Insert(Index + 1, sphere);
         }
 
