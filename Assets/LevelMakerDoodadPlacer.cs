@@ -98,7 +98,8 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
             return;
         foreach(var doodad in level.DoodadData)
         {
-            Instantiate(Doodads[doodad.doodad], doodad.position, Quaternion.identity);
+            var d = Instantiate(Doodads[doodad.doodad], doodad.position, Quaternion.identity);
+            d.GetComponentInChildren<Doodad>().ID = doodad.doodad;
         }
     }
 }
