@@ -143,6 +143,7 @@ public class SplineNoise3D
                 if (d < shortest)
                 {
                     closest = s;
+                    closest.toNext = (SplineLine[i + 1].pos - SplineLine[i].pos).normalized;
                     shortest = d;
                 }
             }
@@ -154,6 +155,7 @@ public class SplineNoise3D
             if (hypo < shortest)
             {
                 closest = SplineLine[i];
+                closest.toNext = (SplineLine[Mathf.Min(i + 1, SplineLine.Count - 1)].pos - closest.pos).normalized;
                 shortest = hypo;
             }
         }
@@ -217,7 +219,7 @@ public class SplineNoise3D
             down = Vector3.Slerp(a.down, b.down, t),
             right = Vector3.Slerp(a.right, b.right, t),
             left = Vector3.Slerp(a.left, b.left, t),
-            rot = Quaternion.Lerp(a.rot, b.rot, t)
+            rot = Quaternion.Slerp(a.rot, b.rot, t)
         };
     }
     
@@ -232,5 +234,6 @@ public class SplineNoise3D
         public Vector3 left;
         public byte shape;
         public Quaternion rot;
+        public Vector3 toNext;
     }
 }

@@ -26,14 +26,16 @@ public class CameraController : MonoBehaviour
         Vector3 targetPos = Target.transform.position + Target.localRotation * TargetOffset;
         transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, Smoothing * Time.fixedDeltaTime);
 
-        Vector3 splinePos = Target.position;
-        Vector3 prev = splinePos;
+        var spline = SplineNoise3D.getLerpSplineFromPoint(Target.position);
+        Vector3 splinePos = spline.pos;
+        Vector3 prev = spline.pos;
         for (int i = 0; i < Steps; i++)
         {
-            var spline = SplineNoise3D.getLerpSplineFromPoint(splinePos);
-            splinePos += spline.rot * Vector3.forward * StepLength;
+            splinePos += spline.toNext * StepLength;
             Debug.DrawLine(prev, splinePos, Color.magenta);
             prev = splinePos;
+
+            spline = SplineNoise3D.getLerpSplineFromPoint(splinePos);
         }
 
         Vector3 lookPos = 

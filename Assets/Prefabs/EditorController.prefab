@@ -136,6 +136,8 @@ MonoBehaviour:
   SpeedUp: 2.5
   AddPrefab: {fileID: 5303251916406420023, guid: 2509e556659a75e478491c46d4a4c6f4,
     type: 3}
+  IntermediatePrefab: {fileID: 9015804697191250863, guid: 0663b961dca6c7749bb4da70b94b7bb1,
+    type: 3}
   ShapePrefabs:
   - {fileID: 4589852790428537606, guid: fe1d8acb1889ede44bec658259babb3a, type: 3}
   - {fileID: 4589852790428537606, guid: 0b9c8fdfe7aa08e438f233e80acfc103, type: 3}
@@ -146,8 +148,13 @@ MonoBehaviour:
   - {fileID: 4589852790428537606, guid: 29454d5e1776e7547b3c5bf31fca06ad, type: 3}
   - {fileID: 4589852790428537606, guid: e4280ba607b2a8841974f274875ed2b9, type: 3}
   - {fileID: 4589852790428537606, guid: 4f1f73cb889a4ba4da623610ba6a2792, type: 3}
-  - {fileID: 5303251916406420023, guid: 8156eddb80b1f1341a1f4c7da12d4e11, type: 3}
+  - {fileID: 4589852790428537606, guid: 06957fae173f63d40b3757a88fee300b, type: 3}
+  SelectionMask:
+    serializedVersion: 2
+    m_Bits: 16384
   VisualMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   SelectionUIMaterial: {fileID: 2100000, guid: 3f7f4862f93283e449878ba44931ec72, type: 2}
   MinRadius: 3
   MaxRadius: 10
+  DisableEdit: 0
+  IsUsingUI: 0
