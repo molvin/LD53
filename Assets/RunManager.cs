@@ -158,8 +158,8 @@ public class RunManager : MonoBehaviour
                 {
                     Wins = 0,
                     Attempts = 0,
-                    AuthorTime = Mathf.CeilToInt(timeAtFinish * 1.1f),
-                    RecordTime = Mathf.CeilToInt(timeAtFinish * 1.1f),
+                    AuthorTime = timeAtFinish * 1.1f,
+                    RecordTime = timeAtFinish,
                     RecordName = PersistentData.PlayerName,
                     ID = PersistentData.PlayerId,
                     Creator = PersistentData.PlayerName,
