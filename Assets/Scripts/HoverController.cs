@@ -29,9 +29,10 @@ public class HoverController : MonoBehaviour
     public float OverrideGravity = 12.0f;
     public LayerMask Mask;
     [Header("audio")]
-    public AudioSource LoopingAudioSource;
-    
-    
+    public AudioSource PlayerAudioSource;
+    public AudioClip[] AudioClipsLooping;
+    public AudioClip[] OneShotAudioClips;
+    private int SoundStateLooping;
 
 
     private new Rigidbody rigidbody;
@@ -104,6 +105,7 @@ public class HoverController : MonoBehaviour
             //Normals.Add(Vector3.down);
             PreviousHeights.Add(MaxHeight);
         }
+        SoundStateLooping = 4;
     }
 
     private void Update()
@@ -117,6 +119,32 @@ public class HoverController : MonoBehaviour
         if (Input.GetButton("Slide"))
             rightCoef = SlideFrictionCoef;
         rightCoef = Mathf.SmoothDamp(rightCoef, PerpendicularFrictionCoef, ref slideDelta, SlideSmoothing);
+        Debug.Log(" SPEED : " + rigidbody.velocity.magnitude);
+        if (Input.GetAxisRaw("Forward") > 0 && SoundStateLooping != 2 && rigidbody.velocity.magnitude > 25)
+        {
+            //Debug.Log("  JAG HÄNDER !!! " + SoundStateLooping + "   ANNDD    " + rigidbody.velocity.magnitude);
+            //SONIC BOOM PLAY ONCE!
+            SoundStateLooping = 2;
+            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1.5f);
+            PlayerAudioSource.clip = AudioClipsLooping[SoundStateLooping];
+            PlayerAudioSource.Play();
+        }
+        else if((Input.GetAxisRaw("Forward") > 0 || Input.GetAxisRaw("Forward") < 0) && SoundStateLooping != 1 && rigidbody.velocity.magnitude <= 15)
+        {
+            //ENGINE EXPLOSION?! PLAY ONCE
+            SoundStateLooping = 1;
+            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1.2f);
+            PlayerAudioSource.clip = AudioClipsLooping[SoundStateLooping];
+            PlayerAudioSource.Play();
+        }
+        else if(Input.GetAxisRaw("Forward") == 0 && SoundStateLooping != 0 && rigidbody.velocity.magnitude <= 12)
+        {
+            //BREAK NOISE PLAY ONCE
+            SoundStateLooping = 0;
+            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1f);
+            PlayerAudioSource.clip = AudioClipsLooping[SoundStateLooping];
+            PlayerAudioSource.Play();
+        }
     }
 
     private void OnDrawGizmos()
