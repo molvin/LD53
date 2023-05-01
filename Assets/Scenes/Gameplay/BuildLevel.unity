@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.06911831, g: 0.06948574, b: 0.06911831, a: 1}
+  m_IndirectSpecularColor: {r: 0.06881507, g: 0.07031423, b: 0.06881507, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1078,6 +1078,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DoodadView: {fileID: 1054630528}
   GateView: {fileID: 398990857}
+  Serializer: {fileID: 1418647747}
   doodadPlacer: {fileID: 282869425}
   gatePlacer: {fileID: 282869426}
   UiLayer: 5
