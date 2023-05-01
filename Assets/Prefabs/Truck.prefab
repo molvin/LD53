@@ -96,8 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b7aea4b7c254f4485da7565f5682ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LinearForce: 700
-  AngularForce: 700
+  LinearForce: 500
+  AngularForce: 868.29
   RollForce: 350
   MinHeight: 0.4
   MaxHeight: 1.5
@@ -105,12 +105,12 @@ MonoBehaviour:
   MaxCompression: 0.8
   SpringForce: 8
   Damping: 1.5
-  AlignedFrictionCoef: 0.6
+  AlignedFrictionCoef: 1
   ForwardFictionCoef: 0.025
-  PerpendicularFrictionCoef: 1.8
+  PerpendicularFrictionCoef: 4.1
   SlideFrictionCoef: 0
   SlideSmoothing: 0.15
-  AlignmentRotationSpeed: 8
+  AlignmentRotationSpeed: 2
   GravitationalPull: 1
   OverrideGravity: 150
   Mask:

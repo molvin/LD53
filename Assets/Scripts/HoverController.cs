@@ -95,6 +95,7 @@ public class HoverController : MonoBehaviour
         Offsets.Add(new Vector3(1.0f, -0.4f, -2.0f) * 0.5f);
         Offsets.Add( new Vector3(-1.0f, -0.4f, -2.0f) * 0.5f);
         // Central
+        Offsets.Add(new Vector3(0.0f, 0f, 2.0f) * 0.5f);
         Offsets.Add(new Vector3(0.0f, -0.4f, 1.0f) * 0.5f);
         Offsets.Add(new Vector3(0.0f, -0.4f, -1.0f) * 0.5f);
 
