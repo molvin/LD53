@@ -126,12 +126,6 @@ public class RunManager : MonoBehaviour
                 Timer.text = $"{(!PersistentData.Validating ? (currentLevel.AuthorTime - t) : t):0}";
             }
 
-            //TODO: remove when pause works
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Restart();
-            }
-
             if (Input.GetButtonDown("Pause"))
             {
                 Pause();
@@ -164,7 +158,7 @@ public class RunManager : MonoBehaviour
                     RecordName = PersistentData.PlayerName,
                     ID = PersistentData.PlayerId,
                     Creator = PersistentData.PlayerName,
-                    Resource = 100
+                    Resource = 5
                 };
                 Debug.Log($"Uploading {JsonUtility.ToJson(meta)}");
                 service.UploadLevel(meta, data);
