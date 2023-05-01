@@ -10,6 +10,8 @@ public class MenuAudioController : MonoBehaviour
     private AudioSource source;
 
     public AudioClip button_hover;
+    public AudioClip swoosh;
+
     void Start()
     {
         source = this.GetComponent<AudioSource>();
@@ -22,5 +24,10 @@ public class MenuAudioController : MonoBehaviour
     public void playButtonHover()
     {
         source.PlayOneShot(button_hover);
+    }
+
+    public void playButtonSwosh()
+    {
+        source.PlayOneShot(swoosh);
     }
 }

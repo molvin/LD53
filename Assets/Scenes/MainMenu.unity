@@ -6439,6 +6439,7 @@ MonoBehaviour:
   levelSelectThing: {fileID: 1584570311}
   creators: {fileID: 1209829989}
   name_select: {fileID: 1931955385}
+  menuAudioController: {fileID: 1794764867}
 --- !u!114 &1794764865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6480,6 +6481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button_hover: {fileID: 8300000, guid: ca6028e375889814287e9d6b9b3cc46c, type: 3}
+  swoosh: {fileID: 8300000, guid: 381ce375a9235b74eac879341282646b, type: 3}
 --- !u!82 &1794764868
 AudioSource:
   m_ObjectHideFlags: 0

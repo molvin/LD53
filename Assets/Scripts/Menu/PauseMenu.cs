@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
     public List<Animator> animators;
     GameMenu parentMenu;
     public TMPro.TextMeshProUGUI back_to_menu_button_text;
+
     public void Init(GameMenu parentMenu)
     {
         this.parentMenu = parentMenu;
@@ -87,6 +88,7 @@ public class PauseMenu : MonoBehaviour
 
     private void TriggerTransitionAnim()
     {
+        parentMenu.menuAudioController.playButtonSwosh();
         animators.ForEach(e => e.SetTrigger("Transition"));
     }
 

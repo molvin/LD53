@@ -108,6 +108,7 @@ public class WinLoseMenu : MonoBehaviour
 
     private void TriggerTransitionAnim()
     {
+        parentMenu.menuAudioController.playButtonSwosh();
         animators.ForEach(e => e.SetTrigger("Transition"));
     }
 

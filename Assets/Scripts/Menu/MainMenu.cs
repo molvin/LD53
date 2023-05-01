@@ -17,8 +17,9 @@ public class MainMenu : MonoBehaviour
 
     public GameObject creators;
     public GameObject name_select;
+    public MenuAudioController menuAudioController;
 
-  
+
 
     public void SetNameState()
     {
@@ -114,17 +115,22 @@ public class MainMenu : MonoBehaviour
 
     private void TriggerTransitionAnim()
     {
+        menuAudioController.playButtonSwosh();
         animators.ForEach(e => e.SetTrigger("Transition"));
     }
 
     private void MoveToLeftCornerAnim()
     {
         animators.ForEach(e => e.SetTrigger("Left"));
+        menuAudioController.playButtonSwosh();
+
     }
 
     private void MoveToCenterAnim()
     {
         animators.ForEach(e => e.SetTrigger("Center"));
+        menuAudioController.playButtonSwosh();
+
     }
 
 }
