@@ -82,16 +82,19 @@ public class LevelMakerEditorController : MonoBehaviour
             Graphics.DrawMesh(VisualMesh, transform.position + transform.forward * 5f - transform.right * 3f - transform.up * 2f, Quaternion.LookRotation(transform.forward, transform.up), SelectionUIMaterial, 0);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        // Select Point
+        if (!IsUsingUI && Input.GetMouseButtonDown(0))
         {
             SelectSplinePoint();
         }
 
-        if (Input.GetMouseButton(0) && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
+        // Drag a point
+        if (!IsUsingUI && Input.GetMouseButton(0) && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
         {
             DragCurrent();
         }
 
+        // Change color if too close to stuff
         if (CurrentSplineEdit && IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
         {
             int Index = IntermediatePoints.IndexOf(CurrentSplineEdit.gameObject);
@@ -106,8 +109,8 @@ public class LevelMakerEditorController : MonoBehaviour
             }
         }
 
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Create a new point
+        if (!IsUsingUI && Input.GetKeyDown(KeyCode.Space))
         {
             if (CurrentSplineEdit != null && IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
             {
@@ -128,16 +131,18 @@ public class LevelMakerEditorController : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        // Scale & Rotate current edit
+        if (!IsUsingUI && Input.GetKey(KeyCode.LeftShift))
         {
             Scale();
         }
-        else
+        else if (!IsUsingUI)
         {
             RotateAround();
         }
 
-        if (Input.GetKeyDown(KeyCode.Delete))
+        // Delete current edit
+        if (!IsUsingUI && Input.GetKeyDown(KeyCode.Delete))
         {
             Delete();
         }
@@ -160,7 +165,8 @@ public class LevelMakerEditorController : MonoBehaviour
         AddPrefab.transform.rotation = WorkingRot;
         AddPrefab.transform.localScale = Vector3.one * WorkScale;
 
-        if (Input.GetKeyDown(KeyCode.B))
+        // Build/generate level
+        if (!IsUsingUI && Input.GetKeyDown(KeyCode.B))
         {
             SplineNoise3D.SplineLine.Clear();
             for (int i = 0; i < SplineTransforms.Count; i++)
