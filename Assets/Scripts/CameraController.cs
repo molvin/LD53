@@ -8,7 +8,8 @@ public class CameraController : MonoBehaviour
     public Vector3 TargetOffset;
     public Vector3 LookOffset;
     public float Smoothing;
-    public float SplineWeight = 0.3f;
+    public float SplineWeight = 0.2f;
+    public float LerpSpeed = 0.1f;
     public float SplineLookAheadDist = 10.0f;
     public int Steps = 10;
     public float StepLength = 1.0f;
@@ -38,8 +39,10 @@ public class CameraController : MonoBehaviour
             spline = SplineNoise3D.getLerpSplineFromPoint(splinePos);
         }
 
-        Vector3 lookPos = Vector3.Lerp(Target.transform.position + Target.localRotation * LookOffset, splinePos, 1f - Mathf.Pow(SplineWeight, Time.fixedDeltaTime));
-        transform.LookAt(lookPos, Vector3.up);
+        Vector3 targetProj = spline.pos + spline.rot * Vector3.down * spline.radius;
+        Vector3 lookPos = Vector3.Lerp(Target.transform.position + Target.localRotation * LookOffset, targetProj, SplineWeight);
+        Quaternion targetRot = Quaternion.LookRotation((lookPos - transform.position).normalized, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, LerpSpeed);
     }
 
 }
