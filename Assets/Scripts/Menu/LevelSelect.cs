@@ -138,6 +138,7 @@ public class LevelSelect : MonoBehaviour
         {
             //+ new Vector3((x_min + x_max) / 2, y_max + y_offset_between_astroids * i, 0)
             var x = Instantiate(prefab, this.transform.position , Quaternion.identity, this.transform);
+            x.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = levels[i].Creator;
             int image_index = Random.Range(0, sprites.Count - 1);
             x.GetComponent<Image>().sprite = sprites[image_index];
             var data = new Astroid_data_holder(x, 0.5f * i, Random.Range(0, x_max_offset), levels[i]);
