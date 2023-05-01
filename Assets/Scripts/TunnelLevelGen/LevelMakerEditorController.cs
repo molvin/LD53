@@ -328,37 +328,39 @@ public class LevelMakerEditorController : MonoBehaviour
         {
             if (hit.transform == AddPrefab.transform)
             {
-
+                AddSplinePoint();
             }
-
-            int i = 0;
-            foreach (var cube in SplineTransforms)
+            else
             {
-                if (cube.transform == hit.transform)
+                int i = 0;
+                foreach (var cube in SplineTransforms)
                 {
-                    CurrentSplineEdit = cube;
-                    CurrentSelection = Shapes[i];
-                    _WorkingScale = _Scales[i];
-                    WorkingRot = CurrentSplineEdit.transform.rotation;
+                    if (cube.transform == hit.transform)
+                    {
+                        CurrentSplineEdit = cube;
+                        CurrentSelection = Shapes[i];
+                        _WorkingScale = _Scales[i];
+                        WorkingRot = CurrentSplineEdit.transform.rotation;
+                    }
+                    i++;
                 }
-                i++;
-            }
 
-            foreach (var sphere in IntermediatePoints)
-            {
-                if (sphere.transform == hit.transform)
+                foreach (var sphere in IntermediatePoints)
                 {
-                    CurrentSplineEdit = sphere;
-                    int Index = IntermediatePoints.IndexOf(sphere);
-                    if (Vector3.Distance(SplineTransforms[Index].transform.position, SplineTransforms[Index + 1].transform.position) < TooCloseDistance)
+                    if (sphere.transform == hit.transform)
                     {
-                        IsTooClose = true;
+                        CurrentSplineEdit = sphere;
+                        int Index = IntermediatePoints.IndexOf(sphere);
+                        if (Vector3.Distance(SplineTransforms[Index].transform.position, SplineTransforms[Index + 1].transform.position) < TooCloseDistance)
+                        {
+                            IsTooClose = true;
+                        }
+                        else
+                        {
+                            InsertSplinePoint();
+                        }
+                        break;
                     }
-                    else
-                    {
-                        InsertSplinePoint();
-                    }
-                    break;
                 }
             }
         }
