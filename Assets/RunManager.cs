@@ -125,6 +125,9 @@ public class RunManager : MonoBehaviour
 
     private IEnumerator RunGame()
     {
+        yield return null;
+        won = false;
+
         float t = 0.0f;
         while (t < currentLevel.AuthorTime || PersistentData.Validating)
         {
@@ -281,7 +284,6 @@ public class RunManager : MonoBehaviour
         deliveryBox.transform.position = truck.transform.position + deliveryBox.Offset;
         deliveryBox.transform.rotation = truck.transform.rotation;
         startTime = Time.time;
-        won = false;
     }
 
     private void BackToMenu()

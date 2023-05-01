@@ -116,8 +116,7 @@ public class ServiceTalker : MonoBehaviour
         Send(JsonUtility.ToJson(request), (byte) Requests.LevelDownloadRequest);
 
         string response = Receive();
-
-        return (LevelData) JsonUtility.FromJson(response, typeof(LevelData));
+        return response == "" ? new LevelData() : (LevelData) JsonUtility.FromJson(response, typeof(LevelData));
     }
 
     private void Connect()
