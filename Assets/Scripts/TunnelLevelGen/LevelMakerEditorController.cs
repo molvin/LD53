@@ -75,7 +75,6 @@ public class LevelMakerEditorController : MonoBehaviour
             return;
         }
 
-        NumPress();
         if (SelectionUIMaterial)
         {
             Vector2 Offset = new Vector2(1f + CurrentSelection % 4 * TilingX, 2f / 3f - (int)(CurrentSelection / 4) * TIlingY);
@@ -198,51 +197,13 @@ public class LevelMakerEditorController : MonoBehaviour
                 Destroy(sphere);
             }
         }
+        UpdateConnector();
     }
 
-    private void NumPress()
+    public void SetCurrentSelection(int value)
     {
         int prev = CurrentSelection;
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            CurrentSelection = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            CurrentSelection = 1;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            CurrentSelection = 2;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            CurrentSelection = 3;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            CurrentSelection = 4;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            CurrentSelection = 5;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            CurrentSelection = 6;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            CurrentSelection = 7;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            CurrentSelection = 8;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            CurrentSelection = 9;
-        }
+        CurrentSelection = value;
         
         if (prev != CurrentSelection && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
         {
@@ -307,6 +268,7 @@ public class LevelMakerEditorController : MonoBehaviour
                 SplineTransforms[Index].transform.position = Reference + fromRef.normalized * 4f * MaxRadius;
             }
         }
+        UpdateConnector();
     }
 
     private void SelectSplinePoint()
@@ -386,6 +348,7 @@ public class LevelMakerEditorController : MonoBehaviour
         AddSplinePoint((byte)CurrentSelection, WorkingPos, WorkingRot, MinRadius);
  
         WorkingPos += WorkingRot * Vector3.forward * AddDistance;
+        UpdateConnector();
     }
 
     private void AddSplinePoint(byte selection, Vector3 pos, Quaternion rot, float radius)
@@ -410,6 +373,7 @@ public class LevelMakerEditorController : MonoBehaviour
             sphere.transform.localScale = Vector3.one * radius;
             IntermediatePoints.Add(sphere);
         }
+        UpdateConnector();
     }
 
     private void InsertSplinePoint()
@@ -450,6 +414,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
         CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
         CurrentSplineEdit = null;
+        UpdateConnector();
     }
 
     private void Scale()
@@ -557,6 +522,15 @@ public class LevelMakerEditorController : MonoBehaviour
             InterTrans.rotation = Rot;
         }
             */
+    }
+
+    private void UpdateConnector()
+    {
+        for (int i = 0; i < SplineTransforms.Count-1; i++)
+        {
+            LevelBuilderConnector con = SplineTransforms[i].GetComponentInChildren<LevelBuilderConnector>();
+            con.finish = SplineTransforms[i + 1].transform;
+        }
     }
 
     private Vector4 GetShape(int Selection)

@@ -216,7 +216,8 @@ public class SplineNoise3D
             up = Vector3.Slerp(a.up, b.up, t),
             down = Vector3.Slerp(a.down, b.down, t),
             right = Vector3.Slerp(a.right, b.right, t),
-            left = Vector3.Slerp(a.left, b.left, t)
+            left = Vector3.Slerp(a.left, b.left, t),
+            rot = Quaternion.Lerp(a.rot, b.rot, t)
         };
     }
     
