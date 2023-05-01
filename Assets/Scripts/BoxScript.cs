@@ -71,6 +71,8 @@ public class BoxScript : MonoBehaviour
         if (GracePeriod > 0)
         {
             transform.position = Owner.transform.position + Owner.transform.rotation * Offset;
+            Vector3 Vel = Vector3.Project(OwnerRigidbody.velocity, Owner.transform.forward);
+            PrevOwnerVel = Vel;
             return;
         }
         if (!rigidbody.isKinematic)
