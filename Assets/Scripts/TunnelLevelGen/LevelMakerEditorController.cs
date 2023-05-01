@@ -15,7 +15,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
     public float MinRadius = 3f;
     public float MaxRadius = 10f;
-    float AddDistance => MaxRadius * 2f;
+    float AddDistance => MaxRadius * 4f;
 
     private GameObject CurrentSplineEdit;
     private List<GameObject> SplineTransforms = new List<GameObject>();
@@ -263,9 +263,9 @@ public class LevelMakerEditorController : MonoBehaviour
             }
 
             Vector3 fromRef = SplineTransforms[Index].transform.position - Reference;
-            if (fromRef.magnitude > 4f * MaxRadius)
+            if (fromRef.magnitude > AddDistance * 2f)
             {
-                SplineTransforms[Index].transform.position = Reference + fromRef.normalized * 4f * MaxRadius;
+                SplineTransforms[Index].transform.position = Reference + fromRef.normalized * AddDistance * 2f;
             }
         }
         UpdateConnector();
