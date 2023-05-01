@@ -133,6 +133,9 @@ public class RunManager : MonoBehaviour
 
     public void Win()
     {
+        if (won)
+            return;
+
         void FinishLevel()
         {
             if (PersistentData.Validating)
