@@ -91,4 +91,12 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
         }
         return false;
     }
+
+    public void InitFromLevel(Serializer.LevelData level)
+    {
+        foreach(var doodad in level.DoodadData)
+        {
+            Instantiate(Doodads[doodad.doodad], doodad.position, Quaternion.identity);
+        }
+    }
 }

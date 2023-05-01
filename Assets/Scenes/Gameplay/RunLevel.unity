@@ -320,6 +320,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowDebugUI: 0
   PointCloud: {fileID: 1418647745}
+  DoodadPrefabs:
+  - {fileID: -7289393844280196609, guid: 171a3d695a2e2ae45937d16c70ab46de, type: 3}
+  - {fileID: 8774363574015870048, guid: 9af1e4952aaf0dc4d91f604ea58f5ab3, type: 3}
+  - {fileID: -135272256478287664, guid: cc13946c66eb89e41bb96f51d938f195, type: 3}
+  - {fileID: -5029576195684516626, guid: bba1cc14c1a81b34998cc850a8365111, type: 3}
+  - {fileID: 8531529035245420809, guid: cc31238df55893346af093d778991428, type: 3}
+  - {fileID: 6115641505202039894, guid: ef8c3121e348401478c46c15750732cf, type: 3}
 --- !u!114 &744809216
 MonoBehaviour:
   m_ObjectHideFlags: 0

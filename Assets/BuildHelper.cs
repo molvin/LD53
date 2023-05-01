@@ -1,20 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class BuildHelper : MonoBehaviour
 {
     public ServiceTalker Service;
     public LevelMakerEditorController LevelEditor;
+    public LevelMakerDoodadPlacer DoodadPlacer;
 
     private void Start()
     {
+        Serializer.LevelData myLevel = new Serializer.LevelData();
         try
         {
             Debug.Log(PersistentData.PlayerId);
             Debug.Log(PersistentData.PlayerName);
 
-            Serializer.LevelData myLevel = Service.DownloadLevel(new LevelMeta
+            myLevel = Service.DownloadLevel(new LevelMeta
             {
                 ID = PersistentData.PlayerId,
                 Creator = PersistentData.PlayerName
@@ -22,14 +25,15 @@ public class BuildHelper : MonoBehaviour
 
             Debug.Log($"My Level from server: {JsonUtility.ToJson(myLevel)}");
 
-            SplineNoise3D.SplineLine = myLevel.SplineData;
-            //TODO: set doodads
-            LevelEditor.InitFromSpline();
+
         }
         catch
         {
             Debug.Log("Player has no saved level");
         }
+
+        LevelEditor.InitFromSpline(myLevel);
+        DoodadPlacer.InitFromLevel(myLevel);
 
     }
 

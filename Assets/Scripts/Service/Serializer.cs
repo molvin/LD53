@@ -23,9 +23,9 @@ public class Serializer : MonoBehaviour
 
     public bool ShowDebugUI;
     public PointCloudManager PointCloud;
+    public List<Doodad> DoodadPrefabs;
 
     private string debugSavePath = "levels/level.json";
-    private string playerName = "tester";
     private bool running;
     private float progress = 1.0f;
 
@@ -72,6 +72,11 @@ public class Serializer : MonoBehaviour
                 yield return ++current / (float) iterations;
             }
             previous = spline;
+        }
+
+        foreach(var doodadStruct in level.DoodadData)
+        {
+            Instantiate(DoodadPrefabs[doodadStruct.doodad], doodadStruct.position, Quaternion.identity);
         }
     }
 
