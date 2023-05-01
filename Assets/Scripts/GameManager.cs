@@ -32,6 +32,8 @@ public static class PersistentData
     public static Serializer.LevelData? OverrideLevel = null;
     public static bool Validating = false;
 
+    public static string Ip = "argilstudio.dev";
+    public static int Port = 6111;
 }
 
 public class GameManager : MonoBehaviour
