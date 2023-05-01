@@ -25,12 +25,15 @@ public static class PersistentData
         get => PlayerPrefs.GetInt("Resources", 0);
         set => PlayerPrefs.SetInt("Resources", value);
     }
+    public static int ResourceDelta = 0;
 
     public static string LevelPath = null;
     public static LevelMeta? LevelMeta = null;
     public static Serializer.LevelData? OverrideLevel = null;
     public static bool Validating = false;
 
+    public static string Ip = "argilstudio.dev";
+    public static int Port = 6111;
 }
 
 public class GameManager : MonoBehaviour

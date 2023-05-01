@@ -78,6 +78,7 @@ public class RunManager : MonoBehaviour
                 LoadingScreen.setProgress(progress);
                 yield return null;
             }
+            Camera.main.transform.position = SplineNoise3D.SplineLine[0].pos;
             bool wait = true;
             LoadingScreen.finished_fade_out = () => wait = false;
             LoadingScreen.fadeOut();
@@ -125,12 +126,6 @@ public class RunManager : MonoBehaviour
                 Timer.text = $"{(!PersistentData.Validating ? (currentLevel.AuthorTime - t) : t):0}";
             }
 
-            //TODO: remove when pause works
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Restart();
-            }
-
             if (Input.GetButtonDown("Pause"))
             {
                 Pause();
@@ -163,11 +158,13 @@ public class RunManager : MonoBehaviour
                     RecordName = PersistentData.PlayerName,
                     ID = PersistentData.PlayerId,
                     Creator = PersistentData.PlayerName,
-                    Resource = 100
+                    Resource = 5
                 };
                 Debug.Log($"Uploading {JsonUtility.ToJson(meta)}");
                 service.UploadLevel(meta, data);
                 Debug.Log("Done Uploading");
+                PersistentData.ResourceCount += PersistentData.ResourceDelta;
+                PersistentData.ResourceDelta = 0;
             }
             else
             {

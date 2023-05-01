@@ -330,7 +330,8 @@ MonoBehaviour:
   - {fileID: 3920602965313797848, guid: 400337e34d97b574180871e004dd46f1, type: 3}
   - {fileID: 8774363574015870048, guid: 9af1e4952aaf0dc4d91f604ea58f5ab3, type: 3}
   - {fileID: -5029576195684516626, guid: bba1cc14c1a81b34998cc850a8365111, type: 3}
-  SplineParticlePrefab: {fileID: 0}
+  SplineParticlePrefab: {fileID: 62840619859076115, guid: b9671716aaca664488ee34cae7da4135,
+    type: 3}
 --- !u!114 &744809216
 MonoBehaviour:
   m_ObjectHideFlags: 0

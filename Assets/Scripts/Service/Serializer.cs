@@ -36,6 +36,8 @@ public class Serializer : MonoBehaviour
         List<DoodadStruct> doods = new List<DoodadStruct>();
         foreach(var doodad in doodads)
         {
+            if (doodad.NonSerialized)
+                continue;
             doods.Add(new DoodadStruct
             {
                 position = doodad.transform.position,

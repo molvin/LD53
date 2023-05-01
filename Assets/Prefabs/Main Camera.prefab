@@ -140,6 +140,6 @@ MonoBehaviour:
   SplineLookAheadDist: 10
   Steps: 25
   StepLength: 0.5
-  collisionMask:
+  CollisionLayer:
     serializedVersion: 2
-    m_Bits: 385
+    m_Bits: 384
