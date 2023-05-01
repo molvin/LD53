@@ -137,7 +137,8 @@ public class LevelSelect : MonoBehaviour
             x.GetComponent<Button>().onClick.AddListener(() => OnLevelClick(data)); 
         }
 
-        OnLevelClick(currentLevelsOnDisplay[0]);
+        if(levels.Count > 0)
+            OnLevelClick(currentLevelsOnDisplay[0]);
 
     }
 }

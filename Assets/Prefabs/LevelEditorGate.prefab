@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3644672581036674094}
   - component: {fileID: 5194240698405029108}
   - component: {fileID: 835710824145701552}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 3591209423167781417}
   - component: {fileID: 7955142475634463259}
   - component: {fileID: 8128104874371500627}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7799404698725411966}
   - component: {fileID: 6945210225584186330}
-  m_Layer: 0
+  - component: {fileID: 371829283345389311}
+  m_Layer: 14
   m_Name: LevelEditorGate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,6 +202,7 @@ Transform:
   - {fileID: 3644672581036674094}
   - {fileID: 6692470394109091259}
   - {fileID: 5344887269158314979}
+  - {fileID: 5968696291268163366}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -217,6 +219,21 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &371829283345389311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5303251916406420023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01375874c1283fe45811b17f45b9906c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  finish: {fileID: 0}
+  ConnectorPrefab: {fileID: 2364971950775904263, guid: fe6836c29c6cd6c4db3d13f55f036380,
+    type: 3}
 --- !u!1 &5371992105989895579
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +245,7 @@ GameObject:
   - component: {fileID: 3153311531333635416}
   - component: {fileID: 6364856848048759592}
   - component: {fileID: 1141150769627070523}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,6 +317,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5636998572998624300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5968696291268163366}
+  - component: {fileID: 1562945991100809136}
+  m_Layer: 14
+  m_Name: ConnectorColllider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5968696291268163366
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5636998572998624300}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7799404698725411966}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1562945991100809136
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5636998572998624300}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5691826268769334977
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,7 +373,7 @@ GameObject:
   - component: {fileID: 515536797935443451}
   - component: {fileID: 6387164586231655474}
   - component: {fileID: 520691505360466291}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -394,7 +456,7 @@ GameObject:
   - component: {fileID: 5344887269158314979}
   - component: {fileID: 7719318816552595857}
   - component: {fileID: 886715201817213910}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,7 +539,7 @@ GameObject:
   - component: {fileID: 6692470394109091259}
   - component: {fileID: 2631409687644463138}
   - component: {fileID: 1539384087527663550}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}

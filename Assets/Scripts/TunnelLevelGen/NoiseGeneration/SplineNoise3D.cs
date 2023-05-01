@@ -143,6 +143,7 @@ public class SplineNoise3D
                 if (d < shortest)
                 {
                     closest = s;
+                    closest.toNext = (SplineLine[i + 1].pos - SplineLine[i].pos).normalized;
                     shortest = d;
                 }
             }
@@ -154,6 +155,7 @@ public class SplineNoise3D
             if (hypo < shortest)
             {
                 closest = SplineLine[i];
+                closest.toNext = (SplineLine[Mathf.Min(i + 1, SplineLine.Count - 1)].pos - closest.pos).normalized;
                 shortest = hypo;
             }
         }
@@ -182,15 +184,18 @@ public class SplineNoise3D
     {
         SplineLine.Add(new Spline { pos = pos, radius = radius, up = Vector3.up });
     }
-    public static void AddSplineSegment(Vector3 pos, Quaternion rot, float radius, Vector4 Roundness)
+    public static void AddSplineSegment(Vector3 pos, Quaternion rot, float radius, Vector4 Roundness, byte shape)
     {
+        Debug.Log(shape);
         SplineLine.Add(new Spline {
             pos = pos,
             radius = radius,
             up = rot * Vector3.up * Roundness.x,
             right = rot * Vector3.right * Roundness.y,
             down = rot * Vector3.down * Roundness.z,
-            left = rot * Vector3.left * Roundness.w
+            left = rot * Vector3.left * Roundness.w,
+            shape = shape,
+            rot = rot
         });
     }
     public static void InsertSplineSegment(int index, Vector3 pos, Quaternion rot, float radius, Vector4 Roundness)
@@ -213,7 +218,8 @@ public class SplineNoise3D
             up = Vector3.Slerp(a.up, b.up, t),
             down = Vector3.Slerp(a.down, b.down, t),
             right = Vector3.Slerp(a.right, b.right, t),
-            left = Vector3.Slerp(a.left, b.left, t)
+            left = Vector3.Slerp(a.left, b.left, t),
+            rot = Quaternion.Slerp(a.rot, b.rot, t)
         };
     }
     
@@ -226,5 +232,8 @@ public class SplineNoise3D
         public Vector3 right;
         public Vector3 down;
         public Vector3 left;
+        public byte shape;
+        public Quaternion rot;
+        public Vector3 toNext;
     }
 }

@@ -13,9 +13,8 @@ public class RunManager : MonoBehaviour
     public GameObject CameraPrefab;
     public GameObject WinPrefab;
     public TextMeshProUGUI Timer;
-    public GameObject GameOverUi;
-    public Button Retry;
-    public Button ToMenu;
+    public GameMenu GameMenu;
+    public LoadingScreen LoadingScreen;
 
     private LevelMeta currentLevel;
     private float startTime;
@@ -24,6 +23,7 @@ public class RunManager : MonoBehaviour
     Vector3 origin;
 
     bool won;
+    private bool paused;
 
     private void Start()
     {
@@ -33,13 +33,11 @@ public class RunManager : MonoBehaviour
     {
         IEnumerator Coroutine()
         {
-            GameOverUi.SetActive(false);
             if (Timer != null)
                 Timer.enabled = false;
             yield return new WaitForSeconds(0.5f);
 
             string data;
-            Debug.Log($"Starting run {serializer}");
             if(PersistentData.Validating && PersistentData.OverrideLevel != null)
             {
                 data = JsonUtility.ToJson(PersistentData.OverrideLevel); //TODO: fix this
@@ -60,7 +58,13 @@ public class RunManager : MonoBehaviour
             else
             {
                 Debug.LogError("No Level Path Set");
-                yield break;
+                currentLevel = new LevelMeta
+                {
+                    ID = PersistentData.PlayerId,
+                    Creator = PersistentData.PlayerName
+                };
+                Serializer.LevelData level = Service.DownloadLevel(currentLevel);
+                data = JsonUtility.ToJson(level); //TODO: fix this
             }
             
             var generateIter = serializer.Generate(data);
@@ -68,8 +72,14 @@ public class RunManager : MonoBehaviour
             while (generateIter.MoveNext())
             {
                 float progress = (float)generateIter.Current;
+                LoadingScreen.setProgress(progress);
                 yield return null;
             }
+            bool wait = true;
+            LoadingScreen.finished_fade_out = () => wait = false;
+            LoadingScreen.fadeOut();
+            while (wait)
+                yield return null;
 
             PersistentData.LevelMeta = PersistentData.LevelMeta = null;
 
@@ -101,8 +111,6 @@ public class RunManager : MonoBehaviour
 
     private IEnumerator RunGame()
     {
-        GameOverUi.SetActive(false);
-
         float t = 0.0f;
         while (t < currentLevel.Time || PersistentData.Validating)
         {
@@ -113,62 +121,120 @@ public class RunManager : MonoBehaviour
                 Timer.text = $"{(!PersistentData.Validating ? (currentLevel.Time - t) : t):0}";
             }
 
+            //TODO: remove when pause works
             if (Input.GetKeyDown(KeyCode.R))
             {
                 Restart();
             }
 
+            if (Input.GetButtonDown("Pause"))
+            {
+                Pause();
+            }
+
             yield return null;
         }
-        Lose();
+
+        if(!won)
+            Lose();
     }
 
     public void Win()
     {
-        won = true;
-        Debug.Log("Finished Level");
+        if (won)
+            return;
 
-        //TODO: UI pop up, with time, retry, back to menu
-
-        if(PersistentData.Validating)
+        void FinishLevel()
         {
-            string data = serializer.SerializeLevelToJson();
-            var service = Service;
-            LevelMeta meta = new LevelMeta
+            if (PersistentData.Validating)
             {
-                Wins = 0,
-                Attempts = 0,
-                Time = Mathf.CeilToInt((Time.time - startTime) * 1.1f),
-                ID = PersistentData.PlayerId,
-                Creator = PersistentData.PlayerName,
-                Resource = 100
-            };
-            Debug.Log($"Uploading {data}");
-            service.UploadLevel(meta, data);
-            Debug.Log("Done Uploading");
+                string data = serializer.SerializeLevelToJson();
+                var service = Service;
+                LevelMeta meta = new LevelMeta
+                {
+                    Wins = 0,
+                    Attempts = 0,
+                    Time = Mathf.CeilToInt((Time.time - startTime) * 1.1f),
+                    ID = PersistentData.PlayerId,
+                    Creator = PersistentData.PlayerName,
+                    Resource = 100
+                };
+                Debug.Log($"Uploading {JsonUtility.ToJson(meta)}");
+                service.UploadLevel(meta, data);
+                Debug.Log("Done Uploading");
+            }
+            else
+            {
+                try
+                {
+                    if (currentLevel.ID != 0)
+                        Service.SendLevelComplete(currentLevel, 1);
+                    else
+                        Debug.Log("Current level not set, cant update attempts");
+                }
+                catch { }
+
+                PersistentData.ResourceCount += currentLevel.Resource;
+            }
+            PersistentData.Validating = false;
+            PersistentData.OverrideLevel = null;
+            SceneManager.LoadScene(0);
         }
-        else
-        {
-            PersistentData.ResourceCount += currentLevel.Resource;
-        }
-        PersistentData.Validating = false;
-        PersistentData.OverrideLevel = null;
-        SceneManager.LoadScene(0);
+
+
+        won = true;
+
+        truck.GetComponent<HoverController>().enabled = false;
+        StopAllCoroutines();
+
+        GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
+        GameMenu.BackToMainMenu = () => FinishLevel();
+  
+        float t = Time.time - startTime;
+        GameMenu.Win(t, currentLevel.Resource);
     }
 
     public void Lose()
     {
         truck.GetComponent<HoverController>().enabled = false;
-        GameOverUi.SetActive(true);
-        Retry.onClick.RemoveAllListeners();
-        Retry.onClick.AddListener(() => { Restart(); StartCoroutine(RunGame()); });
-        ToMenu.onClick.RemoveAllListeners();
-        ToMenu.onClick.AddListener(() => SceneManager.LoadScene(0));    //TODO: correct scene
         StopAllCoroutines();
+
+        GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
+        GameMenu.BackToMainMenu = () => SceneManager.LoadScene(0);
+
+        GameMenu.Lose();
+    }
+
+    public void Pause()
+    {
+        paused = !paused;
+        truck.GetComponent<HoverController>().enabled = !paused;
+
+        Time.timeScale = paused ? 0 : 1;
+        GameMenu.togglePause();
+        GameMenu.Resume = () => { Time.timeScale = 1.0f; paused = false; truck.GetComponent<HoverController>().enabled = true; };
+        GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
+        GameMenu.BackToMainMenu = () => SceneManager.LoadScene(0);
     }
 
     private void Restart()
     {
+        Time.timeScale = 1.0f;
+        paused = false;
+
+        try
+        {
+            if (currentLevel.ID != 0)
+            {
+                Service.SendLevelComplete(currentLevel, 0);
+                Debug.Log($"Updated attempts {currentLevel.ID} {currentLevel.Creator}");
+                Service.GetMetaList();
+            }
+            else
+                Debug.Log("Current level not set, cant update attempts");
+        }
+        catch { }
+
         truck.GetComponent<HoverController>().enabled = true;
         truck.transform.position = camera.transform.position = origin;
         truck.transform.rotation = camera.transform.rotation = Quaternion.identity;
@@ -176,5 +242,10 @@ public class RunManager : MonoBehaviour
         truck.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         startTime = Time.time;
         won = false;
+    }
+
+    private void OnDestroy()
+    {
+        Time.timeScale = 1.0f;
     }
 }
