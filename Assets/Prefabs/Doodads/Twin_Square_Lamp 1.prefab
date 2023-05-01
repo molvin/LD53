@@ -407,7 +407,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8371534817691361222}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Twin_Square_Lamp 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,6 @@ public class BuildUIController : MonoBehaviour
     public GameObject GateView;
     public LevelMakerDoodadPlacer doodadPlacer;
     public LevelMakerEditorController gatePlacer;
-    public List<GameObject> doodads;
     public int UiLayer;
 
     public void Start()
@@ -27,12 +26,15 @@ public class BuildUIController : MonoBehaviour
         for (int i = 0; i < doodads.Length; i++)
         {
             int x = i;
-            doodads[i].onClick.AddListener(() => setPlacer(x));
+            gates[i].onClick.AddListener(() => setPlacer(x));
         }
     }
 
     public void Update()
     {
+        bool usingUi = IsPointerOverUIElement(GetEventSystemRaycastResults());
+        gatePlacer.IsUsingUI = usingUi;
+        doodadPlacer.IsUsingUI = usingUi;
         NumPress();
     }
     public void PressDoodad()
@@ -58,8 +60,7 @@ public class BuildUIController : MonoBehaviour
         }
         else
         {
-            if (value >= doodads.Count) return;
-            doodadPlacer.SetDoodad(doodads[value]);
+            doodadPlacer.SetDoodad(value);
         }      
     }
     private void NumPress()

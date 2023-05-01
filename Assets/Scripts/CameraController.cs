@@ -38,9 +38,7 @@ public class CameraController : MonoBehaviour
             spline = SplineNoise3D.getLerpSplineFromPoint(splinePos);
         }
 
-        Vector3 lookPos = 
-            (Target.transform.position + Target.localRotation * LookOffset) * (1 - SplineWeight) +
-            splinePos * SplineWeight;
+        Vector3 lookPos = Vector3.Lerp(Target.transform.position + Target.localRotation * LookOffset, splinePos, 1f - Mathf.Pow(SplineWeight, Time.fixedDeltaTime));
         transform.LookAt(lookPos, Vector3.up);
     }
 
