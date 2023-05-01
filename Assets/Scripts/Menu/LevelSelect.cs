@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class LevelSelect : MonoBehaviour
@@ -143,7 +144,12 @@ public class LevelSelect : MonoBehaviour
             x.GetComponent<Image>().sprite = sprites[image_index];
             var data = new Astroid_data_holder(x, 0.5f * i, Random.Range(0, x_max_offset), levels[i]);
             currentLevelsOnDisplay.Add(data);
-            x.GetComponent<Button>().onClick.AddListener(() => OnLevelClick(data)); 
+            x.GetComponent<Button>().onClick.AddListener(() => OnLevelClick(data));
+            MenuAudioController MenuAudioController = FindObjectOfType<MenuAudioController>();
+            x.GetComponent<Button>().onClick.AddListener(() => MenuAudioController.playButtonHover());
+
+            x.GetComponent<EventTrigger>().triggers[0].callback.AddListener((eventdata) => MenuAudioController.playButtonHover());
+            
         }
 
         if(levels.Count > 0)

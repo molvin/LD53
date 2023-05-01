@@ -59,7 +59,7 @@ public class TunnelGenController : MonoBehaviour
     {
         if((lastSpline - transform.position).magnitude > splineDistance)
         {
-            SplineNoise3D.AddSplineSegment(transform, Random.Range(1f, 10f));
+            SplineNoise3D.AddSplineSegment(transform, UnityEngine.Random.Range(1f, 10f));
             PCM.InitializeIsoSurfaceSphere(transform.position, 1f, SuperNoiseHole);
             lastSpline = transform.position;
             Debug.Log("generate");

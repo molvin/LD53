@@ -27,9 +27,9 @@ public class GameMenu : MonoBehaviour
         pauseMenu.ToggleEnabled();
     }
 
-    public void Lose()
+    public void Lose(bool FailedByDelivery)
     {
-        winLoseMenu.Lose();
+        winLoseMenu.Lose(FailedByDelivery);
     }
 
     public void Win(float time, int resourcesGaind)

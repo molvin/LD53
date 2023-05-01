@@ -59,6 +59,9 @@ public class Serializer : MonoBehaviour
         Debug.Log($"initializing: {json}");
         LevelData level = (LevelData) JsonUtility.FromJson(json, typeof(LevelData));
         SplineNoise3D.SplineLine = level.SplineData;
+
+        SplineNoise3D.Spline last = SplineNoise3D.SplineLine[SplineNoise3D.SplineLine.Count - 1];
+        SplineNoise3D.AddSplineSegment(last.pos + (last.rot * Vector3.forward) * 40, Quaternion.identity, 10f, Vector4.zero, 0);//add a segment for the door to have space in
         if (level.SplineData.Count < 2)
             yield break;
         SplineNoise3D.Spline previous = level.SplineData[0];
@@ -83,7 +86,12 @@ public class Serializer : MonoBehaviour
             doodad.ID = doodadStruct.doodad;
         }
 
-        foreach(var spline in SplineNoise3D.SplineLine)
+        //Instansiate door doodad at last
+        var door = Instantiate(DoodadPrefabs[7], last.pos, Quaternion.identity);
+        door.ID = 7;
+
+        //Create all particles
+        foreach (var spline in SplineNoise3D.SplineLine)
         {
             if(SplineParticlePrefab)
                 Instantiate(SplineParticlePrefab, spline.pos, spline.rot);

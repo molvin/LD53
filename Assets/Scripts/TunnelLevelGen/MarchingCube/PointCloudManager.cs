@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
+using System.Threading.Tasks;
 
 public class PointCloudManager : MonoBehaviour
 {
@@ -103,13 +105,33 @@ public class PointCloudManager : MonoBehaviour
     }
     public void SetPointCloud(Func<Vector3, float> initDef, Vector3 pos)
     {
+        //threaded maybe
+        //int count = 0;
+        //ManualResetEvent derp = new ManualResetEvent(false);
+        List<Task> tasks = new List<Task>();
         for (int z = 0; z < (size + 1); z++)
+        {
             for (int y = 0; y < (size + 1); y++)
+            {
                 for (int x = 0; x < (size + 1); x++)
                 {
                     int id = x + ((size + 1) * y) + ((size + 1) * (size + 1) * z);
-                    pointCloud[id] = initDef.Invoke(pos + new Vector3(x, y, z));
+                    Vector3 point = pos + new Vector3(x, y, z);
+                    Task t = Task.Run(() =>
+                    {
+                        pointCloud[id] = initDef.Invoke(point);
+                        //Interlocked.Increment(ref count);
+                        //Debug.Log(count);
+                        //if (count >= 729)
+                            //derp.Set();
+                    });
+                    tasks.Add(t);
                 }
+            }
+        }
+        Task.WaitAll(tasks.ToArray());
+        //wait for 
+        //derp.WaitOne();
     }
 
     public void Clear()

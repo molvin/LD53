@@ -6,6 +6,7 @@ public class SplineNoise3D
 {
     private static float penaltySize = 3f;
     public static List<Spline> SplineLine = new List<Spline>();
+    public static System.Random Random = new System.Random();
     public static float SplineNoise(Vector3 point)
     {
         Spline spline = getLerpSplineFromPoint(point);
@@ -35,7 +36,7 @@ public class SplineNoise3D
         float inDown = Vector3.Dot(dir.normalized, deltaPos);
         if (inDown < 0f)
             return 0f;
-        float floor = (1f - dir.magnitude) * radius + (Random.value * penaltySize);
+        float floor = (1f - dir.magnitude) * radius + ((float)Random.NextDouble() * penaltySize);
         return floor == 0 ? float.MaxValue : inDown / floor;
     }
     public static float SplineDistance(Vector3 point)
