@@ -12,6 +12,7 @@ public class GameMenu : MonoBehaviour
     public WinLoseMenu winLoseMenu;
 
 
+    public MenuAudioController menuAudioController;
 
 
 

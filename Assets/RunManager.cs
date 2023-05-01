@@ -13,10 +13,13 @@ public class RunManager : MonoBehaviour
     public GameObject DeliveryBoxPrefab;
     public GameObject CameraPrefab;
     public GameObject WinPrefab;
+    public GameObject WinCutscene;
     public TextMeshProUGUI Timer;
     public GameMenu GameMenu;
     public LoadingScreen LoadingScreen;
+    public LayerMask CollisionLayer;
 
+    private GameObject winCutscene;
     private LevelMeta currentLevel;
     private float startTime;
     GameObject truck;
@@ -24,7 +27,7 @@ public class RunManager : MonoBehaviour
     new GameObject camera;
     Vector3 origin;
     private float timeAtFinish;
-
+    private GameObject main_cam;
     bool won;
     private bool paused;
 
@@ -89,15 +92,24 @@ public class RunManager : MonoBehaviour
 
             DestroyImmediate(Camera.main.gameObject);
             origin = SplineNoise3D.SplineLine[0].pos;
+            if(Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 100000, CollisionLayer))
+            {
+                origin = hit.point + Vector3.up * 2;
+            }
             truck = Instantiate(TruckPrefab, origin, Quaternion.identity);
             deliveryBox = Instantiate(DeliveryBoxPrefab, origin, Quaternion.identity).GetComponent<BoxScript>();
             deliveryBox.transform.position += deliveryBox.Offset;
             deliveryBox.Owner = truck.GetComponent<HoverController>();
+            deliveryBox.GetComponent<Rigidbody>().isKinematic = true;
             camera = Instantiate(CameraPrefab, origin, Quaternion.identity);
+            var cameraController = camera.GetComponent<CameraController>();
+            cameraController.Target = truck.transform;
+            camera.transform.position = origin + camera.GetComponent<CameraController>().TargetOffset;
+
             var lastSpline = SplineNoise3D.SplineLine[SplineNoise3D.SplineLine.Count - 1];
             GameObject win = Instantiate(WinPrefab, lastSpline.pos, Quaternion.identity);
             var winPoint = win.GetComponent<WinPoint>();
-            winPoint.Radius = lastSpline.radius;
+            winPoint.Radius = lastSpline.radius * 2f;
             winPoint.Manager = this;
 
             startTime = Time.time;
@@ -116,6 +128,9 @@ public class RunManager : MonoBehaviour
 
     private IEnumerator RunGame()
     {
+        yield return null;
+        won = false;
+
         float t = 0.0f;
         while (t < currentLevel.AuthorTime || PersistentData.Validating)
         {
@@ -123,7 +138,7 @@ public class RunManager : MonoBehaviour
             if (Timer)
             {
                 Timer.enabled = true;
-                Timer.text = $"{(!PersistentData.Validating ? (currentLevel.AuthorTime - t) : t):0}";
+                Timer.text = $"{(!PersistentData.Validating ? (currentLevel.AuthorTime - t) : t):F2}";
             }
 
             if (Input.GetButtonDown("Pause"))
@@ -142,6 +157,11 @@ public class RunManager : MonoBehaviour
     {
         if (won)
             return;
+
+        //play cutscene
+        winCutscene = Instantiate(WinCutscene, Vector3.up * 10000f, Quaternion.identity);
+        truck.SetActive(false);
+        camera.gameObject.SetActive(false);
 
         void FinishLevel()
         {
@@ -213,7 +233,7 @@ public class RunManager : MonoBehaviour
 
         try
         {
-            if (currentLevel.ID != 0)
+            if (currentLevel.ID != 0 && !PersistentData.Validating)
             {
                 currentLevel.RecordTime = float.MaxValue;
                 currentLevel.RecordName = PersistentData.PlayerName;
@@ -263,15 +283,22 @@ public class RunManager : MonoBehaviour
         }
         catch { }
 
+        if(winCutscene != null)
+            GameObject.Destroy(winCutscene);
+        camera.gameObject.SetActive(true);
+        truck.SetActive(true);
         truck.GetComponent<HoverController>().enabled = true;
-        truck.transform.position = camera.transform.position = origin;
+        truck.transform.position = origin;
+        camera.transform.position = origin + camera.GetComponent<CameraController>().TargetOffset;
         truck.transform.rotation = camera.transform.rotation = Quaternion.identity;
         truck.GetComponent<Rigidbody>().velocity = Vector3.zero;
         truck.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         deliveryBox.transform.position = truck.transform.position + deliveryBox.Offset;
         deliveryBox.transform.rotation = truck.transform.rotation;
+        deliveryBox.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        deliveryBox.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        deliveryBox.GetComponent<Rigidbody>().isKinematic = true;
         startTime = Time.time;
-        won = false;
     }
 
     private void BackToMenu()

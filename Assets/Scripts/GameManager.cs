@@ -22,7 +22,7 @@ public static class PersistentData
     }
     public static int ResourceCount
     {
-        get => PlayerPrefs.GetInt("Resources", 0);
+        get => PlayerPrefs.GetInt("Resources", 10);
         set => PlayerPrefs.SetInt("Resources", value);
     }
     public static int ResourceDelta = 0;
@@ -33,6 +33,7 @@ public static class PersistentData
     public static bool Validating = false;
 
     public static string Ip = "argilstudio.dev";
+    public static string LocalIp = "192.168.1.241";
     public static int Port = 6111;
 }
 
