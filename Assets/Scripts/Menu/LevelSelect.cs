@@ -13,14 +13,13 @@ public class LevelSelect : MonoBehaviour
     public int levelsOnDisplay = 6;
 
     public int y_min, y_max, x_min, x_max;
-    public int y_offset_between_astroids;
+    public float y_offset_between_astroids;
     public float x_max_offset;
     public GameObject prefab;
     public Transform origo;
 
     [SerializeField]
-    float moveSpeed, radius, wheelSpeed;
-    float angle;
+    float moveSpeed, angleSpeed, radius, wheelSpeed;
 
     private Astroid_data_holder selected_level;
 
@@ -72,12 +71,7 @@ public class LevelSelect : MonoBehaviour
                 * (radius + currentLevelsOnDisplay[i].personal_offset)
                 + (origo.position)
                 ;
-
         }
-
-
-
-
     }
 
 
@@ -142,7 +136,7 @@ public class LevelSelect : MonoBehaviour
             x.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = levels[i].Creator;
             int image_index = Random.Range(0, sprites.Count - 1);
             x.GetComponent<Image>().sprite = sprites[image_index];
-            var data = new Astroid_data_holder(x, 0.5f * i, Random.Range(0, x_max_offset), levels[i]);
+            var data = new Astroid_data_holder(x, y_offset_between_astroids * i, Random.Range(0, x_max_offset), levels[i]);
             currentLevelsOnDisplay.Add(data);
             x.GetComponent<Button>().onClick.AddListener(() => OnLevelClick(data));
             MenuAudioController MenuAudioController = FindObjectOfType<MenuAudioController>();

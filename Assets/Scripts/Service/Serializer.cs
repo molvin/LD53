@@ -89,6 +89,9 @@ public class Serializer : MonoBehaviour
         //Instansiate door doodad at last
         var door = Instantiate(DoodadPrefabs[7], last.pos, Quaternion.identity);
         door.ID = 7;
+        //Instansiate platform doodad at first
+        var platform = Instantiate(DoodadPrefabs[8], SplineNoise3D.SplineLine[0].pos, Quaternion.identity);
+        platform.ID = 8;
 
         //Create all particles
         foreach (var spline in SplineNoise3D.SplineLine)
