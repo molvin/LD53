@@ -358,7 +358,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
         SplineTransforms.Add(cube);
         Shapes.Add(CurrentSelection);
-        _Scales.Add(WorkScale);
+        _Scales.Add(radius);
 
         if (SplineTransforms.Count > 1)
         {
@@ -368,7 +368,7 @@ public class LevelMakerEditorController : MonoBehaviour
             GameObject sphere = Instantiate(IntermediatePrefab);
             sphere.transform.position = Pos;
             sphere.transform.rotation = Rot;
-            sphere.transform.localScale = Vector3.one * radius * 2f;
+            sphere.transform.localScale = Vector3.one * MinRadius * 2f;
             IntermediatePoints.Add(sphere);
         }
         UpdateConnector();
