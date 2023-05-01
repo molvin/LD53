@@ -40,9 +40,12 @@ public class HoverController : MonoBehaviour
     private List<float> PreviousHeights = new List<float>();
 
     private Vector3 InputVector;
+    private Vector3 AlignmentNormal;
     private Vector3 UpNormal;
     private float rightCoef;
     private float slideDelta;
+
+    public Transform[] Thrusters;
 
     public Vector3 GroundNormal => UpNormal;
 
@@ -73,26 +76,27 @@ public class HoverController : MonoBehaviour
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
-        rigidbody.centerOfMass = Vector3.down;
+        rigidbody.centerOfMass = Vector3.down * 0.5f;
+        rigidbody.inertiaTensor = new Vector3(1.42f, 1.67f, 0.42f);
+        rigidbody.inertiaTensorRotation = Quaternion.identity;
         //Offsets.Add(new Vector3(0.5f, -0.5f, 0.5f));
         //Offsets.Add(new Vector3(0.5f, -0.5f, -0.5f));
         //Offsets.Add(new Vector3(-0.5f, -0.5f, 0.5f));
         //Offsets.Add(new Vector3(-0.5f, -0.5f, -0.5f));
-
         // Front
-        Offsets.Add(new Vector3(1.0f, -0.5f, 2.0f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, 2.0f));
+        Offsets.Add( new Vector3(1.0f, -0.4f, 2.0f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, 2.0f) * 0.5f);
         // Mid
-        Offsets.Add(new Vector3(1.0f, -0.5f, 0.67f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, 0.67f));
-        Offsets.Add(new Vector3(1.0f, -0.5f, -0.67f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, -0.67f));
+        Offsets.Add(new Vector3(1.0f, -0.4f, 0.67f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, 0.67f) * 0.5f);
+        Offsets.Add(new Vector3(1.0f, -0.4f, -0.67f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, -0.67f) * 0.5f);
         // Back
-        Offsets.Add(new Vector3(1.0f, -0.5f, -2.0f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, -2.0f));
+        Offsets.Add(new Vector3(1.0f, -0.4f, -2.0f) * 0.5f);
+        Offsets.Add( new Vector3(-1.0f, -0.4f, -2.0f) * 0.5f);
         // Central
-        Offsets.Add(new Vector3(0.0f, -0.5f, 1.0f));
-        Offsets.Add(new Vector3(0.0f, -0.5f, -1.0f));
+        Offsets.Add(new Vector3(0.0f, -0.4f, 1.0f) * 0.5f);
+        Offsets.Add(new Vector3(0.0f, -0.4f, -1.0f) * 0.5f);
 
 
         for (int i = 0; i < Offsets.Count; i++)
@@ -138,13 +142,18 @@ public class HoverController : MonoBehaviour
                 VisionHeight,
                 Mask))
             {
-                UpNormal -= IcoNormal * (1.0f - (hit.distance / VisionHeight));
+                UpNormal -= IcoNormal * (1.0f - (Mathf.Pow(hit.distance, 2f) / Mathf.Pow(VisionHeight, 2f)));
             }
         }
         UpNormal.Normalize();
+        AlignmentNormal = Vector3.Lerp(UpNormal.normalized, Vector3.up, 0.5f);
 
         // Consume input vector
         float Forward = InputVector.z;
+        if (Forward < 0f)
+        {
+            Forward *= 0.5f;
+        }
         float Rotation = InputVector.x;
         InputVector = Vector3.zero;
 
@@ -191,31 +200,32 @@ public class HoverController : MonoBehaviour
             PreviousHeights[i] = suspensionDistance;
         }
 
+        float GroundConnectedness = Hits / Normals.Count;
+
         // Friction
-        Vector3 Right = Vector3.ProjectOnPlane(transform.right, UpNormal).normalized;
+        Vector3 Right = Vector3.ProjectOnPlane(transform.right, AlignmentNormal).normalized;
         float Dot = Vector3.Dot(Right, rigidbody.velocity);
 
-        rigidbody.velocity -= Right * Dot * rightCoef;
+        rigidbody.velocity -= Right * Dot * rightCoef * GroundConnectedness * Time.fixedDeltaTime;
 
-        Vector3 forward = Vector3.ProjectOnPlane(transform.forward, UpNormal).normalized;
-        rigidbody.velocity -= forward * Vector3.Dot(forward, rigidbody.velocity) * ForwardFictionCoef * (Hits / Normals.Count);
+        Vector3 forward = Vector3.ProjectOnPlane(transform.forward, AlignmentNormal).normalized;
+        rigidbody.velocity -= forward * Vector3.Dot(forward, rigidbody.velocity) * ForwardFictionCoef * GroundConnectedness * Time.fixedDeltaTime;
 
-        Quaternion delta = Quaternion.FromToRotation(transform.up, UpNormal);//.ToAngleAxis(out float Angle, out Vector2 Axis);
+        Quaternion delta = Quaternion.FromToRotation(transform.up, AlignmentNormal);//.ToAngleAxis(out float Angle, out Vector2 Axis);
         delta.ToAngleAxis(out float Angle, out Vector3 axis);
         rigidbody.AddTorque(axis.normalized * Angle * AlignmentRotationSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
 
-
-
         Debug.DrawLine(transform.position, transform.position + UpNormal * 3.0f);
+        Debug.DrawLine(transform.position, transform.position + AlignmentNormal * 3.0f, Color.yellow);
 
-        Vector3 Gravity = -UpNormal * OverrideGravity * GravitationalPull * Time.fixedDeltaTime;
-        Gravity += Vector3.down * (OverrideGravity - 9.81f);
+        Vector3 Gravity = -AlignmentNormal * OverrideGravity * GravitationalPull * Time.fixedDeltaTime;
+        Gravity += Vector3.down * (OverrideGravity - 9.81f) * Time.fixedDeltaTime;
         // Gravitational pull
-        rigidbody.AddForce(Gravity, ForceMode.Acceleration);
+        rigidbody.AddForce(Gravity);
         // Input
-        rigidbody.AddForce(ForwardInput * LinearForce * Hits / Normals.Count);
-        rigidbody.AddRelativeTorque(TurningInput * AngularForce * Hits / Normals.Count);
-        rigidbody.AddRelativeTorque(RollInput * RollForce * (1.0f - Hits / Normals.Count));
+        rigidbody.AddForce(ForwardInput * LinearForce * GroundConnectedness);
+        rigidbody.AddRelativeTorque(TurningInput * AngularForce * GroundConnectedness);
+        rigidbody.AddRelativeTorque(RollInput * RollForce * (1.0f - GroundConnectedness));
 
 
         //float yVel = rigidbody.velocity.y;

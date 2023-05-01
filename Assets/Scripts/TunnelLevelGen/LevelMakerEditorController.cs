@@ -14,19 +14,17 @@ public class LevelMakerEditorController : MonoBehaviour
     public float TurnSpeed = 3f;
     public float SpeedUp = 2.5f;
 
-    public Mesh VisualMesh;
-    public Material VisualMeshMaterial;
+    public GameObject AddPrefab;
+    public List<GameObject> ShapePrefabs;
 
+    public Mesh VisualMesh;
     public Material SelectionUIMaterial;
 
-    public float TooCloseDistance = 3f;
-    public float HandleLength = 3f;
-    public float HandleDistance = 2f;
-    public float AddDistance = 50f;
-    public float MinRadius = 5f;
-    public float MaxRadius = 20f;
+    public float MinRadius = 3f;
+    public float MaxRadius = 10f;
+    float AddDistance => MaxRadius * 2f;
 
-    private MeshRenderer CurrentSplineEdit;
+    private GameObject CurrentSplineEdit;
     private List<GameObject> SplineTransforms = new List<GameObject>();
     private List<GameObject> IntermediatePoints = new List<GameObject>();
     private List<float> _Scales = new List<float>();
@@ -39,6 +37,7 @@ public class LevelMakerEditorController : MonoBehaviour
     private Vector3 WorkingPos = Vector3.zero;
     private Quaternion WorkingRot = Quaternion.identity;
     private float _WorkingScale = 15f;
+    private float TooCloseDistance => MinRadius * 2f;
     float WorkScale => TransformScale(_WorkingScale);
 
     float TransformScale(float Value) => Mathf.Lerp(MinRadius, MaxRadius, (float)(Mathf.RoundToInt((Value - MinRadius) / (MaxRadius - MinRadius) * 3f)) / 3f);
@@ -50,6 +49,7 @@ public class LevelMakerEditorController : MonoBehaviour
     private void Awake()
     {
         _WorkingScale = (MinRadius + MaxRadius) * 0.5f;
+        AddPrefab = Instantiate(AddPrefab);
     }
 
     private void Update()
@@ -96,29 +96,34 @@ public class LevelMakerEditorController : MonoBehaviour
                 if (Vector3.Distance(SplineTransforms[Index].transform.position, CurrentSplineEdit.transform.position) < TooCloseDistance
                 || Vector3.Distance(SplineTransforms[Index + 1].transform.position, CurrentSplineEdit.transform.position) < TooCloseDistance)
                 {
-                    CurrentSplineEdit.material.color = Color.red;
+                    CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
                 }
                 else
                 {
-                    CurrentSplineEdit.material.color = Color.yellow;
+                    CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
                 }
             }
         }
 
-        if (!CurrentSplineEdit)
-        {
-            DrawVisualizationMesh();
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                AddSplinePoint();
-            }
-        }
-        else if (IntermediatePoints.Contains(CurrentSplineEdit.gameObject) && CurrentSplineEdit.material.color != Color.red)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (CurrentSplineEdit != null && IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
             {
-                InsertSplinePoint();
+                if (CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color != Color.red)
+                {
+                    InsertSplinePoint();
+                }
+            }
+            else
+            {
+                if (CurrentSplineEdit != null)
+                {
+                    CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
+                    CurrentSplineEdit = null;
+                }
+
+                AddSplinePoint();
             }
         }
 
@@ -138,6 +143,10 @@ public class LevelMakerEditorController : MonoBehaviour
 
         UpdatePointRotations();
         UpdateIntermediates();
+        for (int i = 0; i < SplineTransforms.Count; i++)
+        {
+            SplineTransforms[i].transform.localScale = Vector3.one * Scales(i);
+        }
 
         if (SplineTransforms.Count > 0)
         {
@@ -146,13 +155,17 @@ public class LevelMakerEditorController : MonoBehaviour
             WorkingRot = Quaternion.LookRotation(Last.forward, WorkingRot * Vector3.up);
         }
 
+        AddPrefab.transform.position = WorkingPos;
+        AddPrefab.transform.rotation = WorkingRot;
+        AddPrefab.transform.localScale = Vector3.one * WorkScale;
+
         if (Input.GetKeyDown(KeyCode.B))
         {
             SplineNoise3D.SplineLine.Clear();
             for (int i = 0; i < SplineTransforms.Count; i++)
             {
                 Transform Trans = SplineTransforms[i].transform;
-                SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales(i), GetShape(Shapes[i]));
+                SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales(i), GetShape(Shapes[i]), (byte) Shapes[i]);
                 if (i < SplineTransforms.Count - 1)
                 {
                     Vector4 FirstShape = GetShape(Shapes[i]);
@@ -160,7 +173,8 @@ public class LevelMakerEditorController : MonoBehaviour
                     Vector4 Shape = Vector4.Lerp(FirstShape, SecondShape, 0.5f);
                     float scale = (Scales(i) + Scales(i + 1)) * 0.5f;
                     Transform IT = IntermediatePoints[i].transform;
-                    SplineNoise3D.AddSplineSegment(IT.position, IT.rotation, scale, Shape);
+                    // NOTE: Uncomment to add intermediate points
+                    //SplineNoise3D.AddSplineSegment(IT.position, IT.rotation, scale, Shape);
                 }
             }
             StartCoroutine(FindObjectOfType<Serializer>().Generate(FindObjectOfType<Serializer>().SerializeLevelToJson()));
@@ -232,6 +246,16 @@ public class LevelMakerEditorController : MonoBehaviour
         {
             int index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
             Shapes[index] = CurrentSelection;
+
+            GameObject original = CurrentSplineEdit;
+            GameObject newObject = Instantiate(ShapePrefabs[CurrentSelection]);
+            newObject.transform.position = original.transform.position;
+            newObject.transform.rotation = original.transform.rotation;
+            newObject.transform.localScale = original.transform.localScale;
+            SplineTransforms[index] = newObject;
+            Destroy(original);
+            CurrentSplineEdit = newObject;
+            CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
         }
     }
 
@@ -262,22 +286,32 @@ public class LevelMakerEditorController : MonoBehaviour
             CurrentSplineEdit.transform.position = ray.origin + ray.direction * (closest - ray.origin).magnitude;
         }
 
-        /*
-        if (SplineTransforms.Contains(CurrentSplineEdit.gameObject))
+        if (SplineTransforms.Contains(CurrentSplineEdit.gameObject) && SplineTransforms.Count > 1)
         {
             int Index = SplineTransforms.IndexOf(CurrentSplineEdit.gameObject);
-            Spline s = SplineLine[Index];
-            s.pos = CurrentSplineEdit.transform.position;
-            SplineLine[Index] = s;
+            Vector3 Reference;
+            if (Index == 0)
+            {
+                Reference = SplineTransforms[1].transform.position;
+            }
+            else
+            {
+                Reference = SplineTransforms[Index - 1].transform.position;
+            }
+
+            Vector3 fromRef = SplineTransforms[Index].transform.position - Reference;
+            if (fromRef.magnitude > 4f * MaxRadius)
+            {
+                SplineTransforms[Index].transform.position = Reference + fromRef.normalized * 4f * MaxRadius;
+            }
         }
-        */
     }
 
     private void SelectSplinePoint()
     {
         if (CurrentSplineEdit)
         {
-            CurrentSplineEdit.material.color = Color.gray;
+            CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
         }
         CurrentSplineEdit = null;
 
@@ -290,8 +324,10 @@ public class LevelMakerEditorController : MonoBehaviour
             {
                 if (cube.transform == hit.transform)
                 {
-                    CurrentSplineEdit = cube.GetComponent<MeshRenderer>();
+                    CurrentSplineEdit = cube;
                     CurrentSelection = Shapes[i];
+                    _WorkingScale = _Scales[i];
+                    WorkingRot = CurrentSplineEdit.transform.rotation;
                 }
                 i++;
             }
@@ -300,7 +336,7 @@ public class LevelMakerEditorController : MonoBehaviour
             {
                 if (sphere.transform == hit.transform)
                 {
-                    CurrentSplineEdit = sphere.GetComponent<MeshRenderer>();
+                    CurrentSplineEdit = sphere;
                     int Index = IntermediatePoints.IndexOf(sphere);
                     if (Vector3.Distance(SplineTransforms[Index].transform.position, SplineTransforms[Index + 1].transform.position) < TooCloseDistance)
                     {
@@ -312,19 +348,11 @@ public class LevelMakerEditorController : MonoBehaviour
 
         if (CurrentSplineEdit)
         {
-            CurrentSplineEdit.material.color = IsTooClose ? Color.red : Color.yellow;
+            CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = IsTooClose ? Color.red : Color.yellow;
         }
     }
 
-    private void DrawVisualizationMesh()
-    {
-        if (VisualMesh && VisualMeshMaterial)
-        {
-            Graphics.DrawMesh(VisualMesh, WorkingPos, WorkingRot, VisualMeshMaterial, 0);
-        }
-    }
-
-    private void OnDrawGizmos()
+    private void _OnDrawGizmos()
     {
         for (int i = 0; i < SplineTransforms.Count - 1; i++)
         {
@@ -337,29 +365,25 @@ public class LevelMakerEditorController : MonoBehaviour
             Gizmos.DrawWireSphere(SplineTransforms[i].transform.position, Scales(i));
         }
         Gizmos.DrawWireSphere(WorkingPos, WorkScale);
-
-        Vector3 HandlePos = CurrentSplineEdit ? CurrentSplineEdit.transform.position : WorkingPos;
-        Quaternion HandleRot = CurrentSplineEdit ? CurrentSplineEdit.transform.rotation : WorkingRot;
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(HandlePos, HandleRot * Vector3.forward * HandleLength);
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(HandlePos, HandleRot * Vector3.right * HandleLength);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(HandlePos, HandleRot * Vector3.up * HandleLength);
     }
 
     private void AddSplinePoint()
     {
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = WorkingPos;
-        cube.transform.rotation = WorkingRot;
-        cube.transform.localScale = Vector3.one * MinRadius;
+        AddSplinePoint((byte)CurrentSelection, WorkingPos, WorkingRot, MinRadius);
+ 
+        WorkingPos += WorkingRot * Vector3.forward * AddDistance;
+    }
+
+    private void AddSplinePoint(byte selection, Vector3 pos, Quaternion rot, float radius)
+    {
+        GameObject cube = Instantiate(ShapePrefabs[selection]);
+        cube.transform.position = pos;
+        cube.transform.rotation = rot;
+        cube.transform.localScale = Vector3.one * radius;
+
         SplineTransforms.Add(cube);
         Shapes.Add(CurrentSelection);
         _Scales.Add(WorkScale);
-        //SplineNoise3D.AddSplineSegment(WorkingPos, WorkingRot, Random.Range(1f, 10f), Roundness);
-        WorkingPos += WorkingRot * Vector3.forward * AddDistance;
 
         if (SplineTransforms.Count > 1)
         {
@@ -369,7 +393,7 @@ public class LevelMakerEditorController : MonoBehaviour
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.position = Pos;
             sphere.transform.rotation = Rot;
-            sphere.transform.localScale = Vector3.one * MinRadius;
+            sphere.transform.localScale = Vector3.one * radius;
             IntermediatePoints.Add(sphere);
         }
     }
@@ -380,7 +404,8 @@ public class LevelMakerEditorController : MonoBehaviour
         Vector3 NewPos = CurrentSplineEdit.transform.position;
         Quaternion NewRot = CurrentSplineEdit.transform.rotation;
 
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        GameObject cube = Instantiate(ShapePrefabs[CurrentSelection]);
         cube.transform.position = NewPos;
         cube.transform.rotation = NewRot;
         cube.transform.localScale = Vector3.one * MinRadius;
@@ -409,7 +434,7 @@ public class LevelMakerEditorController : MonoBehaviour
             IntermediatePoints.Insert(Index + 1, sphere);
         }
 
-        CurrentSplineEdit.material.color = Color.gray;
+        CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
         CurrentSplineEdit = null;
     }
 
@@ -435,14 +460,11 @@ public class LevelMakerEditorController : MonoBehaviour
         float Scroll = Input.GetAxisRaw("Mouse ScrollWheel");
         if (Mathf.Abs(Scroll) > float.Epsilon)
         {
+            Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, WorkingRot * Vector3.forward);
+            WorkingRot *= delta;
             if (CurrentSplineEdit != null)
             {
-                CurrentSplineEdit.transform.RotateAroundLocal(Vector3.forward, Scroll * 2f);
-            }
-            else
-            {
-                Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, WorkingRot * Vector3.forward);
-                WorkingRot *= delta;
+                CurrentSplineEdit.transform.rotation = WorkingRot;
             }
         }
     }
@@ -526,5 +548,20 @@ public class LevelMakerEditorController : MonoBehaviour
             case 9: { Shape.z = 0.5f; Shape.x = 0.5f; Shape.y = 0.5f; Shape.w = 0.5f; break; }
         }
         return Shape;
+    }
+
+    public void InitFromSpline()
+    {
+        Vector3 pos = Vector3.zero;
+        Quaternion rot = Quaternion.identity;
+
+        foreach (SplineNoise3D.Spline spline in SplineNoise3D.SplineLine)
+        {
+            pos = spline.pos;
+            rot = spline.rot;
+            AddSplinePoint(spline.shape, pos, rot, spline.radius);
+        }
+
+        WorkingPos = pos + rot * Vector3.forward * AddDistance;
     }
 }

@@ -26,7 +26,8 @@ public struct LevelDownloadRequest
 public struct LevelCompleteRequest
 {
     public int Version;
-    public int Level;
+    public int ID;
+    public string Creator;
     public int Success;
 }
 [System.Serializable]

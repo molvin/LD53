@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class Serializer : MonoBehaviour
 {
     [System.Serializable]
     public struct LevelData
     {
-        public Vector3 Start;
-        public Vector3 End;
         public List<SplineNoise3D.Spline> SplineData;
     }
 
@@ -25,10 +23,7 @@ public class Serializer : MonoBehaviour
 
     public string SerializeLevelToJson()
     {
-        Debug.Log(SplineNoise3D.SplineLine.Count);
         LevelData data = new LevelData{
-            Start = Vector3.zero,
-            End = Vector3.one,
             SplineData = SplineNoise3D.SplineLine
         };
 
@@ -97,8 +92,7 @@ public class Serializer : MonoBehaviour
         GUI.Label(new Rect(20, 90, 200, 30), $"Progress {progress:P0}");
 
 
-        playerName = GUI.TextField(new Rect(400, 20, 200, 30), playerName);
-        if (GUI.Button(new Rect(400, 50, 110, 30), "Upload to level"))
+        if (SplineNoise3D.SplineLine.Count > 1 && GUI.Button(new Rect(400, 50, 110, 30), "Upload"))
         {
             string data = SerializeLevelToJson();
             var service = FindObjectOfType<ServiceTalker>();
@@ -106,14 +100,22 @@ public class Serializer : MonoBehaviour
             {
                 Wins = 0,
                 Attempts = 0,
-                Time = 30.0f,
-                ID = 0,
-                Creator = playerName,
+                Time = 60.0f,
+                ID = PersistentData.PlayerId,
+                Creator = PersistentData.PlayerName,
                 Resource = 100
             };
             Debug.Log($"Uploading {data}");
             service.UploadLevel(meta, data);
             Debug.Log("Done Uploading");
+        }
+        if (SplineNoise3D.SplineLine.Count > 1 && GUI.Button(new Rect(400, 90, 110, 30), "Play and Upload"))
+        {
+            PersistentData.Validating = true;
+            PersistentData.OverrideLevel = new LevelData {
+                SplineData = SplineNoise3D.SplineLine
+            };
+            SceneManager.LoadScene(3);
         }
     }
 
