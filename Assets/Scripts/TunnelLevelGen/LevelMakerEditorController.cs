@@ -32,7 +32,7 @@ public class LevelMakerEditorController : MonoBehaviour
     private float _WorkingScale = 15f;
     private float TooCloseDistance => MinRadius * 2f;
     float WorkScale => TransformScale(_WorkingScale);
-    int CurrentResource => PersistentData.ResourceCount + PersistentData.ResourceDelta;
+    public int CurrentResource => PersistentData.ResourceCount + PersistentData.ResourceDelta;
 
     float TransformScale(float Value) => Mathf.Lerp(MinRadius, MaxRadius, (float)(Mathf.RoundToInt((Value - MinRadius) / (MaxRadius - MinRadius) * 3f)) / 3f);
 

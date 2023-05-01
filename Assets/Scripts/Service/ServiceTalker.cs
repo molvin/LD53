@@ -116,15 +116,15 @@ public class ServiceTalker : MonoBehaviour
         Send(JsonUtility.ToJson(request), (byte) Requests.LevelDownloadRequest);
 
         string response = Receive();
-
-        return (LevelData) JsonUtility.FromJson(response, typeof(LevelData));
+        return response == "" ? new LevelData() : (LevelData) JsonUtility.FromJson(response, typeof(LevelData));
     }
 
     private void Connect()
     {
         IPAddress ip = IPAddress.Any;
         socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        var address = System.Net.Dns.GetHostAddresses(PersistentData.Ip)[0];
+        //var address = System.Net.Dns.GetHostAddresses(PersistentData.Ip)[0];
+        var address = IPAddress.Parse(PersistentData.LocalIp);
         socket.Connect(new IPEndPoint(address, PersistentData.Port));
     }
 
@@ -132,34 +132,41 @@ public class ServiceTalker : MonoBehaviour
     {
         MemoryStream stream = new MemoryStream();
         byte[] json_data = Encoding.Unicode.GetBytes(json);
+        Debug.Log("JSON DATA SIZE: " + json_data.Length);
+
         stream.Write(BitConverter.GetBytes(json_data.Length));
         stream.WriteByte(code);
         stream.Write(json_data);
 
         socket.Send(stream.ToArray());
+        stream.Close();
+
+        System.IO.File.WriteAllBytes(Application.dataPath + "/temp.bin", json_data);
+        System.IO.File.WriteAllText(Application.dataPath + "/temp.json", json);
     }
 
     private string Receive()
     {
-        StringBuilder builder = new StringBuilder();
-
+        MemoryStream stream = new MemoryStream();
         try
         {
             int bytesRec = socket.Receive(buffer);
             int payloadSize = BitConverter.ToInt32(buffer, 0);
             int totalRecived = bytesRec - 4;
-            builder.Append(Encoding.Unicode.GetString(buffer, 4, bytesRec - 4));
+            // builder.Append(Encoding.Unicode.GetString(buffer, 4, bytesRec - 4));
+            stream.Write(buffer, 4, bytesRec - 4);
             while (totalRecived < payloadSize)
             {
                 bytesRec = socket.Receive(buffer);
                 totalRecived += bytesRec;
-                builder.Append(Encoding.Unicode.GetString(buffer, 0, bytesRec));
+                // builder.Append(Encoding.Unicode.GetString(buffer, 0, bytesRec));
+                stream.Write(buffer, 0, bytesRec);
             }
         }
         catch
         {
             Debug.LogError("failed to read response");
         }
-        return builder.ToString();
+        return Encoding.Unicode.GetString(stream.GetBuffer());
     }
 }
