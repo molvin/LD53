@@ -11,6 +11,14 @@ public class Serializer : MonoBehaviour
     public struct LevelData
     {
         public List<SplineNoise3D.Spline> SplineData;
+        public List<Doodad> DoodadData;
+    }
+
+    [System.Serializable]
+    public struct Doodad
+    {
+        public Vector3 position;
+        public int doodad;
     }
 
     public bool ShowDebugUI;
@@ -100,12 +108,13 @@ public class Serializer : MonoBehaviour
             {
                 Wins = 0,
                 Attempts = 0,
-                Time = 60.0f,
+                AuthorTime = 60.0f,
+                RecordTime = 60.0f,
+                RecordName = PersistentData.PlayerName,
                 ID = PersistentData.PlayerId,
                 Creator = PersistentData.PlayerName,
                 Resource = 100
             };
-            Debug.Log($"Uploading {data}");
             service.UploadLevel(meta, data);
             Debug.Log("Done Uploading");
         }

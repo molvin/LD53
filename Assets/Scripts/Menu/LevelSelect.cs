@@ -26,12 +26,20 @@ public class LevelSelect : MonoBehaviour
     public LevelInforBoxController level_info_object;
     public LevelSelectHelper level_select_helper;
 
-
+    public LoadingScreen loadingScreen;
     public List<Sprite> sprites;
 
     public void PlayLevel()
     {
+        loadingScreen.fadeIn();
+        StartCoroutine(playInSec(0.8f));
+    }
+
+    public IEnumerator playInSec(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
         level_select_helper.PlayLevel(selected_level.data);
+
     }
 
 

@@ -186,7 +186,6 @@ public class SplineNoise3D
     }
     public static void AddSplineSegment(Vector3 pos, Quaternion rot, float radius, Vector4 Roundness, byte shape)
     {
-        Debug.Log(shape);
         SplineLine.Add(new Spline {
             pos = pos,
             radius = radius,
