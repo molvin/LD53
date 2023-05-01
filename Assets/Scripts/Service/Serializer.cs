@@ -76,7 +76,8 @@ public class Serializer : MonoBehaviour
 
         foreach(var doodadStruct in level.DoodadData)
         {
-            Instantiate(DoodadPrefabs[doodadStruct.doodad], doodadStruct.position, Quaternion.identity);
+            var doodad = Instantiate(DoodadPrefabs[doodadStruct.doodad], doodadStruct.position, Quaternion.identity);
+            doodad.ID = doodadStruct.doodad;
         }
     }
 
