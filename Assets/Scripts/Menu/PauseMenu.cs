@@ -20,7 +20,7 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         NiceShutdown();
-
+        StartCoroutine(ResumeAfterTime(1.2f));
     }
 
     public void NiceShutdown()
@@ -110,4 +110,12 @@ public class PauseMenu : MonoBehaviour
         yield return new WaitForSeconds(wait_time);
         parentMenu.Retry();
     }
+
+
+    public IEnumerator ResumeAfterTime(float wait_time)
+    {
+        yield return new WaitForSeconds(wait_time);
+        parentMenu.Resume();
+    }
+    
 }

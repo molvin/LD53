@@ -11,24 +11,7 @@ public class GameMenu : MonoBehaviour
 
     public WinLoseMenu winLoseMenu;
 
-    public void Update()
-    {
-        if (Input.GetButtonDown("Pause") && !winLoseMenu.menuObj.gameObject.activeSelf)
-        {
-            togglePause();
-        }
 
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            Lose();
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Win(26.4f, 8);
-        }
-    }
 
 
 
