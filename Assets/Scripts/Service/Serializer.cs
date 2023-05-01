@@ -61,7 +61,8 @@ public class Serializer : MonoBehaviour
         SplineNoise3D.SplineLine = level.SplineData;
 
         SplineNoise3D.Spline last = SplineNoise3D.SplineLine[SplineNoise3D.SplineLine.Count - 1];
-        SplineNoise3D.AddSplineSegment(last.pos + (last.rot * Vector3.forward) * 40, Quaternion.identity, 10f, Vector4.zero, 0);//add a segment for the door to have space in
+        SplineNoise3D.Spline nextToLast = SplineNoise3D.SplineLine[SplineNoise3D.SplineLine.Count - 2];
+        SplineNoise3D.AddSplineSegment(last.pos + (last.pos - nextToLast.pos).normalized * 40f, Quaternion.identity, 10f, Vector4.zero, 0);//add a segment for the door to have space in
         if (level.SplineData.Count < 2)
             yield break;
         SplineNoise3D.Spline previous = level.SplineData[0];

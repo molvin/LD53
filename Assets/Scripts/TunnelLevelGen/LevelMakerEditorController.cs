@@ -42,6 +42,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
     public bool DisableEdit = false;
     public bool IsUsingUI = false;
+    private bool DidASelect = false;
 
     private void Awake()
     {
@@ -78,11 +79,18 @@ public class LevelMakerEditorController : MonoBehaviour
         // Select Point
         if (!IsUsingUI && Input.GetMouseButtonDown(0))
         {
+            bool WasSelected = CurrentSplineEdit != null;
             SelectSplinePoint();
+            DidASelect = !WasSelected && CurrentSplineEdit != null;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            DidASelect = false;
         }
 
         // Drag a point
-        if (!IsUsingUI && Input.GetMouseButton(0) && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
+        if (!IsUsingUI && !DidASelect && Input.GetMouseButton(0) && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
         {
             DragCurrent();
         }
@@ -334,21 +342,6 @@ public class LevelMakerEditorController : MonoBehaviour
         {
             CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = IsTooClose ? Color.red : Color.yellow;
         }
-    }
-
-    private void _OnDrawGizmos()
-    {
-        for (int i = 0; i < SplineTransforms.Count - 1; i++)
-        {
-            Debug.DrawLine(SplineTransforms[i].transform.position, IntermediatePoints[i].transform.position, Color.red);
-            Debug.DrawLine(IntermediatePoints[i].transform.position, SplineTransforms[i + 1].transform.position, Color.red);
-        }
-
-        for (int i = 0; i < SplineTransforms.Count; i++)
-        {
-            Gizmos.DrawWireSphere(SplineTransforms[i].transform.position, Scales(i));
-        }
-        Gizmos.DrawWireSphere(WorkingPos, WorkScale);
     }
 
     private void AddSplinePoint()
