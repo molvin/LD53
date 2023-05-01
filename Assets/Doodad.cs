@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Doodad : MonoBehaviour
 {
+    public int ID;
     void Update()
     {
         SplineNoise3D.Spline s = SplineNoise3D.getLerpSplineFromPoint(transform.position);
