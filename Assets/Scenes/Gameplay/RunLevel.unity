@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0030227546, g: 0.0029614258, b: 0.002936698, a: 1}
+  m_IndirectSpecularColor: {r: 0.0030212146, g: 0.002974086, b: 0.0029360796, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -440,6 +440,15 @@ MonoBehaviour:
   CollisionLayer:
     serializedVersion: 2
     m_Bits: 384
+  currentLevel:
+    Wins: 0
+    Attempts: 0
+    AuthorTime: 0
+    RecordTime: 0
+    RecordName: 
+    ID: 0
+    Creator: 
+    Resource: 0
 --- !u!114 &744809217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -647,6 +656,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3409850347916878157, guid: 500e7d79a718b1640806604ee4907d59,
+        type: 3}
+      propertyPath: back_to_menu_text
+      value: 
+      objectReference: {fileID: 1332692916}
     - target: {fileID: 7454070066141576326, guid: 500e7d79a718b1640806604ee4907d59,
         type: 3}
       propertyPath: m_Name
@@ -769,6 +783,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ea785468b1707f449bf7afc780e7900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1332692916 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6874183926063972696, guid: 500e7d79a718b1640806604ee4907d59,
+    type: 3}
+  m_PrefabInstance: {fileID: 1332692914}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1418647744

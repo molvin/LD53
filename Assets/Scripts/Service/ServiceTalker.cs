@@ -123,8 +123,8 @@ public class ServiceTalker : MonoBehaviour
     {
         IPAddress ip = IPAddress.Any;
         socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        //var address = System.Net.Dns.GetHostAddresses(PersistentData.Ip)[0];
-        var address = IPAddress.Parse(PersistentData.LocalIp);
+        var address = System.Net.Dns.GetHostAddresses(PersistentData.Ip)[0];
+        // var address = IPAddress.Parse(PersistentData.LocalIp);
         socket.Connect(new IPEndPoint(address, PersistentData.Port));
     }
 

@@ -280,7 +280,7 @@ public class HoverController : MonoBehaviour
 
         rigidbody.AddForce(ForwardInput * LinearForce * GroundConnectedness);
         rigidbody.AddRelativeTorque(TurningInput * AngularForce * GroundConnectedness);
-        rigidbody.AddRelativeTorque(RollInput * RollForce * (1.0f - GroundConnectedness));
+        rigidbody.AddRelativeTorque(-RollInput * RollForce * (1.0f - GroundConnectedness));
 
 
         //float yVel = rigidbody.velocity.y;

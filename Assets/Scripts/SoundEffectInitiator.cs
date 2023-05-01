@@ -21,7 +21,7 @@ public class SoundEffectInitiator : MonoBehaviour
     void Update()
     {
         CollisionSoundCurrentCooldown = CollisionSoundCurrentCooldown - Time.deltaTime;
-        Debug.Log("  WHOMST ARE NOT NULL??  " + PlayerCollider + "  or  " + OneShotPlayer);
+        // Debug.Log("  WHOMST ARE NOT NULL??  " + PlayerCollider + "  or  " + OneShotPlayer);
     }
 
     private void OnCollisionEnter(Collision collision)
