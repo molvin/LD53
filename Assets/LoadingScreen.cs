@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,12 +18,13 @@ public class LoadingScreen : MonoBehaviour
     private float time = 0;
     private int time_direction;
 
-
+    public TMPro.TextMeshProUGUI progress_text;
+    private float progress = 0;
 
     public Action finished_fade_out;
     public Action finished_fade_in;
 
-    public bool action_called = true;
+    private bool action_called = true;
     public void Update()
     {
         /*
@@ -58,11 +60,17 @@ public class LoadingScreen : MonoBehaviour
             action_called = true;
            
         }
+        if(progress == 0)
+        {
+            progress_text.gameObject.SetActive(false);
+        }
     }
 
     public void setProgress(float v)
     {
-
+        progress = v;
+        progress_text.gameObject.SetActive(true);
+        progress_text.text = Mathf.RoundToInt(v * 100f) + " %";
     }
 
     public void fadeIn()

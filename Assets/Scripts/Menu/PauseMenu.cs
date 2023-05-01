@@ -34,6 +34,7 @@ public class PauseMenu : MonoBehaviour
     public void ToggleEnabled()
     {
         bool desierd_stade = !menu.activeSelf;
+        Debug.Log(desierd_stade);
         if(desierd_stade)
         {
             menu.SetActive(true);
