@@ -146,19 +146,19 @@ public class HoverController : MonoBehaviour
         {
             //SONICBOOM PLAY ONCE
             SoundStateLooping = 2;
-            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1.5f);
+            Idle.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1.5f);
         }
         else if((Input.GetAxisRaw("Forward") > 0 || Input.GetAxisRaw("Forward") < 0) && SoundStateLooping != 1 && rigidbody.velocity.magnitude <= 15)
         {
             //ENGINE EXPLOSION?! PLAY ONCE
             SoundStateLooping = 1;
-            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1.2f);
+            Idle.PlayOneShot(OneShotAudioClips[SoundStateLooping], 0.8f);
         }
         else if(Input.GetAxisRaw("Forward") == 0 && SoundStateLooping != 0 && rigidbody.velocity.magnitude <= 12)
         {
             //BREAK NOISE PLAY ONCE
             SoundStateLooping = 0;
-            PlayerAudioSource.PlayOneShot(OneShotAudioClips[SoundStateLooping], 1f);
+            Idle.PlayOneShot(OneShotAudioClips[SoundStateLooping], 0.8f);
         }
         float SpeedVolume = Mathf.Clamp01(CurrentSpeed / 20f);
         float AccelerationVolume = Mathf.Clamp01(CurrentAcceleration / 20f);

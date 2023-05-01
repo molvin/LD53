@@ -215,7 +215,7 @@ Transform:
   m_GameObject: {fileID: 235267831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 10, y: 10, z: 47.09}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -555,12 +555,16 @@ MonoBehaviour:
   AlignmentRotationSpeed: 0.5
   GravitationalPull: 0.2
   OverrideGravity: 12
+  ExtraHillPush: 3
   Mask:
     serializedVersion: 2
     m_Bits: 0
   PlayerAudioSource: {fileID: 0}
   AudioClipsLooping: []
   OneShotAudioClips: []
+  Idle: {fileID: 0}
+  Accelerate: {fileID: 0}
+  TopSpeed: {fileID: 0}
   Thrusters: []
 --- !u!65 &699528511
 BoxCollider:
@@ -670,7 +674,7 @@ PrefabInstance:
     - target: {fileID: 9004064766185725364, guid: 79d07df60e2c09b4f831043a9c7d62e2,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.4
+      value: -56.2
       objectReference: {fileID: 0}
     - target: {fileID: 9004064766185725364, guid: 79d07df60e2c09b4f831043a9c7d62e2,
         type: 3}
@@ -707,7 +711,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9042949815596239000, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 79d07df60e2c09b4f831043a9c7d62e2, type: 3}
 --- !u!4 &899873473 stripped
 Transform:
