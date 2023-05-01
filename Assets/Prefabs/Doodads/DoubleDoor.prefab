@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5135059995625059810}
   - component: {fileID: 8137087872147913287}
   - component: {fileID: 6271342776996269709}
+  - component: {fileID: 8278824987301598195}
   m_Layer: 0
   m_Name: space_door
   m_TagString: Untagged
@@ -84,6 +85,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8278824987301598195
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5478828471033311064}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.008444616, y: 0.062213823, z: 0.07799424}
+  m_Center: {x: 0.005777693, y: -0.021106908, z: 0.028997123}
 --- !u!1 &8278824985969330044
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,6 +170,7 @@ GameObject:
   - component: {fileID: 8278824986329126225}
   - component: {fileID: 8278824986329126191}
   - component: {fileID: 8278824986329126224}
+  - component: {fileID: 8278824987301598194}
   m_Layer: 0
   m_Name: space_door (1)
   m_TagString: Untagged
@@ -229,3 +244,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8278824987301598194
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8278824986329126226}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.008444616, y: 0.062213823, z: 0.07799424}
+  m_Center: {x: 0.005777693, y: -0.021106908, z: 0.028997123}
