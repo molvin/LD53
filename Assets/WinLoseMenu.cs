@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using static System.Net.Mime.MediaTypeNames;
 
 public class WinLoseMenu : MonoBehaviour
 {
@@ -17,7 +18,8 @@ public class WinLoseMenu : MonoBehaviour
     public GameObject menuObj;
     public List<Animator> animators;
     GameMenu parentMenu;
-    
+
+    public TMPro.TextMeshProUGUI win_or_lose_text;
 
 
 
@@ -28,17 +30,29 @@ public class WinLoseMenu : MonoBehaviour
 
     }
 
+    public IEnumerator setTextAfterTime(float time, string text)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        win_or_lose_text.text = text;
+    }
+
+
     public void Lose()
     {
         menuObj.SetActive(true);
+        win_or_lose_text.text = "";
+
         HideTextStuff();
         TriggerTransitionAnim();
         StartCoroutine(ActivateAfterTime(buttonGroup, 1, true));
-      
+        StartCoroutine(setTextAfterTime(1, "You ran out of time"));
+
+
     }
 
     public void Win(float time, int resources_gained)
     {
+        win_or_lose_text.text = "";
 
         menuObj.SetActive(true);
         HideTextStuff();
@@ -46,6 +60,8 @@ public class WinLoseMenu : MonoBehaviour
         StartCoroutine(ActivateAfterTime(buttonGroup, 1, true));
         StartCoroutine(ActivateAfterTime(time_text.gameObject, 1, true));
         StartCoroutine(ActivateAfterTime(resources_text.gameObject, 1, true));
+        StartCoroutine(setTextAfterTime(1, "Dilivery compleated!"));
+
 
         time_text.text = "Your time: " + time;
         resources_text.text = "Resources gained: " + resources_gained;
