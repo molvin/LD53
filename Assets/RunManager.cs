@@ -39,7 +39,6 @@ public class RunManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             string data;
-            Debug.Log($"Starting run {serializer}");
             if(PersistentData.Validating && PersistentData.OverrideLevel != null)
             {
                 data = JsonUtility.ToJson(PersistentData.OverrideLevel); //TODO: fix this
@@ -120,40 +119,60 @@ public class RunManager : MonoBehaviour
 
             yield return null;
         }
-        Lose();
+
+        if(!won)
+            Lose();
     }
 
     public void Win()
     {
-        won = true;
-        Debug.Log("Finished Level");
-
-        //TODO: UI pop up, with time, retry, back to menu
-
-        if(PersistentData.Validating)
+        void FinishLevel()
         {
-            string data = serializer.SerializeLevelToJson();
-            var service = Service;
-            LevelMeta meta = new LevelMeta
+            if (PersistentData.Validating)
             {
-                Wins = 0,
-                Attempts = 0,
-                Time = Mathf.CeilToInt((Time.time - startTime) * 1.1f),
-                ID = PersistentData.PlayerId,
-                Creator = PersistentData.PlayerName,
-                Resource = 100
-            };
-            Debug.Log($"Uploading {data}");
-            service.UploadLevel(meta, data);
-            Debug.Log("Done Uploading");
+                string data = serializer.SerializeLevelToJson();
+                var service = Service;
+                LevelMeta meta = new LevelMeta
+                {
+                    Wins = 0,
+                    Attempts = 0,
+                    Time = Mathf.CeilToInt((Time.time - startTime) * 1.1f),
+                    ID = PersistentData.PlayerId,
+                    Creator = PersistentData.PlayerName,
+                    Resource = 100
+                };
+                Debug.Log($"Uploading {JsonUtility.ToJson(meta)}");
+                service.UploadLevel(meta, data);
+                Debug.Log("Done Uploading");
+            }
+            else
+            {
+                try
+                {
+                    if (currentLevel.ID != 0)
+                        Service.SendLevelComplete(currentLevel, 1);
+                    else
+                        Debug.Log("Current level not set, cant update attempts");
+                }
+                catch { }
+
+                PersistentData.ResourceCount += currentLevel.Resource;
+            }
+            PersistentData.Validating = false;
+            PersistentData.OverrideLevel = null;
+            SceneManager.LoadScene(0);
         }
-        else
-        {
-            PersistentData.ResourceCount += currentLevel.Resource;
-        }
-        PersistentData.Validating = false;
-        PersistentData.OverrideLevel = null;
-        SceneManager.LoadScene(0);
+
+
+        won = true;
+
+        truck.GetComponent<HoverController>().enabled = false;
+        GameOverUi.SetActive(true);
+        Retry.onClick.RemoveAllListeners();
+        Retry.onClick.AddListener(() => { Restart(); won = false; StartCoroutine(RunGame()); });
+        ToMenu.onClick.RemoveAllListeners();
+        ToMenu.onClick.AddListener(() => FinishLevel());
+        StopAllCoroutines();
     }
 
     public void Lose()
@@ -169,6 +188,19 @@ public class RunManager : MonoBehaviour
 
     private void Restart()
     {
+        try
+        {
+            if (currentLevel.ID != 0)
+            {
+                Service.SendLevelComplete(currentLevel, 0);
+                Debug.Log($"Updated attempts {currentLevel.ID} {currentLevel.Creator}");
+                Service.GetMetaList();
+            }
+            else
+                Debug.Log("Current level not set, cant update attempts");
+        }
+        catch { }
+
         truck.GetComponent<HoverController>().enabled = true;
         truck.transform.position = camera.transform.position = origin;
         truck.transform.rotation = camera.transform.rotation = Quaternion.identity;

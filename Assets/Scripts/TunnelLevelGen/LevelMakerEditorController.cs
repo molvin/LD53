@@ -158,7 +158,7 @@ public class LevelMakerEditorController : MonoBehaviour
             for (int i = 0; i < SplineTransforms.Count; i++)
             {
                 Transform Trans = SplineTransforms[i].transform;
-                SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales(i), GetShape(Shapes[i]));
+                SplineNoise3D.AddSplineSegment(Trans.position, Trans.rotation, Scales(i), GetShape(Shapes[i]), (byte) Shapes[i]);
                 if (i < SplineTransforms.Count - 1)
                 {
                     Vector4 FirstShape = GetShape(Shapes[i]);
@@ -360,16 +360,21 @@ public class LevelMakerEditorController : MonoBehaviour
 
     private void AddSplinePoint()
     {
-        //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        GameObject cube = Instantiate(ShapePrefabs[CurrentSelection]);
-        cube.transform.position = WorkingPos;
-        cube.transform.rotation = WorkingRot;
-        cube.transform.localScale = Vector3.one * MinRadius;
+        AddSplinePoint((byte)CurrentSelection, WorkingPos, WorkingRot, MinRadius);
+ 
+        WorkingPos += WorkingRot * Vector3.forward * AddDistance;
+    }
+
+    private void AddSplinePoint(byte selection, Vector3 pos, Quaternion rot, float radius)
+    {
+        GameObject cube = Instantiate(ShapePrefabs[selection]);
+        cube.transform.position = pos;
+        cube.transform.rotation = rot;
+        cube.transform.localScale = Vector3.one * radius;
+
         SplineTransforms.Add(cube);
         Shapes.Add(CurrentSelection);
         _Scales.Add(WorkScale);
-        //SplineNoise3D.AddSplineSegment(WorkingPos, WorkingRot, Random.Range(1f, 10f), Roundness);
-        WorkingPos += WorkingRot * Vector3.forward * AddDistance;
 
         if (SplineTransforms.Count > 1)
         {
@@ -379,7 +384,7 @@ public class LevelMakerEditorController : MonoBehaviour
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.position = Pos;
             sphere.transform.rotation = Rot;
-            sphere.transform.localScale = Vector3.one * MinRadius;
+            sphere.transform.localScale = Vector3.one * radius;
             IntermediatePoints.Add(sphere);
         }
     }
@@ -537,5 +542,20 @@ public class LevelMakerEditorController : MonoBehaviour
             case 9: { Shape.z = 0.5f; Shape.x = 0.5f; Shape.y = 0.5f; Shape.w = 0.5f; break; }
         }
         return Shape;
+    }
+
+    public void InitFromSpline()
+    {
+        Vector3 pos = Vector3.zero;
+        Quaternion rot = Quaternion.identity;
+
+        foreach (SplineNoise3D.Spline spline in SplineNoise3D.SplineLine)
+        {
+            pos = spline.pos;
+            rot = spline.rot;
+            AddSplinePoint(spline.shape, pos, rot, spline.radius);
+        }
+
+        WorkingPos = pos + rot * Vector3.forward * AddDistance;
     }
 }

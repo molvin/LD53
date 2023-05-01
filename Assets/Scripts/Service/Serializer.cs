@@ -23,7 +23,6 @@ public class Serializer : MonoBehaviour
 
     public string SerializeLevelToJson()
     {
-        Debug.Log(SplineNoise3D.SplineLine.Count);
         LevelData data = new LevelData{
             SplineData = SplineNoise3D.SplineLine
         };
@@ -93,7 +92,6 @@ public class Serializer : MonoBehaviour
         GUI.Label(new Rect(20, 90, 200, 30), $"Progress {progress:P0}");
 
 
-        playerName = GUI.TextField(new Rect(400, 20, 200, 30), playerName);
         if (SplineNoise3D.SplineLine.Count > 1 && GUI.Button(new Rect(400, 50, 110, 30), "Upload"))
         {
             string data = SerializeLevelToJson();
@@ -102,9 +100,9 @@ public class Serializer : MonoBehaviour
             {
                 Wins = 0,
                 Attempts = 0,
-                Time = 30.0f,
-                ID = 0,
-                Creator = playerName,
+                Time = 60.0f,
+                ID = PersistentData.PlayerId,
+                Creator = PersistentData.PlayerName,
                 Resource = 100
             };
             Debug.Log($"Uploading {data}");

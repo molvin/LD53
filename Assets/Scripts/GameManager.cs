@@ -12,7 +12,13 @@ public static class PersistentData
     }
     public static int PlayerId
     {
-        get => PlayerPrefs.GetInt("PlayerId", Random.Range(0, int.MaxValue));
+        get{
+            if (PlayerPrefs.HasKey("PlayerId"))
+                return PlayerPrefs.GetInt("PlayerId");
+            int id = Random.Range(0, int.MaxValue);
+            PlayerPrefs.SetInt("PlayerId", id);
+            return id;
+        }
     }
     public static int ResourceCount
     {
