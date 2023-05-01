@@ -13,11 +13,13 @@ public class RunManager : MonoBehaviour
     public GameObject DeliveryBoxPrefab;
     public GameObject CameraPrefab;
     public GameObject WinPrefab;
+    public GameObject WinCutscene;
     public TextMeshProUGUI Timer;
     public GameMenu GameMenu;
     public LoadingScreen LoadingScreen;
     public LayerMask CollisionLayer;
 
+    private GameObject winCutscene;
     private LevelMeta currentLevel;
     private float startTime;
     GameObject truck;
@@ -25,7 +27,7 @@ public class RunManager : MonoBehaviour
     new GameObject camera;
     Vector3 origin;
     private float timeAtFinish;
-
+    private GameObject main_cam;
     bool won;
     private bool paused;
 
@@ -107,7 +109,7 @@ public class RunManager : MonoBehaviour
             var lastSpline = SplineNoise3D.SplineLine[SplineNoise3D.SplineLine.Count - 1];
             GameObject win = Instantiate(WinPrefab, lastSpline.pos, Quaternion.identity);
             var winPoint = win.GetComponent<WinPoint>();
-            winPoint.Radius = lastSpline.radius;
+            winPoint.Radius = lastSpline.radius * 2f;
             winPoint.Manager = this;
 
             startTime = Time.time;
@@ -155,6 +157,11 @@ public class RunManager : MonoBehaviour
     {
         if (won)
             return;
+
+        //play cutscene
+        winCutscene = Instantiate(WinCutscene, Vector3.up * 10000f, Quaternion.identity);
+        truck.SetActive(false);
+        camera.gameObject.SetActive(false);
 
         void FinishLevel()
         {
@@ -276,6 +283,10 @@ public class RunManager : MonoBehaviour
         }
         catch { }
 
+        if(winCutscene != null)
+            GameObject.Destroy(winCutscene);
+        camera.gameObject.SetActive(true);
+        truck.SetActive(true);
         truck.GetComponent<HoverController>().enabled = true;
         truck.transform.position = origin;
         camera.transform.position = origin + camera.GetComponent<CameraController>().TargetOffset;
