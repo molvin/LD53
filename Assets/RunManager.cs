@@ -216,6 +216,9 @@ public class RunManager : MonoBehaviour
 
     public void Lose()
     {
+        if (won)
+            return;
+
         truck.GetComponent<HoverController>().enabled = false;
         StopAllCoroutines();
 
