@@ -479,11 +479,16 @@ public class LevelMakerEditorController : MonoBehaviour
         float Scroll = Input.GetAxisRaw("Mouse ScrollWheel");
         if (Mathf.Abs(Scroll) > float.Epsilon)
         {
-            Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, WorkingRot * Vector3.forward);
-            WorkingRot *= delta;
             if (CurrentSplineEdit != null)
             {
-                CurrentSplineEdit.transform.rotation = WorkingRot;
+                Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, CurrentSplineEdit.transform.rotation * Vector3.forward);
+                CurrentSplineEdit.transform.rotation *= delta;
+                WorkingRot = CurrentSplineEdit.transform.rotation;  
+            }
+            else
+            {
+                Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, WorkingRot * Vector3.forward);
+                WorkingRot *= delta;
             }
         }
     }
