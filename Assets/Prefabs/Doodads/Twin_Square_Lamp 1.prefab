@@ -290,6 +290,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8371534817691361222}
+  - component: {fileID: 6501390554957364190}
+  - component: {fileID: 6971334076695401420}
   m_Layer: 11
   m_Name: Twin_Square_Lamp 1
   m_TagString: Untagged
@@ -315,3 +317,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &6501390554957364190
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8371534817691361273}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6971334076695401420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8371534817691361273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb75b8c08879c4241a0da6b09c3d6893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 0
