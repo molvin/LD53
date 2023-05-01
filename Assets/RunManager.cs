@@ -163,6 +163,8 @@ public class RunManager : MonoBehaviour
                 Debug.Log($"Uploading {JsonUtility.ToJson(meta)}");
                 service.UploadLevel(meta, data);
                 Debug.Log("Done Uploading");
+                PersistentData.ResourceCount += PersistentData.ResourceDelta;
+                PersistentData.ResourceDelta = 0;
             }
             else
             {

@@ -192,6 +192,9 @@ public class HoverController : MonoBehaviour
         AlignmentNormal = Vector3.Lerp(UpNormal.normalized, Vector3.up, 0.5f);
 
         // Consume input vector
+        //Vector3 LocalInput = Input.GetAxisRaw("Horizontal") * Vector3.right;
+        //LocalInput += Input.GetAxisRaw("Forward") * Vector3.forward;
+        //InputVector = Vector3.ClampMagnitude(LocalInput, 1f) * Time.fixedDeltaTime;
         float Forward = InputVector.z;
         if (Forward < 0f)
         {
@@ -258,14 +261,16 @@ public class HoverController : MonoBehaviour
         delta.ToAngleAxis(out float Angle, out Vector3 axis);
         rigidbody.AddTorque(axis.normalized * Angle * AlignmentRotationSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
 
-        Debug.DrawLine(transform.position, transform.position + UpNormal * 3.0f);
-        Debug.DrawLine(transform.position, transform.position + AlignmentNormal * 3.0f, Color.yellow);
-
         Vector3 Gravity = -AlignmentNormal * OverrideGravity * GravitationalPull * Time.fixedDeltaTime;
         Gravity += Vector3.down * (OverrideGravity - 9.81f) * Time.fixedDeltaTime;
         // Gravitational pull
         rigidbody.AddForce(Gravity);
         // Input
+        if (ForwardInput.y > 0 && GravitationalPull > 0)
+        {
+            ForwardInput.y *= 2;
+        }
+
         rigidbody.AddForce(ForwardInput * LinearForce * GroundConnectedness);
         rigidbody.AddRelativeTorque(TurningInput * AngularForce * GroundConnectedness);
         rigidbody.AddRelativeTorque(RollInput * RollForce * (1.0f - GroundConnectedness));
