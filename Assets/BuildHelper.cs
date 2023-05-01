@@ -23,6 +23,7 @@ public class BuildHelper : MonoBehaviour
             Debug.Log($"My Level from server: {JsonUtility.ToJson(myLevel)}");
 
             SplineNoise3D.SplineLine = myLevel.SplineData;
+            //TODO: set doodads
             LevelEditor.InitFromSpline();
         }
         catch
