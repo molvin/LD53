@@ -25,7 +25,7 @@ public class LevelMakerEditorController : MonoBehaviour
     float Scales(int Index) => TransformScale(_Scales[Index]);
 
     private float Yaw = 0f;
-    private float Pitch = 0f;
+    private float Pitch = 75f;
 
     private Vector3 WorkingPos = Vector3.zero;
     private Quaternion WorkingRot = Quaternion.identity;
