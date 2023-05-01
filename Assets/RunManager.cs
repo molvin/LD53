@@ -192,7 +192,6 @@ public class RunManager : MonoBehaviour
             SceneManager.LoadScene(0);
         }
 
-
         won = true;
 
         truck.GetComponent<HoverController>().enabled = false;
