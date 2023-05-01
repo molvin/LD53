@@ -30,8 +30,10 @@ public class LevelInforBoxController : MonoBehaviour
         Best_time.text = $"Best time: {data.RecordTime:F2} sec";
         Champion.text = "Record holder: " + data.RecordName;
 
-        //TODO: set record name and best time
-        Resources.text = "Resources to gain: " + data.Resource;
+        if (!PlayerPrefs.HasKey($"{data.Creator}+{data.ID}"))
+            Resources.text = "Reward for delivery: " + data.Resource;
+        else
+            Resources.text = "Delivery complete";
     }
 
 
