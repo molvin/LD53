@@ -49,7 +49,7 @@ public class BoxScript : MonoBehaviour
     IEnumerator Lose()
     {
         yield return new WaitForSeconds(1f);
-        FindObjectOfType<RunManager>().Lose();
+        FindObjectOfType<RunManager>().Lose(true);
     }
 
     private void FixedUpdate()

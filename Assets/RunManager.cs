@@ -221,7 +221,7 @@ public class RunManager : MonoBehaviour
         GameMenu.Win(timeAtFinish, currentLevel.Resource);
     }
 
-    public void Lose()
+    public void Lose(bool FailedDelivery = false)
     {
         truck.GetComponent<HoverController>().enabled = false;
         StopAllCoroutines();
@@ -229,7 +229,7 @@ public class RunManager : MonoBehaviour
         GameMenu.Retry = () => { Restart(false); StartCoroutine(RunGame()); };
         GameMenu.BackToMainMenu = () => BackToMenu();
 
-        GameMenu.Lose();
+        GameMenu.Lose(FailedDelivery);
 
         try
         {
