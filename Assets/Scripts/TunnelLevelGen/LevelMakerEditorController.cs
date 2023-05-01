@@ -1,12 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Security.Cryptography;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.UIElements;
 
 public class LevelMakerEditorController : MonoBehaviour
 {
@@ -47,6 +41,7 @@ public class LevelMakerEditorController : MonoBehaviour
     const float TIlingY = 1f / 3f;
 
     public bool DisableEdit = false;
+    public bool IsUsingUI = false;
 
     private void Awake()
     {
