@@ -33,6 +33,9 @@ public class BuildUIController : MonoBehaviour
 
     public void Update()
     {
+        bool usingUi = IsPointerOverUIElement(GetEventSystemRaycastResults());
+        gatePlacer.IsUsingUI = usingUi;
+        doodadPlacer.IsUsingUI = usingUi;
         NumPress();
     }
     public void PressDoodad()

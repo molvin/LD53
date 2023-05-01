@@ -4,24 +4,38 @@ using UnityEngine;
 
 public class LevelMakerDoodadPlacer : MonoBehaviour
 {
-
+    private int CurrentDoodad;
+    public List<GameObject> Doodads;
     private GameObject doodadPrefab;
     private GameObject shadowObject;
     public LayerMask ConnectorMask;
+    public LayerMask DoodadMask;
+    public bool IsUsingUI;
 
     // Update is called once per frame
-    public void SetDoodad(GameObject DoodadPrefab)
+    public void SetDoodad(int doodad)
     {
-        Debug.Log("Selected a doodad");
-        doodadPrefab = DoodadPrefab;
+        doodadPrefab = Doodads[doodad];
         if (shadowObject != null)
             GameObject.Destroy(shadowObject);
         shadowObject = Instantiate(doodadPrefab);
+        shadowObject.GetComponentInChildren<Doodad>().ID = doodad;
     }
 
     void Update()
     {
-        if (shadowObject == null) return;
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (shadowObject != null)
+                GameObject.Destroy(shadowObject);
+            shadowObject = null;
+        }
+        RemoveOld();
+        UpdateShadow();
+    }
+    private void UpdateShadow()
+    {
+        if (IsUsingUI) return;
         Vector3 p1 = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         Vector3 p2 = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 100));
         Vector3 direction = p2 - p1;
@@ -29,18 +43,48 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
         Physics.Raycast(p1, direction.normalized, out hit, 100000f, ConnectorMask);
 
         //is on spline
-        if(hit.collider != null)
+        if (shadowObject == null) return;
+        if (hit.collider != null)
         {
+            shadowObject.SetActive(true);
+            //add a new one
             SplineNoise3D.Spline s = SplineNoise3D.getLerpSplineFromPoint(hit.point);
-            Debug.DrawLine(s.pos, s.pos + Vector3.up * 10f, Color.black);
             shadowObject.transform.position = s.pos;
-            shadowObject.transform.rotation = s.rot;
-            shadowObject.transform.localScale = Vector3.one * s.radius;
-
             if (Input.GetMouseButtonDown(0))
             {
                 shadowObject = null;
                 SetDoodad(doodadPrefab);
+            }
+        }
+        else
+        {
+            shadowObject.SetActive(false);
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (shadowObject != null)
+                    GameObject.Destroy(shadowObject);
+                shadowObject = null;
+            }
+        }
+    }
+    private void RemoveOld()
+    {
+        if (IsUsingUI) return;
+        Vector3 p1 = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+        Vector3 p2 = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 100));
+        Vector3 direction = p2 - p1;
+        RaycastHit hit;
+        Physics.Raycast(p1, direction.normalized, out hit, 100000f, DoodadMask);
+
+        //is on spline
+        if (hit.collider != null)
+        {
+            //remove an old doodad
+            if (Input.GetMouseButtonDown(0) && shadowObject == null)
+            {
+                if (shadowObject != null)
+                    GameObject.Destroy(shadowObject);
+                shadowObject = hit.collider.gameObject;
             }
         }
     }
