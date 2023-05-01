@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.Audio;
 using UnityEngine;
 
 public class HoverController : MonoBehaviour
@@ -27,6 +28,11 @@ public class HoverController : MonoBehaviour
     public float GravitationalPull = 0.2f;
     public float OverrideGravity = 12.0f;
     public LayerMask Mask;
+    [Header("audio")]
+    public AudioSource LoopingAudioSource;
+    
+    
+
 
     private new Rigidbody rigidbody;
     private List<Vector3> Offsets = new List<Vector3>();
@@ -37,6 +43,8 @@ public class HoverController : MonoBehaviour
     private Vector3 UpNormal;
     private float rightCoef;
     private float slideDelta;
+
+    public Transform[] Thrusters;
 
     public Vector3 GroundNormal => UpNormal;
 
@@ -67,26 +75,27 @@ public class HoverController : MonoBehaviour
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
-        rigidbody.centerOfMass = Vector3.down;
+        rigidbody.centerOfMass = Vector3.down * 0.5f;
+        rigidbody.inertiaTensor = new Vector3(1.42f, 1.67f, 0.42f);
+        rigidbody.inertiaTensorRotation = Quaternion.identity;
         //Offsets.Add(new Vector3(0.5f, -0.5f, 0.5f));
         //Offsets.Add(new Vector3(0.5f, -0.5f, -0.5f));
         //Offsets.Add(new Vector3(-0.5f, -0.5f, 0.5f));
         //Offsets.Add(new Vector3(-0.5f, -0.5f, -0.5f));
-
         // Front
-        Offsets.Add(new Vector3(1.0f, -0.5f, 2.0f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, 2.0f));
+        Offsets.Add( new Vector3(1.0f, -0.4f, 2.0f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, 2.0f) * 0.5f);
         // Mid
-        Offsets.Add(new Vector3(1.0f, -0.5f, 0.67f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, 0.67f));
-        Offsets.Add(new Vector3(1.0f, -0.5f, -0.67f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, -0.67f));
+        Offsets.Add(new Vector3(1.0f, -0.4f, 0.67f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, 0.67f) * 0.5f);
+        Offsets.Add(new Vector3(1.0f, -0.4f, -0.67f) * 0.5f);
+        Offsets.Add(new Vector3(-1.0f, -0.4f, -0.67f) * 0.5f);
         // Back
-        Offsets.Add(new Vector3(1.0f, -0.5f, -2.0f));
-        Offsets.Add(new Vector3(-1.0f, -0.5f, -2.0f));
+        Offsets.Add(new Vector3(1.0f, -0.4f, -2.0f) * 0.5f);
+        Offsets.Add( new Vector3(-1.0f, -0.4f, -2.0f) * 0.5f);
         // Central
-        Offsets.Add(new Vector3(0.0f, -0.5f, 1.0f));
-        Offsets.Add(new Vector3(0.0f, -0.5f, -1.0f));
+        Offsets.Add(new Vector3(0.0f, -0.4f, 1.0f) * 0.5f);
+        Offsets.Add(new Vector3(0.0f, -0.4f, -1.0f) * 0.5f);
 
 
         for (int i = 0; i < Offsets.Count; i++)
@@ -104,7 +113,7 @@ public class HoverController : MonoBehaviour
         LocalInput += Input.GetAxisRaw("Forward") * Vector3.forward;
         InputVector += Vector3.ClampMagnitude(LocalInput, 1.0f) * Time.deltaTime;
         //InputVector += Vector3.ProjectOnPlane(transform.rotation * LocalInput, UpNormal).normalized * Time.deltaTime;
-    
+
         if (Input.GetButton("Slide"))
             rightCoef = SlideFrictionCoef;
         rightCoef = Mathf.SmoothDamp(rightCoef, PerpendicularFrictionCoef, ref slideDelta, SlideSmoothing);

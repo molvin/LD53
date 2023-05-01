@@ -22,6 +22,9 @@ public static class PersistentData
 
     public static string LevelPath = null;
     public static LevelMeta? LevelMeta = null;
+    public static Serializer.LevelData? OverrideLevel = null;
+    public static bool Validating = false;
+
 }
 
 public class GameManager : MonoBehaviour
@@ -45,21 +48,29 @@ public class GameManager : MonoBehaviour
         if (gotoMain)
         {
             SceneManager.LoadScene(0);
+            PersistentData.Validating = false;
+            PersistentData.OverrideLevel = null;
         }
 
         if (gotoSelect)
         {
             SceneManager.LoadScene(1);
+            PersistentData.Validating = false;
+            PersistentData.OverrideLevel = null;
         }
 
         if (gotoBuild)
         {
             SceneManager.LoadScene(2);
+            PersistentData.Validating = false;
+            PersistentData.OverrideLevel = null;
         }
 
         if (gotoPlay)
         {
             SceneManager.LoadScene(3);
+            PersistentData.Validating = false;
+            PersistentData.OverrideLevel = null;
         }
     }
 
