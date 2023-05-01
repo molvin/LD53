@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoxScript : MonoBehaviour
@@ -17,7 +18,15 @@ public class BoxScript : MonoBehaviour
 
     [HideInInspector]
     public Vector3 Offset = new Vector3(0f, 0.15f, -0.7f);
+    private float GracePeriod = 2f;
 
+    public void Reset()
+    {
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
+        rigidbody.isKinematic = true;
+        GracePeriod = 2f;
+    }
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -25,10 +34,17 @@ public class BoxScript : MonoBehaviour
         collider = GetComponent<BoxCollider>();
         collider.enabled = false;
         OwnerRigidbody = Owner.GetComponent<Rigidbody>();
+        GracePeriod = 2f;
     }
 
     private void Update()
     {
+        if (GracePeriod > 0)
+        {
+            GracePeriod -= Time.deltaTime;
+            transform.position = Owner.transform.position + Owner.transform.rotation * Offset;
+            return;
+        }
         if (!rigidbody.isKinematic)
         {
             return;
@@ -52,6 +68,11 @@ public class BoxScript : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GracePeriod > 0)
+        {
+            transform.position = Owner.transform.position + Owner.transform.rotation * Offset;
+            return;
+        }
         if (!rigidbody.isKinematic)
         {
             return;

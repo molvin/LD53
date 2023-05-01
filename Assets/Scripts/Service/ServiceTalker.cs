@@ -140,9 +140,6 @@ public class ServiceTalker : MonoBehaviour
 
         socket.Send(stream.ToArray());
         stream.Close();
-
-        System.IO.File.WriteAllBytes(Application.dataPath + "/temp.bin", json_data);
-        System.IO.File.WriteAllText(Application.dataPath + "/temp.json", json);
     }
 
     private string Receive()

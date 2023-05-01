@@ -153,7 +153,7 @@ MonoBehaviour:
   SelectionMask:
     serializedVersion: 2
     m_Bits: 16384
-  MinRadius: 3
+  MinRadius: 4
   MaxRadius: 10
   DisableEdit: 0
   IsUsingUI: 0
