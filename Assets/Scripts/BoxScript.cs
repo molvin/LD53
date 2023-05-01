@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class BoxScript : MonoBehaviour
@@ -49,7 +47,7 @@ public class BoxScript : MonoBehaviour
     IEnumerator Lose()
     {
         yield return new WaitForSeconds(1f);
-        FindObjectOfType<RunManager>().Lose();
+        FindObjectOfType<RunManager>().Lose(true);
     }
 
     private void FixedUpdate()
