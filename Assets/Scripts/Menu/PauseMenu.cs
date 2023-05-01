@@ -90,31 +90,31 @@ public class PauseMenu : MonoBehaviour
 
     public IEnumerator ActivateAfterTime(GameObject to_activate, float wait_time, bool state)
     {
-        yield return new WaitForSeconds(wait_time);
+        yield return new WaitForSecondsRealtime(wait_time);
         to_activate.SetActive(state);
     }
 
     public IEnumerator MenuAfterTime(float wait_time)
     {
-        yield return new WaitForSeconds(wait_time);
+        yield return new WaitForSecondsRealtime(wait_time);
         SceneManager.LoadScene(0);
     }
     public IEnumerator QutiAfterTime(float wait_time)
     {
-        yield return new WaitForSeconds(wait_time);
+        yield return new WaitForSecondsRealtime(wait_time);
         Application.Quit();
     }
 
     public IEnumerator RetryAfterTime(float wait_time)
     {
-        yield return new WaitForSeconds(wait_time);
+        yield return new WaitForSecondsRealtime(wait_time);
         parentMenu.Retry();
     }
 
 
     public IEnumerator ResumeAfterTime(float wait_time)
     {
-        yield return new WaitForSeconds(wait_time);
+        yield return new WaitForSecondsRealtime(wait_time);
         parentMenu.Resume();
     }
     

@@ -22,6 +22,7 @@ public class RunManager : MonoBehaviour
     Vector3 origin;
 
     bool won;
+    private bool paused;
 
     private void Start()
     {
@@ -199,12 +200,21 @@ public class RunManager : MonoBehaviour
 
     public void Pause()
     {
+        paused = !paused;
+        truck.GetComponent<HoverController>().enabled = !paused;
+
+        Time.timeScale = paused ? 0 : 1;
         GameMenu.togglePause();
-        GameMenu.Resume = () => { };
+        GameMenu.Resume = () => { Time.timeScale = 1.0f; paused = false; truck.GetComponent<HoverController>().enabled = true; };
+        GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
+        GameMenu.BackToMainMenu = () => SceneManager.LoadScene(0);
     }
 
     private void Restart()
     {
+        Time.timeScale = 1.0f;
+        paused = false;
+
         try
         {
             if (currentLevel.ID != 0)
@@ -225,5 +235,10 @@ public class RunManager : MonoBehaviour
         truck.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         startTime = Time.time;
         won = false;
+    }
+
+    private void OnDestroy()
+    {
+        Time.timeScale = 1.0f;
     }
 }
