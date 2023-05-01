@@ -11,6 +11,14 @@ public class Serializer : MonoBehaviour
     public struct LevelData
     {
         public List<SplineNoise3D.Spline> SplineData;
+        public List<Doodad> DoodadData;
+    }
+
+    [System.Serializable]
+    public struct Doodad
+    {
+        public Vector3 position;
+        public int doodad;
     }
 
     public bool ShowDebugUI;
