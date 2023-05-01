@@ -37,7 +37,7 @@ public class WinLoseMenu : MonoBehaviour
     }
 
 
-    public void Lose()
+    public void Lose(bool FailedByDelivery)
     {
         menuObj.SetActive(true);
         win_or_lose_text.text = "";
@@ -45,7 +45,7 @@ public class WinLoseMenu : MonoBehaviour
         HideTextStuff();
         TriggerTransitionAnim();
         StartCoroutine(ActivateAfterTime(buttonGroup, 1, true));
-        StartCoroutine(setTextAfterTime(1, "You ran out of time"));
+        StartCoroutine(setTextAfterTime(1, FailedByDelivery ? "You dropped the box" : "You ran out of time"));
 
 
     }

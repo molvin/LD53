@@ -160,9 +160,9 @@ public class HoverController : MonoBehaviour
             SoundStateLooping = 0;
             Idle.PlayOneShot(OneShotAudioClips[SoundStateLooping], 0.8f);
         }
-        float SpeedVolume = Mathf.Clamp01(CurrentSpeed / 20f);
-        float AccelerationVolume = Mathf.Clamp01(CurrentAcceleration / 20f);
-        float IdleVolume = ((1f - Mathf.Clamp01(CurrentSpeed / 20f)) + 1f) * 0.5f;
+        float SpeedVolume = Mathf.Clamp01(CurrentSpeed / 20f) * 0.1f;
+        float AccelerationVolume = Mathf.Clamp01(CurrentAcceleration / 20f) * 0.1f;
+        float IdleVolume = ((1f - Mathf.Clamp01(CurrentSpeed / 20f)) + 1f) * 0.02f;
 
         Idle.volume = Mathf.Lerp(Idle.volume, IdleVolume, 4f * Time.deltaTime);
         TopSpeed.volume = Mathf.Lerp(TopSpeed.volume, SpeedVolume, 4f * Time.deltaTime);
