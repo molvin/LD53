@@ -121,7 +121,7 @@ public class HoverController : MonoBehaviour
         if (Input.GetButton("Slide"))
             rightCoef = SlideFrictionCoef;
         rightCoef = Mathf.SmoothDamp(rightCoef, PerpendicularFrictionCoef, ref slideDelta, SlideSmoothing);
-        Debug.Log(" SPEED : " + rigidbody.velocity.magnitude);
+        // Debug.Log(" SPEED : " + rigidbody.velocity.magnitude);
         if (Input.GetAxisRaw("Forward") > 0 && SoundStateLooping != 2 && rigidbody.velocity.magnitude > 25)
         {
             //Debug.Log("  JAG HÄNDER !!! " + SoundStateLooping + "   ANNDD    " + rigidbody.velocity.magnitude);

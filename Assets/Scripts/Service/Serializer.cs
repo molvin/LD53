@@ -23,6 +23,8 @@ public class Serializer : MonoBehaviour
 
     public string SerializeLevelToJson()
     {
+        FindObjectsOfType<Doodad>
+
         LevelData data = new LevelData{
             SplineData = SplineNoise3D.SplineLine
         };
