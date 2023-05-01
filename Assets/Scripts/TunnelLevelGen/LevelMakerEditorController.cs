@@ -1,12 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Security.Cryptography;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.UIElements;
 
 public class LevelMakerEditorController : MonoBehaviour
 {
@@ -47,6 +41,7 @@ public class LevelMakerEditorController : MonoBehaviour
     const float TIlingY = 1f / 3f;
 
     public bool DisableEdit = false;
+    public bool IsUsingUI = false;
 
     private void Awake()
     {
@@ -80,7 +75,6 @@ public class LevelMakerEditorController : MonoBehaviour
             return;
         }
 
-        NumPress();
         if (SelectionUIMaterial)
         {
             Vector2 Offset = new Vector2(1f + CurrentSelection % 4 * TilingX, 2f / 3f - (int)(CurrentSelection / 4) * TIlingY);
@@ -88,16 +82,19 @@ public class LevelMakerEditorController : MonoBehaviour
             Graphics.DrawMesh(VisualMesh, transform.position + transform.forward * 5f - transform.right * 3f - transform.up * 2f, Quaternion.LookRotation(transform.forward, transform.up), SelectionUIMaterial, 0);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        // Select Point
+        if (!IsUsingUI && Input.GetMouseButtonDown(0))
         {
             SelectSplinePoint();
         }
 
-        if (Input.GetMouseButton(0) && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
+        // Drag a point
+        if (!IsUsingUI && Input.GetMouseButton(0) && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
         {
             DragCurrent();
         }
 
+        // Change color if too close to stuff
         if (CurrentSplineEdit && IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
         {
             int Index = IntermediatePoints.IndexOf(CurrentSplineEdit.gameObject);
@@ -112,8 +109,8 @@ public class LevelMakerEditorController : MonoBehaviour
             }
         }
 
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Create a new point
+        if (!IsUsingUI && Input.GetKeyDown(KeyCode.Space))
         {
             if (CurrentSplineEdit != null && IntermediatePoints.Contains(CurrentSplineEdit.gameObject))
             {
@@ -134,16 +131,18 @@ public class LevelMakerEditorController : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        // Scale & Rotate current edit
+        if (!IsUsingUI && Input.GetKey(KeyCode.LeftShift))
         {
             Scale();
         }
-        else
+        else if (!IsUsingUI)
         {
             RotateAround();
         }
 
-        if (Input.GetKeyDown(KeyCode.Delete))
+        // Delete current edit
+        if (!IsUsingUI && Input.GetKeyDown(KeyCode.Delete))
         {
             Delete();
         }
@@ -166,7 +165,8 @@ public class LevelMakerEditorController : MonoBehaviour
         AddPrefab.transform.rotation = WorkingRot;
         AddPrefab.transform.localScale = Vector3.one * WorkScale;
 
-        if (Input.GetKeyDown(KeyCode.B))
+        // Build/generate level
+        if (!IsUsingUI && Input.GetKeyDown(KeyCode.B))
         {
             SplineNoise3D.SplineLine.Clear();
             for (int i = 0; i < SplineTransforms.Count; i++)
@@ -203,51 +203,13 @@ public class LevelMakerEditorController : MonoBehaviour
                 Destroy(sphere);
             }
         }
+        UpdateConnector();
     }
 
-    private void NumPress()
+    public void SetCurrentSelection(int value)
     {
         int prev = CurrentSelection;
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            CurrentSelection = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            CurrentSelection = 1;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            CurrentSelection = 2;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            CurrentSelection = 3;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            CurrentSelection = 4;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            CurrentSelection = 5;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            CurrentSelection = 6;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            CurrentSelection = 7;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            CurrentSelection = 8;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            CurrentSelection = 9;
-        }
+        CurrentSelection = value;
         
         if (prev != CurrentSelection && CurrentSplineEdit && SplineTransforms.Contains(CurrentSplineEdit.gameObject))
         {
@@ -312,6 +274,7 @@ public class LevelMakerEditorController : MonoBehaviour
                 SplineTransforms[Index].transform.position = Reference + fromRef.normalized * 4f * MaxRadius;
             }
         }
+        UpdateConnector();
     }
 
     private void SelectSplinePoint()
@@ -391,6 +354,7 @@ public class LevelMakerEditorController : MonoBehaviour
         AddSplinePoint((byte)CurrentSelection, WorkingPos, WorkingRot, MinRadius);
  
         WorkingPos += WorkingRot * Vector3.forward * AddDistance;
+        UpdateConnector();
     }
 
     private void AddSplinePoint(byte selection, Vector3 pos, Quaternion rot, float radius)
@@ -415,6 +379,7 @@ public class LevelMakerEditorController : MonoBehaviour
             sphere.transform.localScale = Vector3.one * radius;
             IntermediatePoints.Add(sphere);
         }
+        UpdateConnector();
     }
 
     private void InsertSplinePoint()
@@ -455,6 +420,7 @@ public class LevelMakerEditorController : MonoBehaviour
 
         CurrentSplineEdit.GetComponentInChildren<MeshRenderer>().material.color = Color.white;
         CurrentSplineEdit = null;
+        UpdateConnector();
     }
 
     private void Scale()
@@ -479,11 +445,16 @@ public class LevelMakerEditorController : MonoBehaviour
         float Scroll = Input.GetAxisRaw("Mouse ScrollWheel");
         if (Mathf.Abs(Scroll) > float.Epsilon)
         {
-            Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, WorkingRot * Vector3.forward);
-            WorkingRot *= delta;
             if (CurrentSplineEdit != null)
             {
-                CurrentSplineEdit.transform.rotation = WorkingRot;
+                Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, CurrentSplineEdit.transform.rotation * Vector3.forward);
+                CurrentSplineEdit.transform.rotation *= delta;
+                WorkingRot = CurrentSplineEdit.transform.rotation;  
+            }
+            else
+            {
+                Quaternion delta = Quaternion.AngleAxis(Scroll * 2f * Mathf.Rad2Deg, WorkingRot * Vector3.forward);
+                WorkingRot *= delta;
             }
         }
     }
@@ -557,6 +528,15 @@ public class LevelMakerEditorController : MonoBehaviour
             InterTrans.rotation = Rot;
         }
             */
+    }
+
+    private void UpdateConnector()
+    {
+        for (int i = 0; i < SplineTransforms.Count-1; i++)
+        {
+            LevelBuilderConnector con = SplineTransforms[i].GetComponentInChildren<LevelBuilderConnector>();
+            con.finish = SplineTransforms[i + 1].transform;
+        }
     }
 
     private Vector4 GetShape(int Selection)
