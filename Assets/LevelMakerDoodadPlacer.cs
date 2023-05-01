@@ -60,12 +60,6 @@ public class LevelMakerDoodadPlacer : MonoBehaviour
         else
         {
             shadowObject.SetActive(false);
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (shadowObject != null)
-                    GameObject.Destroy(shadowObject);
-                shadowObject = null;
-            }
         }
     }
     private bool RemoveOld()
