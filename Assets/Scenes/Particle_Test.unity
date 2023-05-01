@@ -315,7 +315,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a506464ca7204a54b9d56520d5b261e9,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a506464ca7204a54b9d56520d5b261e9, type: 3}
@@ -621,11 +621,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: One Pillar_horizontal
       objectReference: {fileID: 0}
-    - target: {fileID: 1442890057609814635, guid: 2e2ea0a70f1950045920d750f63974e1,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e2ea0a70f1950045920d750f63974e1, type: 3}
 --- !u!1001 &266657857569897875
@@ -713,11 +708,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Twin Pillar_horizontal
-      objectReference: {fileID: 0}
-    - target: {fileID: 4963301508286922176, guid: a04e88fcbc8e0b649ab568495579129c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4963301508286922177, guid: a04e88fcbc8e0b649ab568495579129c,
         type: 3}
@@ -1181,11 +1171,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Twin Pillar
       objectReference: {fileID: 0}
-    - target: {fileID: 6172865164907274984, guid: cc31238df55893346af093d778991428,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6172865164907274985, guid: cc31238df55893346af093d778991428,
         type: 3}
       propertyPath: m_RootOrder
@@ -1540,6 +1525,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Twin_Square_Lamp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8371534817691361273, guid: c578edf0ccb3a104285771a9ee7079e1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c578edf0ccb3a104285771a9ee7079e1, type: 3}
