@@ -64,7 +64,7 @@ MonoBehaviour:
   Damping: 3
   LerpDistance: 0.01
   MaxDistance: 0.17
-  MaxDeltaVelocity: 15
+  MaxDeltaVelocity: 17
   Offset: {x: 0, y: 0.15, z: -0.7}
 --- !u!54 &8956012929669513486
 Rigidbody:
