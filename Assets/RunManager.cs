@@ -147,6 +147,7 @@ public class RunManager : MonoBehaviour
 
         //play cutscene
         winCutscene = Instantiate(WinCutscene, Vector3.up * 10000f, Quaternion.identity);
+        truck.SetActive(false);
         camera.gameObject.SetActive(false);
 
         void FinishLevel()
@@ -272,6 +273,7 @@ public class RunManager : MonoBehaviour
         if(winCutscene != null)
             GameObject.Destroy(winCutscene);
         camera.gameObject.SetActive(true);
+        truck.SetActive(true);
         truck.GetComponent<HoverController>().enabled = true;
         truck.transform.position = camera.transform.position = origin;
         truck.transform.rotation = camera.transform.rotation = Quaternion.identity;
