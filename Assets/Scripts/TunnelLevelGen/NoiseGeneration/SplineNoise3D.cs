@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SplineNoise3D
 {
-    private static float penaltySize = 20f;
+    private static float penaltySize = 5f;
     public static List<Spline> SplineLine = new List<Spline>();
     public static System.Random Random = new System.Random();
     public static float SplineNoise(Vector3 point)
@@ -36,7 +36,9 @@ public class SplineNoise3D
         float inDown = Vector3.Dot(dir.normalized, deltaPos);
         if (inDown < 0f)
             return 0f;
-        float floor = (1f - dir.magnitude) * radius + ((float)Random.NextDouble() * penaltySize);
+
+        float seed = Perlin3D.PerlinNoise3D(pos/100f);
+        float floor = (1f - dir.magnitude) * radius + (seed * penaltySize);
         return floor == 0 ? float.MaxValue : inDown / floor;
     }
     public static float SplineDistance(Vector3 point)
