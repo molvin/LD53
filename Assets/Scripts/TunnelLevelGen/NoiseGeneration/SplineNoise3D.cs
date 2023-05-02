@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SplineNoise3D
 {
-    private static float penaltySize = 6f;
+    private static float penaltySize = 20f;
     public static List<Spline> SplineLine = new List<Spline>();
     public static System.Random Random = new System.Random();
     public static float SplineNoise(Vector3 point)
