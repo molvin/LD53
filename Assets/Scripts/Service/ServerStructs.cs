@@ -7,7 +7,8 @@ public enum Requests
     MetaListRequest = 0,
     LevelDownloadRequest = 1,
     LevelCompleteRequest = 2,
-    LevelUploadRequest = 3
+    LevelUploadRequest = 3,
+    LevelMoveRequest = 4
 }
 
 [System.Serializable]
@@ -38,6 +39,14 @@ public struct LevelUploadRequest
     public int Version;
     public LevelMeta Meta;
     public string JsonData;
+}
+[System.Serializable]
+public struct LevelMoveRequest
+{
+    public int Version;
+    public int ID;
+    public string Creator;
+    public int Index;
 }
 [System.Serializable]
 public struct Level

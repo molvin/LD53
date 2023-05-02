@@ -16,6 +16,7 @@ public class ServiceTalker : MonoBehaviour
      * level request
      * level completed
      * level upload
+     * move level
      */
 
     public int Version = 0;
@@ -118,6 +119,24 @@ public class ServiceTalker : MonoBehaviour
         string response = Receive();
         return response == "" ? new LevelData() : (LevelData) JsonUtility.FromJson(response, typeof(LevelData));
     }
+    public void Movelevel(LevelMeta meta, int index)
+    {
+        Connect();
+        var request = new LevelMoveRequest
+        {
+            Version = Version,
+            ID = meta.ID,
+            Creator = meta.Creator,
+            Index = index
+        };
+
+        Debug.Log(JsonUtility.ToJson(request));
+        Send(JsonUtility.ToJson(request), (byte)Requests.LevelMoveRequest);
+
+        string response = Receive();
+
+        Debug.Log("Finished move level complete " + response);
+    }
 
     private void Connect()
     {
@@ -127,7 +146,6 @@ public class ServiceTalker : MonoBehaviour
         // var address = IPAddress.Parse(PersistentData.LocalIp);
         socket.Connect(new IPEndPoint(address, PersistentData.Port));
     }
-
     private void Send(string json, byte code)
     {
         MemoryStream stream = new MemoryStream();
@@ -141,7 +159,6 @@ public class ServiceTalker : MonoBehaviour
         socket.Send(stream.ToArray());
         stream.Close();
     }
-
     private string Receive()
     {
         MemoryStream stream = new MemoryStream();

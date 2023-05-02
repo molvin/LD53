@@ -17,6 +17,7 @@ public class LevelSelect : MonoBehaviour
     public float x_max_offset;
     public GameObject prefab;
     public RectTransform origo;
+    public ServiceTalker server;
 
     [SerializeField]
     float moveSpeed, angleSpeed, radiusFactor, wheelSpeed;
@@ -35,13 +36,17 @@ public class LevelSelect : MonoBehaviour
         StartCoroutine(playInSec(0.8f));
     }
 
+    public void MoveLevel(int index)
+    {
+        server.Movelevel(selected_level.data, index);
+    }
+
     public IEnumerator playInSec(float time)
     {
         yield return new WaitForSecondsRealtime(time);
         level_select_helper.PlayLevel(selected_level.data);
 
     }
-
 
     public void BackToMainMenu()
     {
@@ -75,7 +80,6 @@ public class LevelSelect : MonoBehaviour
         }
     }
 
-
     private void OnLevelClick(Astroid_data_holder x)
     {
         for (int i = 0; i < currentLevelsOnDisplay.Count; i++)
@@ -107,8 +111,6 @@ public class LevelSelect : MonoBehaviour
 
     public void Start()
     {
-      
-
         Enter();
     }
 
