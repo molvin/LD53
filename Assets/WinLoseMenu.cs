@@ -63,7 +63,8 @@ public class WinLoseMenu : MonoBehaviour
         StartCoroutine(setTextAfterTime(1, "Dilivery compleated!"));
 
         var manager = FindObjectOfType<RunManager>();
-        time_text.text = PersistentData.Validating || manager.currentLevel.RecordTime < time ? "Your time: " + time : "New Record! " + time;
+
+        time_text.text = (PersistentData.Validating || manager.currentLevel.RecordTime < time) ? "Your time: " + time : "New Record! " + time;
         resources_text.text = "Resources gained: " + resources_gained;
     }
 
