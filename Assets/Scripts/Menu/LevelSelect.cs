@@ -16,10 +16,10 @@ public class LevelSelect : MonoBehaviour
     public float y_offset_between_astroids;
     public float x_max_offset;
     public GameObject prefab;
-    public Transform origo;
+    public RectTransform origo;
 
     [SerializeField]
-    float moveSpeed, angleSpeed, radius, wheelSpeed;
+    float moveSpeed, angleSpeed, radiusFactor, wheelSpeed;
 
     private Astroid_data_holder selected_level;
 
@@ -63,6 +63,7 @@ public class LevelSelect : MonoBehaviour
             return;
         var speedmod = Input.GetAxis("Mouse ScrollWheel") * wheelSpeed;
 
+        float radius = Screen.width * radiusFactor;
         for (int i = 0; i < currentLevelsOnDisplay.Count; i++)
         {
             currentLevelsOnDisplay[i].current_angle += Time.deltaTime * -moveSpeed * (1 + speedmod);

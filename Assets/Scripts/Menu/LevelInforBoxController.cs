@@ -28,7 +28,7 @@ public class LevelInforBoxController : MonoBehaviour
         Attempts.text = "Attempts: " + data.Attempts;
         Time.text = $"Time to beat: {data.AuthorTime:F2} sec";
         Best_time.text = $"Best time: {data.RecordTime:F2} sec";
-        Champion.text = "Record holder: " + data.RecordName;
+        Champion.text = "Champion: " + data.RecordName;
 
         if (!PlayerPrefs.HasKey($"{data.Creator}+{data.ID}"))
             Resources.text = "Reward for delivery: " + data.Resource;
