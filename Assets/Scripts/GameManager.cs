@@ -82,7 +82,5 @@ public class GameManager : MonoBehaviour
             PersistentData.Validating = false;
             PersistentData.OverrideLevel = null;
         }
-    }
-
-    
+    }  
 }

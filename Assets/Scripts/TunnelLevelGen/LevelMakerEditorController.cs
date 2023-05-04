@@ -365,7 +365,7 @@ public class LevelMakerEditorController : MonoBehaviour
         cube.transform.localScale = Vector3.one * radius * 2f;
 
         SplineTransforms.Add(cube);
-        Shapes.Add(CurrentSelection);
+        Shapes.Add(selection);
         _Scales.Add(radius);
 
         if (SplineTransforms.Count > 1)
