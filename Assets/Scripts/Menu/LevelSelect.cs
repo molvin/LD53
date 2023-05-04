@@ -109,15 +109,22 @@ public class LevelSelect : MonoBehaviour
         public LevelMeta data;
     }
 
-    public void Start()
+    public void OnEnable()
     {
         Enter();
     }
 
-    private void Enter()
+    public void Enter()
     {
         level_select_helper.Refresh();
         levels = level_select_helper.GetLevels();
+
+        //remove old astroids if they exist
+        if (currentLevelsOnDisplay != null) {
+            for (int i = 0; i < currentLevelsOnDisplay.Count; i++)
+                Destroy(currentLevelsOnDisplay[i].game_object);
+        }
+
         currentLevelsOnDisplay = new List<Astroid_data_holder>();
         /*
         levels = new List<LevelMeta>();

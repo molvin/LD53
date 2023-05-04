@@ -86,7 +86,6 @@ public class MainMenu : MonoBehaviour
         mainMenuButtonGroup.SetActive(false);
         creators.SetActive(false);
         MoveToLeftCornerAnim();
-
     }
 
     public void LevelSelectToMainTransition()
