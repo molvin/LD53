@@ -19,7 +19,16 @@ public class MainMenu : MonoBehaviour
     public GameObject name_select;
     public MenuAudioController menuAudioController;
 
+    public LevelSelectHelper level_select_helper;
 
+
+    public void Start()
+    {
+        if (level_select_helper == null)
+        {
+            level_select_helper = FindObjectOfType<LevelSelectHelper>();
+        }
+    }
 
     public void SetNameState()
     {
@@ -69,6 +78,8 @@ public class MainMenu : MonoBehaviour
 
     public void MainToLevelSelectTransition()
     {
+        level_select_helper.Refresh();
+
         StartCoroutine(ActivateAfterTime(LevelSelectMenuButtonGroup, 1, true));
         StartCoroutine(ActivateAfterTime(levelSelectThing, 1, true));
 
