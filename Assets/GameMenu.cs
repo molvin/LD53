@@ -32,12 +32,12 @@ public class GameMenu : MonoBehaviour
         winLoseMenu.Lose(FailedByDelivery);
     }
 
-    public void Win(float time, int resourcesGaind)
+    public void Win(float time, float record, int resourcesGaind)
     {
 
         //TODO: check validating
         bool b = PersistentData.Validating;
-        winLoseMenu.Win(time, resourcesGaind);
+        winLoseMenu.Win(time, record, resourcesGaind);
 
     }
 

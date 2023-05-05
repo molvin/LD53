@@ -50,7 +50,7 @@ public class WinLoseMenu : MonoBehaviour
 
     }
 
-    public void Win(float time, int resources_gained)
+    public void Win(float time, float record, int resources_gained)
     {
         win_or_lose_text.text = "";
 
@@ -62,9 +62,7 @@ public class WinLoseMenu : MonoBehaviour
         StartCoroutine(ActivateAfterTime(resources_text.gameObject, 1, true));
         StartCoroutine(setTextAfterTime(1, "Dilivery compleated!"));
 
-        var manager = FindObjectOfType<RunManager>();
-
-        time_text.text = (PersistentData.Validating || manager.currentLevel.RecordTime < time) ? "Your time: " + time : "New Record! " + time;
+        time_text.text = (PersistentData.Validating || record <= time) ? "Your time: " + time : "New Record! " + time;
         resources_text.text = "Resources gained: " + resources_gained;
     }
 

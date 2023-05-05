@@ -29,6 +29,7 @@ public class RunManager : MonoBehaviour
     new GameObject camera;
     Vector3 origin;
     private float timeAtFinish;
+    public float recordTime;
     private GameObject main_cam;
     bool won;
     private bool paused;
@@ -74,7 +75,6 @@ public class RunManager : MonoBehaviour
                 Serializer.LevelData level = Service.DownloadLevel(currentLevel);
                 data = JsonUtility.ToJson(level); //TODO: fix this
             }
-            
             var generateIter = serializer.Generate(data);
             Debug.Log($"Generating {data}");
             while (generateIter.MoveNext())
@@ -190,19 +190,6 @@ public class RunManager : MonoBehaviour
             }
             else
             {
-                try
-                {
-                    if (currentLevel.ID != 0)
-                    {
-                        currentLevel.RecordName = PersistentData.PlayerName;
-                        currentLevel.RecordTime = timeAtFinish;
-                        Service.SendLevelComplete(currentLevel, 1);
-                    }
-                    else
-                        Debug.Log("Current level not set, cant update attempts");
-                }
-                catch { }
-
                 if(!PlayerPrefs.HasKey($"{currentLevel.Creator}+{currentLevel.ID}"))
                 {
                     PersistentData.ResourceCount += currentLevel.Resource;
@@ -215,6 +202,31 @@ public class RunManager : MonoBehaviour
             SceneManager.LoadScene(0);
         }
 
+        float recordTime = currentLevel.RecordTime;
+        foreach(var meta in Service.GetMetaList().Levels)
+        {
+            if(meta.ID == currentLevel.ID && meta.Creator == currentLevel.Creator)
+            {
+                recordTime = meta.RecordTime;
+                break;
+            }
+        }
+
+        timeAtFinish = Time.time - startTime;
+
+        try
+        {
+            if (currentLevel.ID != 0)
+            {
+                currentLevel.RecordName = PersistentData.PlayerName;
+                currentLevel.RecordTime = timeAtFinish;
+                Service.SendLevelComplete(currentLevel, 1);
+            }
+            else
+                Debug.Log("Current level not set, cant update attempts");
+        }
+        catch { }
+
         won = true;
 
         truck.GetComponent<HoverController>().enabled = false;
@@ -223,8 +235,7 @@ public class RunManager : MonoBehaviour
         GameMenu.Retry = () => { Restart(); StartCoroutine(RunGame()); };
         GameMenu.BackToMainMenu = () => FinishLevel();
   
-        timeAtFinish = Time.time - startTime;
-        GameMenu.Win(timeAtFinish, !PlayerPrefs.HasKey($"{currentLevel.Creator}+{currentLevel.ID}") ? currentLevel.Resource : 0);
+        GameMenu.Win(timeAtFinish, recordTime, !PlayerPrefs.HasKey($"{currentLevel.Creator}+{currentLevel.ID}") ? currentLevel.Resource : 0);
     }
 
     public void Lose(bool FailedDelivery = false)
