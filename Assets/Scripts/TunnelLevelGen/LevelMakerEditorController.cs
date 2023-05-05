@@ -567,7 +567,10 @@ public class LevelMakerEditorController : MonoBehaviour
 
     public void InitFromSpline(Serializer.LevelData level)
     {
-        SplineNoise3D.SplineLine = level.SplineData ?? new List<SplineNoise3D.Spline>();
+        if (level.SplineData != null)
+        {
+            SplineNoise3D.SplineLine = level.SplineData;
+        }
         PersistentData.ResourceDelta += SplineNoise3D.SplineLine.Count;
 
         Vector3 pos = Vector3.zero;
